@@ -1,33 +1,7 @@
+<?php
+ob_start();
+?>
 
-<!DOCTYPE html>
-<html lang="fr">
-  <head>
-    <title>EcoIT</title>
-    <meta charset="utf-8">
-    <meta name="description" content="Corespions est une société privée (totalement fictive) d'espionnage. Nous sommes à votre disposition pour toutes vos idées de sabotage, de vengeance et d'espionnage.">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital@1&family=Montserrat&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="style/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="style/style.css">
-  </head>
-  <body>
-  <header >
-      <div id="container-pre-header">
-      <h1>EcoIT</h1>
-      <button type="button" id="connexion-button" class="btn">Déconnexion</button>
-      </div>
-      <div id="header-menu" class="d-flex flex-column align-items-center">
-          <div id="container-menu">
-            <div id="container-item-menu" class="d-flex">
-              <a class="menu-item">Accueil</a>
-              <a class="menu-item">S'inscrire</a>
-              <a class="menu-item">Postuler</a>
-            </div>
-          </div>
-        </div>
-    </header>
     <main>
         <a href="mesformations-apprenant.view.php" class="btn button-general button-type-1">Retour aux formations</a>
         <h2 id="formation-title" class="text-center">Les bonnes pratiques en front-end</h2>
@@ -102,11 +76,9 @@
             </div>
         </div>
     </main>
-    <footer>
+    
+<?php
 
-    </footer>
-    <script type="text/javascript" src="javascript\jquery-3.6.0.js"></script>
-    <script type="text/javascript" src="javascript\bootstrap.min.js"></script>
-    <script src="javascript/script.js" type="text/javascript"></script>
-  </body>
-</html>
+$content = ob_get_clean();
+
+require "views/common/template.view.php";

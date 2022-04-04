@@ -820,6 +820,7 @@ margin:0 auto;
   
   .error-msg{
     font-weight:bolder;
+    font-size:1.1rem;
     font-style:italic;
     color:red;
   }
