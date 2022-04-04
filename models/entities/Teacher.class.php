@@ -32,7 +32,7 @@ class Teacher
 
     public function getPassword(){ return $this -> password; }
 
-    public function getPictureProfil(){ return $this -> pictureProfile; }
+    public function getPictureProfile(){ return $this -> pictureProfile; }
 
     public function getDescription(){ return $this -> description;}
     

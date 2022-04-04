@@ -6,11 +6,11 @@ class Formation
     private string $title;
     private string $description;
     private string $picture;
-    private string $creationDate;
+    private $creationDate;
     private int $teacherId;
     private string $onlineStatus;
 
-    public function __construct(int $id, string $title, string $description, string $picture, string $creationDate, int $teacherId, string $onlineStatus){
+    public function __construct(int $id, string $title, string $description, string $picture, $creationDate, int $teacherId, string $onlineStatus){
         $this -> id = $id;
         $this -> title = $title;
         $this -> description = $description;
@@ -30,7 +30,7 @@ class Formation
 
     public function getCreationDate() { return $this -> creationDate; }
 
-    public function GetTeacherId(){ return $this -> teacherId; }
+    public function getTeacherId(){ return $this -> teacherId; }
 
-    public function GetOnlineStatus(){ return $this -> onlineStatus; }
+    public function getOnlineStatus(){ return $this -> onlineStatus; }
 }

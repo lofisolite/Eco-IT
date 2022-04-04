@@ -5,16 +5,16 @@ print_r($_SESSION);
 
     <main>
     <div class="container-intro-espace">
-        <p>Bonjour Jean-Louis</p>
-        <h2>Mes formations</h2>
-        <div class="text-explication">
-          <p class="text-align">Lorsque vous créez une formation, elle est hors ligne.</p>
-          <p class="text-align"> Avant de la mettre en ligne, vous pouvez voir votre formation comme elle sera présentée pour les apprenants et la modifier si besoin puis la mettre en ligne. Elle apparaîtra alors dans le repertoire des formations.</p>
-          <p class="text-align">Une fois en ligne, vous pouvez toujours modifier votre formation.</p>
-          <div class="d-flex justify-content-center m-3">
+      <p class="welcome-text"><?= 'Bonjour '.$_SESSION['fn'].' '. $_SESSION['ln'] ?></p>
+      <h2>Mes formations</h2>
+      <div class="text-explication">
+        <p class="text-align">Lorsque vous créez une formation, elle est hors ligne.</p>
+        <p class="text-align"> Avant de la mettre en ligne, vous pouvez voir votre formation comme elle sera présentée pour les apprenants et la modifier si besoin puis la mettre en ligne. Elle apparaîtra alors dans le repertoire des formations.</p>
+        <p class="text-align">Une fois en ligne, vous pouvez toujours modifier votre formation.</p>
+        <div class="d-flex justify-content-center m-3">
             <a class="btn button-general button-type-2">Créer une formation</a>
-          </div>
         </div>
+    </div>
 
         <div class="container-main">
           <h3>Formations hors ligne</h3>

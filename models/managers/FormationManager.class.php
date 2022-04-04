@@ -15,7 +15,25 @@ class FormationManager extends Bdd
         return $this-> formations;
     }
 
-    public function loadFormation(){
+    // reçoit un identifiant de formateur, donne toutes ses formations.
+    public function getFormationsByTeacherId($teacherId){
+        foreach($this->formations as $formation){
+            if($formation->getTeacherId() === $teacherId){
+                $formationsByTeacher[] = $formation;
+            }
+        }
+        return $formationsByTeacher;
+    }
+
+    // reçoit un tableau d'identifiant de formateurs, renvoie un tableau de tableau de formations.
+    public function getFormationsByTeachersId($teachersId){
+        foreach($teachersId as $teacherId){
+            $formationsByTeachers[] = $this->getFormationsByTeacherId($teacherId);
+        }
+        return $formationsByTeachers;
+    }
+
+    public function loadFormations(){
         $req = "SELECT * FROM formation";
         $stmt = $this -> getBdd()->prepare($req);
         $stmt -> execute();

@@ -1,5 +1,6 @@
 <?php
 ob_start();
+print_r($_POST);
 ?>
 
 <main id="main-inscription">
@@ -38,7 +39,7 @@ ob_start();
                 <p id="errorDescription" class="mb-3 error-msg"></p>
                 <label for="description" class="form-label">Décrivez vous</label>
                 <p class="explication-msg mb-3">Maximum 500 caractères sur votre parcours et vos spécialités.</p>
-                <textarea class="form-control" id="description" name="description" cols="30" rows="6" min="2" max="500" required><?= $_POST['description'] ?? '' ?></textarea>
+                <textarea class="form-control" id="description" name="description" cols="30" rows="6" minlength="2" maxlength="500" required><?= $_POST['description'] ?? '' ?></textarea>
                 <div id="compteur" style="text-align:right">0</div>
             </div>
             <script>

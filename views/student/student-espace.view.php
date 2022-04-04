@@ -5,9 +5,14 @@ print_r($_SESSION);
 
     <main>
     <div class="container-intro-espace" class="d-flex flex-column align-items-center">
-        <p>Bonjour Julie</p>
-        <h2>Mes formations</h2>
-        
+        <p class="welcome-text"><?= 'Bonjour '.$_SESSION['ps'] ?></p>
+        <h2>Les formations</h2>
+        <div class="text-explication m-3">
+            <p class="text-center">L'onglet "Les dernières" présente les dernières formations sorties, vous pouvez chercher une formation par mot clef.</p>
+            <p class="text-center">Lorsque vous cliquez sur "accéder", la formation est placé dans l'onglet "En cours".</p>
+            <p class="text-center">En validant toutes les leçons d'une formation, elle se retrouvera dans l'onglet "terminées".</p>
+        </div>
+
           <ul class="nav nav-tabs justify-content-center">
             <li class="nav-item">
               <a class="nav-link active" data-bs-toggle="tab" href="#toutes">Les dernières</a>

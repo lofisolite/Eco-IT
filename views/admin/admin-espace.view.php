@@ -1,11 +1,24 @@
 <?php
 ob_start();
+
+if(!empty($_SESSION['alert'])) : ?>
+    <div class="alert alert-<?= $_SESSION['alert']['type'] ?>" role="alert">
+    <?= $_SESSION['alert']['msg'] ?>
+    </div>
+<?php unset($_SESSION['alert']);
+endif;
 ?>
 
 <main id="main-admin">
     
     <div class="container-intro-espace" class="d-flex flex-column align-items-center">
-        <p>Bonjour Martin</p>
+        <p class="welcome-text"><?= 'Bonjour '.$_SESSION['fn'] ?></p>
+        <div class="text-explication">
+          <p class="text-align">Dans la partie "gestion des formateurs, vous avez un tableau contenant les formateurs non validés et un tableau contenant les formateurs validés."</p>
+          <p class="text-align">Si vous validez un formateur, il aura accès à son espace et pourra créer des formations. Si vous ne validez pas un formateur, il sera supprimé de la base de donnée.</p>
+          <br>
+        </div>
+
         <h2>Gestion des formateurs</h2>
     </div>  
     <div class="container-main">
@@ -17,34 +30,24 @@ ob_start();
                     <th>Décisions</th>
                     <th></th>
                 </tr>
+                <?php foreach($teachersNotValidate as $teacher):?>
                 <tr>
-                    <td class="cell-border-right align-middle">John Doe</td>
+                    <td class="cell-border-right align-middle"><?= $teacher->getFirstname().' '.$teacher->getLastname(); ?></td>
                     <td class="cell-border-right align-middle">
-                        <a class="btn button-general btn-choice-valid" href="">Valider</a>
-                        <a class="btn button-general btn-choice-reject" href="">Rejeter</a>
-                    </td>
-                    <td class="align-middle"><a class="btn button-general button-type-2" href="">Détails</a></td>
-                </tr>
-                <tr>
-                    <td class="cell-border-right align-middle">Sabrina Durand</td>
-                    <td class="cell-border-right align-middle">
-                        <a class="btn button-general btn-choice-valid" href="">Valider</a>
-                        <a class="btn button-general btn-choice-reject" href="">Rejeter</a>
+
+                    <div class="admin-choice">
+                        <a href="<?= URL ?>adminEspace/validate/<?= $teacher->getId();?>" type="submit" class="btn button-general btn-choice-valid">Valider</a>
+                        
+                        <form method="POST" action="<?= URL ?>adminEspace/reject/<?= $teacher->getId(); ?>" onSubmit="return confirm('voulez vous vraiment supprimer le formateur?');">
+                            <button type="submit" class="btn button-general btn-choice-reject">Rejeter</button>
+                        </form>
+                    </div>
                     </td>
                     <td class="align-middle">
-                        <a class="btn button-general button-type-2" href="">Détails</a>
+                    <a class="btn button-general button-type-2" href="<?= '#card'.$teacher->getId(); ?>">Détails</a>
                     </td>
                 </tr>
-                <tr>
-                    <td class="cell-border-right align-middle">Fabrice Ramolos</td>
-                    <td class="cell-border-right align-middle">
-                        <a class="btn button-general btn-choice-valid" href="">Valider</a>
-                        <a class="btn button-general btn-choice-reject" href="">Rejeter</a>
-                    </td>
-                    <td class="align-middle">
-                        <a class="btn button-general button-type-2" href="">Détails</a>
-                    </td>
-                </tr>
+                <?php endforeach; ?>
             </table>
         </div>
 
@@ -55,23 +58,14 @@ ob_start();
                     <th>Nom</th>
                     <th></th>
                 </tr>
+                <?php foreach($teachersValidate as $teacher):?>
                 <tr>
-                    <td class="cell-border-right align-middle">Damien Sarrazin</td>
+                    <td class="cell-border-right align-middle"><?= $teacher->getFirstname().' '.$teacher->getLastname(); ?></td>
                     <td class="align-middle">
-                        <a class="btn button-general button-type-2" href="">Détails</a></td>
-                </tr>
-                <tr>
-                    <td class="cell-border-right align-middle">Antoine Daniel</td>
-                    <td class="align-middle">
-                        <a class="btn button-general button-type-2" href="">Détails</a>
+                        <a class="btn button-general button-type-2" href="<?= '#card'.$teacher->getId(); ?>">Détails</a>
                     </td>
                 </tr>
-                <tr>
-                    <td class="cell-border-right align-middle">Natasha Brandon</td>
-                    <td class="align-middle">
-                        <a class="btn button-general button-type-2" href="">Détails</a>
-                    </td>
-                </tr>
+                <?php endforeach; ?>
             </table>
         </div>
     </div>
@@ -87,77 +81,98 @@ ob_start();
         </div>
         <h3>Non validés</h3>
         <div class="container-admin">
-            <div class="container-cards" class="d-flex justify-content-center">
+            <div class="container-cards-teacher" class="d-flex justify-content-center">
                 <div id="container-card">
-
+                <?php foreach($teachersNotValidate as $teacher):?>
                     <div id="box-container-card" class="d-flex flex-column align-items-center">
 
-                        <div id="" class="card-box" class="d-flex flex-column align-items-center">
+                        <div id="<?= 'card'.$teacher->getId(); ?>" class="card-box">
                             
                             <div class="card-identity">
                                 <div class="card-title">
-                                    <h4>Florian Fleur</h4>
+                                    <h4><?= $teacher->getFirstname().' '.$teacher->getLastname(); ?></h4>
                                 </div>
-                                <img class="picture-profile" src="https://picsum.photos/500/500" alt="">
+                                <img class="picture-profile" src="<?= $teacher->getPictureProfile(); ?>" alt="">
                             </div>
 
                             <div class="card-box-main">
                                 <div class="card-box-description">
-                                    <p class="fw-bold">JohnDoe@mail.fr</p>
-                                    <p class="card-description">Cette formation a pour but de vous faire acquérir des bonnes pratiques dans la réalisation d'un site web afin de réduire son impact environnemental. En passant par les phases d'analyses, de maquettage et enfin de réalisation, vous avancerez pas à pas dans la conception de votre site.</p>
+                                    <p class="fw-bold"><?= $teacher->getMail(); ?></p>
+                                    <p class="card-description"><?= $teacher->getDescription(); ?></p>
                                 </div>
                             </div>
 
                             <div class="card-box-footer">
                                 <div class="d-flex justify-content-center m-3">
-                                    <a class="btn button-general btn-choice-valid" href="">Valider</a>
-                                    <a class="btn button-general btn-choice-reject" href="">Rejeter</a>
+                                    <a href="<?= URL ?>adminEspace/validate/<?= $teacher->getId();?>" type="submit" class="btn button-general btn-choice-valid">Valider</a>
+                                    
+                                    <form method="POST" action="<?= URL ?>adminEspace/reject/<?= $teacher->getId(); ?>" onSubmit="return confirm('voulez vous vraiment supprimer le formateur?');">
+                                        <button type="submit" class="btn button-general btn-choice-reject">Rejeter</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
 
         <h3>Validés</h3>
         <div class="container-admin">
-            <div class="container-cards" class="d-flex justify-content-center">
+            <div class="container-cards-teacher" class="d-flex justify-content-center">
                 <div id="container-card">
-
+                <?php foreach($teachersValidate as $teacher):?>
                     <div id="box-container-card" class="d-flex flex-column align-items-center">
 
-                        <div id="" class="card-box" class="d-flex flex-column align-items-center">
+                        <div id="<?= 'card'.$teacher->getId(); ?>" class="card-box">
                             
                             <div class="card-identity">
                                 <div class="card-title">
-                                    <h4>Florian Fleur</h4>
+                                    <h4><?= $teacher->getFirstname().' '.$teacher->getLastname(); ?></h4>
                                 </div>
-                                <img class="picture-profile" src="https://picsum.photos/500/500" alt="">
+                                <img class="picture-profile" src="<?= $teacher->getPictureProfile(); ?>" alt="">
                             </div>
 
                             <div class="card-box-main">
                                 <div class="card-box-description">
-                                    <p class="fw-bold">JohnDoe@mail.fr</p>
-                                    <p class="card-description">Cette formation a pour but de vous faire acquérir des bonnes pratiques dans la réalisation d'un site web afin de réduire son impact environnemental. En passant par les phases d'analyses, de maquettage et enfin de réalisation, vous avancerez pas à pas dans la conception de votre site.</p>
+                                    <p class="fw-bold"><?= $teacher->getMail(); ?></p>
+                                    <p class="card-description"><?= $teacher->getDescription(); ?></p>
                                 </div>
                             </div>
 
                             <div class="card-box-footer">
                                 <p class="text-center"><span>Ses formations</span></p>
-                                <p class="text-center">les bonnes pratiques en front-end</p>
-                                <p class="text-center">les bonnes pratiques en back-end</p>
+                                
+                            <?php 
+                            $teacherId = $teacher->getId();
+
+                            foreach($formationsByTeachersId as $formations){
+                                foreach($formations as $formation){
+
+                                    $formationTitle = $formation->getTitle();
+
+                                    $formationTeacherId = $formation->getTeacherId(); 
+
+                                    if($teacherId === $formationTeacherId){ ?>
+                                        <p class="text-center"><?= $formationTitle ?></p>
+
+                                    <?php }
+                                }
+                            } ?>
                             </div>
                         </div>
                     </div>
                 </div>
+                <?php endforeach; ?>
             </div>
         </div> 
     </div>
 </main>
 
 <?php
-
 $content = ob_get_clean();
+
+$src = "javascript/general/script.admin.js";
 
 require "views/common/template.view.php";

@@ -57,7 +57,7 @@ function validMail(input, errorText){
   } else if(mailRegex.test(input.value) == false){
     errorText.textContent = "Le format du mail n\'est pas valide."
     return false;
-  } else if (input.size <= 7 || input.size >= 80){
+  } else if (input.value.length <= 7 || input.value.length >= 80){
     errorText.textContent = "La taille du mail n\'est pas bonne."
     return false;
   } else {
@@ -73,7 +73,7 @@ function validPassword(input, errorText){
   } else if(passwordRegex.test(input.value) == false){
     errorText.textContent = "Le format du mot de passe n\'est pas valide."
     return false;
-  } else if (input.size <= 2 || input.size >= 80){
+  } else if (input.value.length <= 2 || input.value.length >= 80){
     errorText.textContent = "La taille du mot de passe  n\'est pas bonne."
     return false;
   } else {
@@ -89,7 +89,7 @@ function validPseudo(input, errorText){
   } else if(pseudoRegex.test(input.value) == false){
     errorText.textContent = "Le format du pseudo n\'est pas valide."
     return false;
-  } else if (input.size <= 2 || input.size >= 50){
+  } else if (input.value.length <= 2 || input.value.length >= 50){
     errorText.textContent = "La taille du pseudo  n\'est pas bonne."
     return false;
   } else {
@@ -103,9 +103,9 @@ function validName(input, errorText){
     errorText.textContent = "";
     return false;
   } else if(nameRegex.test(input.value) == false){
-    errorText.textContent = "Le format du nom n\'est pas valide."
+    errorText.textContent = "Format non valide."
     return false;
-  } else if (input.size <= 2 || input.size >= 50){
+  } else if (input.value.length <= 2 || input.value.length >= 50){
     errorText.textContent = "La taille du nom  n\'est pas bonne."
     return false;
   } else {
@@ -133,15 +133,15 @@ function validImage(input, errorText){
 
 }
 
-function validString(input, errorText){
+function validDescription(input, errorText){
   if(input.value === ""){
     errorText.textContent = "";
     return false;
   } else if(stringRegex.test(input.value) == false){
     errorText.textContent = "Le format n\'est pas valide. Il y a des caractères non autorisés."
     return false;
-  } else if (input.size <= 2 || input.size >= 500){
-    errorText.textContent = "La taille  n\'est pas bonne."
+  } else if (input.value.length <= 2 || input.value.length > 500){
+    errorText.textContent = "La description doit avoir entre 50 et 500 caractères."
     return false;
   } else {
     errorText.textContent='';
@@ -248,7 +248,7 @@ if(formTinscription !== null){
   });
   
   description.addEventListener('focusout', () => {
-    validString(description, errorDescription)
+    validDescription(description, errorDescription);
   });
 
   mail.addEventListener('focusout', () => {
@@ -259,10 +259,9 @@ if(formTinscription !== null){
     validPassword(password, errorPassword);
   });
 
-
   formTinscription.addEventListener('submit', function(e) {
     e.preventDefault();
-    if(validName(firstname, errorFirstname) && validName(lastname, errorLastname) && validImage(pictureProfile, errorPictureProfile) && validString(description, errorDescription) && validMail(mail, errorMail) && validPassword(password, errorPassword)){
+    if(validName(firstname, errorFirstname) && validName(lastname, errorLastname) && validImage(pictureProfile, errorPictureProfile) && validDescription(description, errorDescription) && validMail(mail, errorMail) && validPassword(password, errorPassword)){
       formTinscription.submit();
     };
   });

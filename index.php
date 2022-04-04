@@ -36,12 +36,21 @@ try{
             $controller->signUpTeacher();
           break;
 
+          case "credits" :
+            require_once "views/common/credits.view.php";
+          break;
+
           case "adminEspace" :
-              if(verifyAccessAdmin()){
-                require_once 'views/admin/admin-espace.view.php';
-              } else {
+              //if(verifyAccessAdmin()){
+                if(empty($getPage[1])){
+                  $controller-> setAdminEspace(); 
+                } else if($getPage[1] === "validate"){
+                  $controller->validateTeacher($getPage[2]);
+                } else if($getPage[1] === "reject"){
+                  $controller->rejectTeacher($getPage[2]);
+              } /*else {
                 throw new Exception("Vous n'avez pas le droit d'accéder à cette page.");
-              }
+              }*/
           break;
 
           case "studentEspace" :

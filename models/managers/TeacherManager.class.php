@@ -100,4 +100,31 @@ class TeacherManager extends Bdd
             die();
         }
     }
+
+    public function validateTeacherInBdd(int $id){
+        $req ="
+        UPDATE teacher
+        SET validation = :validation
+        Where id = :id
+        ";
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindValue(":id", $id, PDO::PARAM_INT);
+        $stmt->bindValue(":validation", "non", PDO::PARAM_STR);
+        $result = $stmt->execute();
+        $stmt->closeCursor();
+
+        return $result;
+    }
+
+    public function deleteTeacherInBdd(int $teacherId){
+        $req ="
+        DELETE FROM teacher WHERE id = :id
+        ";
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindValue(":id", $teacherId, PDO::PARAM_INT);
+        $result = $stmt->execute();
+        $stmt->closeCursor();
+
+        return $result;
+    }
 }

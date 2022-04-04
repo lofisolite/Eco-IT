@@ -1,7 +1,7 @@
 <?php
 ob_start();
-
 ?>
+
 <main>
       <section id="container-intro-home" class="d-flex flex-column align-items-center">
         <h2>Formations en eco-conception web</h2>
