@@ -1,7 +1,7 @@
 <?php
 
-require_once "models/Bdd.class.php";
-require_once "models/entities/Student.class.php";
+require_once(ROOT.'/models/Bdd.class.php');
+require_once(ROOT.'/models/entities/Student.class.php');
 
 class StudentManager extends Bdd
 {
@@ -15,6 +15,7 @@ class StudentManager extends Bdd
         return $this-> students;
     }
 
+    // recupère toutes les mails des étudiants - 
     public function getStudentsMails(){
         foreach($this->students as $student){
             $studentsMails[] = $student->getMail();
@@ -22,6 +23,7 @@ class StudentManager extends Bdd
         return $studentsMails;
     }
 
+    // récupère les pseudos des étudiants - permet de vérifier que deux étudiants n'ont pas le même pseudos.
     public function getStudentsPseudos(){
         foreach($this->students as $student){
             $studentsPseudos[] = $student->getPseudo();
@@ -29,6 +31,25 @@ class StudentManager extends Bdd
         return $studentsPseudos;
     }
 
+    // récupère un étudiant avec son mail
+    public function getStudentByMail(string $mail){
+        foreach($this->students as $student){
+                if($student->getMail() === $mail){
+                    return $student;
+                }
+            }
+        throw new Exception("Problème pour récupérer l'étudiant avec son mail.");
+    }
+
+    // vérifie que l'éudiant fournit les bons identifiants.
+    public function isStudentConnexionValid(string $mail, string $password){
+        $student= $this->getStudentByMail($mail);
+        $bddPassword = $student->getPassword();
+        return password_verify($password, $bddPassword);
+    }
+
+    // fonctions requêtes bdd
+    // charge les étudiants
     public function loadStudents(){
         $req = "SELECT * FROM student";
         $stmt = $this -> getBdd()->prepare($req);
@@ -41,23 +62,8 @@ class StudentManager extends Bdd
             $this->addStudent($s);
         }
     }
-    
-    public function getStudentByMail(string $mail){
-        foreach($this->students as $student){
-                if($student->getMail() === $mail){
-                    return $student;
-                }
-            }
-        throw new Exception("Problème pour récupérer l'étudiant avec son mail.");
-    }
 
-    public function isStudentConnexionValid(string $mail, string $password){
-        $student= $this->getStudentByMail($mail);
-        $bddPassword = $student->getPassword();
-        return password_verify($password, $bddPassword);
-    }
-
-    // fonctions requêtes Bdd mission
+    // ajoute un étudiant en bdd
     public function addStudentInBdd(string $pseudo, string $mail, string $password){
         $req ="
         INSERT INTO student(pseudo, mail, password) 

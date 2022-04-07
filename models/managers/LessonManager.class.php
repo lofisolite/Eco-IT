@@ -1,7 +1,7 @@
 <?php
 
-require_once "models/Bdd.class.php";
-require_once "models/entities/lesson.class.php";
+require_once(ROOT.'/models/Bdd.class.php');
+require_once(ROOT.'/models/entities/Lesson.class.php');
 
 class LessonManager extends Bdd
 {
@@ -15,6 +15,8 @@ class LessonManager extends Bdd
         return $this-> lessons;
     }
 
+    // fonctions requêtes bdd
+    // charge toutes les lessons
     public function loadLessons(){
         $req = "SELECT * FROM lesson";
         $stmt = $this -> getBdd()->prepare($req);

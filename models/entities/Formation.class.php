@@ -17,7 +17,7 @@ class Formation
         $this -> picture = $picture;
         $this -> creationDate = $creationDate;
         $this -> teacherId = $teacherId;
-        $this -> online = $onlineStatus;
+        $this -> onlineStatus = $onlineStatus;
     }
 
     public function getId(){ return $this-> id; }

@@ -3,9 +3,9 @@ ob_start();
 ?>
 
 <br>
-<h2>Oups ! Il y a une erreur</h2>
 
-<div class="d-flex flex-column align-items-center m-4">
+<div id="errorPageDiv" class="d-flex flex-column align-items-center ">
+    <h2>Oups ! Il y a une erreur</h2>
     <br>
     <h4><?= $ErrorMsg ?></h4>
     <br>

@@ -1,7 +1,7 @@
 <?php
 
-require_once "models/Bdd.class.php";
-require_once "models/entities/Teacher.class.php";
+require_once(ROOT.'/models/Bdd.class.php');
+require_once(ROOT.'/models/entities/Teacher.class.php');
 
 class TeacherManager extends Bdd
 {
@@ -16,6 +16,7 @@ class TeacherManager extends Bdd
         return $this-> teachersValidate;
     }
 
+    // récupère tous les mails des formateurs validés
     public function getTeachersValidateMails(){
         foreach($this->teachersValidate as $teacher){
             $teachersValidateMails[] = $teacher->getMail();
@@ -31,6 +32,43 @@ class TeacherManager extends Bdd
         return $this-> teachersNotValidate;
     }
 
+    // récupère un formateur validé - lors de la connexion, permet de récupérer son mot de passe et autoriser ou non sa connexion.
+    public function getTeacherValidateByMail(string $mail){
+        foreach($this->teachersValidate as $teacher){
+            if($teacher->getMail() === $mail){
+                return $teacher;
+            }
+        }
+        throw new Exception("Problème pour récupérer le formateur avec son mail.");
+    }
+    
+    // récupére un formateur non validés - permet de récupérer la photo d'un formateur rejeté par l'admin pour la supprimer.
+    public function getTeacherNotValidateById(int $teacherId){
+        foreach($this->teachersNotValidate as $teacher){
+            if($teacher->getId() === $teacherId){  
+                return $teacher;
+            }
+        }
+    }
+    
+    // récupére un formateur validé - permet d'afficher les informations des formateurs en fournissant leur identifiants
+    public function getTeacherValidateById(int $teacherId){
+        foreach($this->teachersValidate as $teacher){
+            if($teacher->getId() === $teacherId){
+                return $teacher;
+            }
+        }
+    }
+    
+    // Lors de la connexion, verifie qu'un formateur validé donne ses bons identifiants.
+    public function isTeacherValidateConnexionValid(string $mail, string $password){
+        $teacher = $this->getTeacherValidateByMail($mail);
+        $bddPassword = $teacher->getPassword();
+        return password_verify($password, $bddPassword);
+    }
+
+    // Fonctions requêtes
+    // récupère tous les formateurs.
     public function loadTeachers(){
         $req = "
         SELECT * FROM teacher
@@ -51,31 +89,7 @@ class TeacherManager extends Bdd
         }
     }
 
-    public function getTeacherValidateByMail(string $mail){
-        foreach($this->teachersValidate as $teacher){
-                if($teacher->getMail() === $mail){
-                    return $teacher;
-                }
-            }
-        throw new Exception("Problème pour récupérer le formateur avec son mail.");
-    }
-
-    public function getTeacherNotValidateByMail(string $mail){
-        foreach($this->teachersNotValidate as $teacher){
-                if($teacher->getMail() === $mail){
-                    return $teacher;
-                }
-            }
-        throw new Exception("Problème pour récupérer le formateur avec son mail.");
-    }
-
-    public function isTeacherValidateConnexionValid(string $mail, $password){
-        $teacherValidate = $this->getTeacherValidateByMail($mail);
-        $bddPassword = $teacherValidate->getPassword();
-        return password_verify($password, $bddPassword);
-    }
-
-    // fonctions requêtes Bdd mission
+    // ajoute un formateur (non validé) en Bdd
     public function addTeacherInBdd(string $firstname, string $lastname, string $mail, string $password, string $pictureProfile, string $description){
         $req ="
         INSERT INTO teacher(firstname, lastname, mail, password, url_picture_profile, description, validation) 
@@ -94,13 +108,13 @@ class TeacherManager extends Bdd
 
         if($result === true){
             $teacher = new Teacher($this->getBdd()->lastInsertId(), $firstname, $lastname, $pictureProfile, $description, $mail, $password, 'non');
-            $this->addTeacherNotValidate($teacher);
         } else {
             throw new Exception("Votre inscription n'a pas fonctionné, veuillez réessayer.");
             die();
         }
     }
 
+    // passe la propriété "validation" de non à oui par l'action de l'admin.
     public function validateTeacherInBdd(int $id){
         $req ="
         UPDATE teacher
@@ -109,13 +123,14 @@ class TeacherManager extends Bdd
         ";
         $stmt = $this->getBdd()->prepare($req);
         $stmt->bindValue(":id", $id, PDO::PARAM_INT);
-        $stmt->bindValue(":validation", "non", PDO::PARAM_STR);
+        $stmt->bindValue(":validation", "oui", PDO::PARAM_STR);
         $result = $stmt->execute();
         $stmt->closeCursor();
 
         return $result;
     }
 
+    // supprime un formateur de la base de donnée par action de l'admin
     public function deleteTeacherInBdd(int $teacherId){
         $req ="
         DELETE FROM teacher WHERE id = :id

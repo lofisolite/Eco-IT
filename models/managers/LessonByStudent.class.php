@@ -1,7 +1,7 @@
 <?php
 
-require_once "models/Bdd.class.php";
-require_once "models/entities/LessonByStudent.class.php";
+require_once(ROOT.'/models/Bdd.class.php');
+require_once(ROOT.'/models/entities/LessonByStudent.class.php');
 
 class LessonByStudentManager extends Bdd
 {
@@ -15,6 +15,8 @@ class LessonByStudentManager extends Bdd
         return $this-> lessonsByStudent;
     }
 
+    // fonctions requêtes bdd
+    // charge toutes les lignes des lessons par étudiant
     public function loadlessonsByStudent(){
         $req = "
         SELECT * FROM student_lesson

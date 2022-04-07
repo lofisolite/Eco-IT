@@ -5,7 +5,7 @@ ob_start();
 <main id="main-connexion">
 <h2>Connexion</h2>
 
-<div class="d-flex justify-content-center" >
+<div class="d-flex justify-content-center">
     <form action="" method="POST" class="form d-flex flex-column" id="formConnexion">
         <p id="errorMsg" class="mb-3 error-msg"><?= $alert ?></p>
         <div class="mb-3">
@@ -31,6 +31,6 @@ ob_start();
 
 $content = ob_get_clean();
 
-$src = "javascript/form/formGeneral.js";
+$src = "script/form/formGeneral.js";
 
 require_once "views/common/template.view.php";

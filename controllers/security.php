@@ -115,16 +115,16 @@ function verifyPicture($input){
                 if($input['size'] < 1000000){
                     return true;
                 } else {
-                    return 'Photo de profil : l\'image est trop volumineuse';
+                    return 'Photo : l\'image est trop volumineuse';
                 }
             } else {
-                return 'Photo de profil : l\'image n\'est pas au bon format.';
+                return 'Photo : l\'image n\'est pas au bon format.';
             }
         } else{
-            return 'Photo de profil : le  fichier n\'est pas une image';
+            return 'Photo : le  fichier n\'est pas une image';
         }  
     } else {
-        return 'Photo de profil : Problème avec le téléchargement de l\'imagettt';
+        return 'Photo : Problème avec le téléchargement de l\'image';
     }  
 }
 
@@ -139,3 +139,44 @@ function verifyDescription($input){
         return "Description : Entre 2 et 500 caractères.";
     }
 }
+
+function verifyFormationTitle($input){
+    if(strlen($input) >= 2 && strlen($input) <= 80){
+        if(preg_match('/^[a-z0-9éèàùâêîôûëçëïüÿ\s\'\-\.\!\?\,\:\;]+$/i', $input)){
+            return true;
+        } else {
+            return "Titre : Caractères non autorisés.";
+        }
+    } else {
+        return "Titre : Entre 2 et 80 caractères.";
+    }
+}
+
+function verifyTitle($input){
+    if(strlen($input) >= 2 && strlen($input) <= 60){
+        if(preg_match('/^[a-z0-9éèàùâêîôûëçëïüÿ\s\'\-\.\!\?\,\:\;]+$/i', $input)){
+            return true;
+        } else {
+            return "Titre : Caractères non autorisés.";
+        }
+    } else {
+        return "Titre : Entre 2 et 60 caractères.";
+    }
+}
+
+function verifyContent($input){
+    if(preg_match('/^[a-z0-9éèàùâêîôûëçëïüÿ\s\'\-\.\!\?\,\:\;]+$/i', $input)){
+        return true;
+    } else {
+        return "contenu lesson : Caractères non autorisés.";
+    }
+}
+
+function verifyVideo($input){
+    if(preg_match('/(https\:\/\/){0,}(www\.){0,}(youtube\.com){1}(\/watch\?v\=[^\s]){1})/', $input)){
+        return true;
+    } else {
+        return "video : la vidéo n'est pas une vidéo youtube";
+    }
+}
+

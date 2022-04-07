@@ -1,8 +1,6 @@
 <?php
 ob_start();
-print_r($_POST);
-echo '<br>';
-print_r($essai);
+
 ?>
 
 <main id="main-inscription">  
@@ -45,6 +43,6 @@ print_r($essai);
 $content = ob_get_clean();
 
 // $src = '';
-$src = "javascript/form/formGeneral.js";
+$src = "script/form/formGeneral.js";
 
 require_once "views/common/template.view.php";

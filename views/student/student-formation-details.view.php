@@ -89,4 +89,6 @@ ob_start();
 <?php
 $content = ob_get_clean();
 
+$src = '';
+
 require "views/common/template.view.php";

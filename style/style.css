@@ -23,33 +23,46 @@ header{
 h1{
     color:var(--vertdark);
     text-align:center;
-    padding:15px;
+    padding:25px 5px;
+}
+
+h1 a{
+    text-decoration:none;
+    color:var(--vertdark);
+}
+
+h1 a:hover{
+    color:var(--vertdark);
 }
 
 #container-pre-header{
     position:relative;
 }
 
-#connexion-button{
+.connexion-button{
     position:absolute;
     right:10px;
-    top:20px;    
+    top:10px;    
     border: var(--vertdark) solid 2px;
     background:#FFF;
     color:var(--vertdark);
     font-size:1.3rem;
 }
 
-#connexion-button:hover{
+.connexion-button:hover{
     background-color: var(--vertdark);
     color:var(--beige);
 }
 
-@media screen and (max-width:500px){
-    #connexion-button{
+.btnEspace{
+    top:60px;
+}
+
+@media screen and (max-width:650px){
+    .connexion-button{
         right:5px;
         font-size:1.1rem;
-        padding:5px;
+        padding:3px;
     }
 }
 
@@ -84,7 +97,7 @@ h1{
     }
 
     #container-item-menu{
-        margin-top : 8px;
+        margin-top : 10px;
     }
 }
 
@@ -136,10 +149,14 @@ p{
     text-align:center;
 }
 
+.box-welcome-text{
+    padding:15px 0px;
+}
+
 .welcome-text{
     text-align:center;
     font-weight:bolder;
-    font-size:1.5rem;
+    font-size:1.3rem;
     letter-spacing: 1px;
 }
 
@@ -273,7 +290,80 @@ input{
     }
 }
 
-/* card */
+/* formulaire connexion */
+#main-connexion{
+    margin:120px 0px;
+}
+
+#main-inscription{
+    margin:50px 0px;
+}
+
+@media screen and (max-height:920px){
+    #main-connexion{
+        margin:80px 0px;
+    }
+}
+
+@media screen and (max-height:800px){
+    #main-connexion{
+        margin:40px 0px;
+    }
+}
+
+.form{
+    width:600px;
+    margin:20px 10px;
+  }
+
+  .form-part{
+      font-size:1.5rem;
+      font-weight:bolder;
+      color:var(--bleu);
+  }
+
+  label{
+    font-size:1.2rem;
+    padding-bottom: 8px;
+    letter-spacing:1px;
+  }
+  
+  .form-spe{
+    margin:10px;
+  }
+  
+  .container-password{
+    position:relative;
+  }
+  
+  #eye{
+    width:25px;
+    height:25px;
+    position:absolute;
+    right:12px;
+    top:7px;
+  }
+  
+  .error-msg{
+    font-weight:bolder;
+    font-size:1.1rem;
+    font-style:italic;
+    color:red;
+  }
+  
+  .explication-msg{
+    color:#30336b;
+    font-style:italic;
+    font-size:1.1rem;
+    text-align:left;
+  }
+
+  .infos-msg{
+    font-size:1.2rem;
+  }
+
+
+/* card général*/
 .container-main{
     background-color: var(--beige);
     margin:0px 15px 30px 15px;
@@ -289,12 +379,11 @@ input{
     margin:0 auto;
 }
 
-
 .card-box{
     border:var(--vertdark) solid 3px;
     background-color: #fff;
     box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    margin:20px 0px;
+    margin:30px 0px;
 }
 
 .card-box-intro{
@@ -618,6 +707,137 @@ footer{
     }
 }
 
+/* Espace admin */
+#main-admin h3{
+    text-decoration: underline;
+}
+
+#divButton {
+    display:none;
+    position: fixed;
+    bottom: -5px;
+    right: 8px;
+  }
+
+#btn-up-page {
+    font-size:1.1rem;
+    background-color : #31B0D5;
+    color: white;
+    padding: 8px;
+    border-radius: 4px;
+    border-color: #46b8da;
+    cursor:pointer;
+  }
+
+.admin-choice{
+    display:flex;
+    justify-content: center;
+}
+
+@media screen and (max-width:800px){
+    .admin-choice{
+        flex-direction: column;
+        align-items:center;
+    }
+}
+
+/* espace admin - tableaux */
+.container-admin{
+    padding:10px 0px 20px 0px;
+}
+
+.table{
+    margin:0 auto;
+    background-color:white;
+  }
+
+#table1{
+    max-width:70%;
+}
+
+#table2{
+    max-width: 50%;
+}
+
+  th{
+      font-size:1.2rem;
+      letter-spacing:1px;
+      color:var(--bleu);
+  }
+
+  td{
+      font-size:1.1rem;
+  }
+ 
+  .cell-border-right{
+    border-right-width:1px;
+  }
+
+@media screen and (max-width:1000px){
+    #table1{
+        max-width:95%;
+      }
+
+      #table2{
+          max-width:85%;
+      }
+}
+
+@media screen and (max-width:500px){
+    #table1{
+        max-width:95%;
+      }
+
+      #table2{
+          max-width:95%;
+      }
+}
+
+/* espace admin - card */
+.card-identity{
+    padding:10px;
+    min-height:150px;
+    display:flex;
+    align-items:center;
+}
+
+.card-title{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content: center;
+}
+
+.card-title h4{
+    text-align:center;
+    font-size:1.8rem;
+    letter-spacing:2px;
+    color:var(--bleu);
+    padding-left:150px;
+}
+
+.picture-profile{
+    width:150px;
+}
+
+.card-box-description{
+    margin:10px 0px;
+    width:90%;
+}
+
+@media screen and (max-width:600px){
+    .card-identity{
+        flex-direction:column;
+      }
+    .card-title h4{
+        text-align:center;
+        font-size:1.8rem;
+        letter-spacing:2px;
+        color:var(--bleu);
+        padding-left:0px;
+    }
+}
+
 /*espace apprenant */
 .nav-tabs{
     margin:20px;
@@ -678,196 +898,10 @@ margin:0 auto;
     }
 }
 
-/* Espace admin */
-#main-admin h3{
-    text-decoration: underline;
+/* page d'erreur */
+#errorPageDiv{
+    margin:100px 0px;
 }
-
-#divButton {
-    display:none;
-    position: fixed;
-    bottom: -5px;
-    right: 8px;
-  }
-
-#btn-up-page {
-    font-size:1.1rem;
-    background-color : #31B0D5;
-    color: white;
-    padding: 8px;
-    border-radius: 4px;
-    border-color: #46b8da;
-    cursor:pointer;
-  }
-
-.admin-choice{
-    display:flex;
-    justify-content: center;
-}
-
-@media screen and (max-width:800px){
-    .admin-choice{
-        flex-direction: column;
-        align-items:center;
-    }
-}
-
-/* tableaux */
-.container-admin{
-    padding:10px 0px 20px 0px;
-}
-
-.table{
-    margin:0 auto;
-    background-color:white;
-  }
-
-#table1{
-    max-width:70%;
-}
-
-#table2{
-    max-width: 50%;
-}
-
-  th{
-      font-size:1.2rem;
-      letter-spacing:1px;
-      color:var(--bleu);
-  }
-
-  td{
-      font-size:1.1rem;
-  }
- 
-  .cell-border-right{
-    border-right-width:1px;
-  }
-
-@media screen and (max-width:1000px){
-    #table1{
-        max-width:95%;
-      }
-
-      #table2{
-          max-width:85%;
-      }
-}
-
-@media screen and (max-width:500px){
-    #table1{
-        max-width:95%;
-      }
-
-      #table2{
-          max-width:95%;
-      }
-}
-
-/* card */
-.card-identity{
-    padding:10px;
-    min-height:150px;
-    display:flex;
-    align-items:center;
-}
-
-.card-title{
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    justify-content: center;
-}
-
-.card-title h4{
-    text-align:center;
-    font-size:1.8rem;
-    letter-spacing:2px;
-    color:var(--bleu);
-    padding-left:150px;
-}
-
-.picture-profile{
-    width:150px;
-}
-
-.card-box-description{
-    margin:10px 0px;
-    width:90%;
-}
-
-@media screen and (max-width:600px){
-    .card-identity{
-        flex-direction:column;
-      }
-    .card-title h4{
-        text-align:center;
-        font-size:1.8rem;
-        letter-spacing:2px;
-        color:var(--bleu);
-        padding-left:0px;
-    }
-}
-
-/* formulaire connexion */
-#main-connexion{
-    margin:50px 0px;
-}
-
-#main-inscription{
-    margin:50px 0px;
-}
-
-.form{
-    width:600px;
-    margin:20px 10px;
-  }
-
-  .form-part{
-      font-size:1.5rem;
-      font-weight:bolder;
-      color:var(--bleu);
-  }
-
-  label{
-    font-size:1.2rem;
-    padding-bottom: 8px;
-    letter-spacing:1px;
-  }
-  
-  .form-spe{
-    margin:10px;
-  }
-  
-  .container-password{
-    position:relative;
-  }
-  
-  #eye{
-    width:25px;
-    height:25px;
-    position:absolute;
-    right:12px;
-    top:7px;
-  }
-  
-  .error-msg{
-    font-weight:bolder;
-    font-size:1.1rem;
-    font-style:italic;
-    color:red;
-  }
-  
-  .explication-msg{
-    color:#30336b;
-    font-style:italic;
-    font-size:1.1rem;
-    text-align:left;
-  }
-
-  .infos-msg{
-    font-size:1.2rem;
-  }
 
   /* credits */
 

@@ -15,6 +15,8 @@ class SectionManager extends Bdd
         return $this-> sections;
     }
 
+    // fonctions requêtes bdd
+    // charge toutes les sections
     public function loadSections(){
         $req = "SELECT * FROM section";
         $stmt = $this -> getBdd()->prepare($req);

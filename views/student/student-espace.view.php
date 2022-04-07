@@ -1,15 +1,14 @@
 <?php
 ob_start();
-print_r($_SESSION);
 ?>
 
-    <main>
+<main>
     <div class="container-intro-espace" class="d-flex flex-column align-items-center">
         <p class="welcome-text"><?= 'Bonjour '.$_SESSION['ps'] ?></p>
         <h2>Les formations</h2>
-        <div class="text-explication m-3">
-            <p class="text-center">L'onglet "Les dernières" présente les dernières formations sorties, vous pouvez chercher une formation par mot clef.</p>
-            <p class="text-center">Lorsque vous cliquez sur "accéder", la formation est placé dans l'onglet "En cours".</p>
+        <div class="text-explication">
+            <p class="text-center">L'onglet "Les dernières" présente les dernières formations sorties, vous pouvez également chercher une formation par mot clef.</p>
+            <p class="text-center">Lorsque vous cliquez sur "accéder", la formation sera placé dans l'onglet "En cours".</p>
             <p class="text-center">En validant toutes les leçons d'une formation, elle se retrouvera dans l'onglet "terminées".</p>
         </div>
 
@@ -26,46 +25,52 @@ print_r($_SESSION);
           </ul>
     </div>
 
-
     <div class="container-main">
-
         <div id="myTabContent" class="tab-content">
   
             <div class="tab-pane fade  active show" id="toutes">
                 <h3>Les dernières formations</h3>
-                <div class="container-cards" class="d-flex justify-content-center">
+
+                <div class="container-cards">
                     <div id="container-card">
                         <div id="container-form-home" class="d-flex flex-column align-items-start">
                             <div id="box-search-form">
-                                <form action=""  method="POST" id="form-search">
+                                <form action="" method="POST" id="form-search">
                                 <label for="input-search" class="form-label">Chercher une formation :</label>
                                 <br>
-                                <input type="text" id="input-search" name="search" placeholder="ex : javascript, front-end...">
+                                <input type="text" id="input-search" name="search" placeholder="ex : javascript, front-end..." minlength="2" maxlength="30" required>
                                 <button class="btn button-form" type="submit">Envoi</button>
                                 </form>
                             </div>
                         </div>
-                        <div id="card-container" class="d-flex flex-column align-items-center">
-                            <div class="card-box d-flex flex-column align-items-center">
-                                <div class="card-box-intro">
-                                    <h4>L'impact environnemental de la conception de site web sous php et javascript</h4>
-                                </div>
 
-                                <div class="card-box-main">
-                                    <div class="card-box-image">
-                                    <div class="card-img">
-                                        <img src="images/javascript.jpg" alt="logo javascript" class="card-img">
+
+
+                        <div id="resultat">
+                        <?php foreach($lastFormationsTable as $formation) : ?>
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="card-box d-flex flex-column align-items-center">
+                                    <div class="card-box-intro">
+                                        <h4><?= $formation['title']; ?></h4>
                                     </div>
-                                    <p class="card-description">Cette formation a pour but de vous faire acquérir des bonnes pratiques dans la réalisation d'un site web afin de réduire son impact environnemental. En passant par les phases d'analyses, de maquettage et enfin de réalisation, vous avancerez pas à pas dans la conception de votre site.</p>
+
+                                    <div class="card-box-main">
+                                        <div class="card-box-image">
+                                        <div class="card-img">
+                                            <img src="<?= $formation['picture']?>" class="card-img">
+                                        </div>
+                                        <p class="card-description"><?= $formation['description']?></p>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="card-box-footer">
-                                    <p class="text-center"><span>Formateur :</span> Florian Fleur</p>
-                                </div>
+                                    <div class="card-box-footer">
+                                        <p class="text-center"><span>Formateur : </span><?= $formation['firstname'] .' '. $formation['lastname'] ?></p>
+                                    </div>
 
-                                <a href="Suivre-formation.view.php" class="m-3 btn button-general button-type-2">Accéder</a>
+                                    <a href="Suivre-formation.view.php" class="btn button-general button-type-2 m-3">Accéder</a>
+                                </div>
                             </div>
+                        <?php endforeach ; ?>
                         </div>
                     </div>
                 </div>
@@ -73,30 +78,40 @@ print_r($_SESSION);
 
             <div class="tab-pane fade" id="en-cours">
                 <h3>Mes formations en cours</h3>
-                <div class="container-cards" class="d-flex justify-content-center">
+                <div class="container-cards">
                     <div id="container-card">
-                        <div id="card-container" class="d-flex flex-column align-items-center">
-                            <div class="card-box d-flex flex-column align-items-center">
+                    <?php if(!empty($startedFormationsTable)){
+                        foreach($startedFormationsTable as $formation) : ?>
+                        <div class="d-flex flex-column align-items-center">
+
+                            <div class="card-box  d-flex flex-column align-items-center">
                                 <div class="card-box-intro">
-                                    <h4>L'impact environnemental de la conception de site web sous php et javascript</h4>
+                                    <h4><?= $formation['title'] ?></h4>
                                 </div>
 
                                 <div class="card-box-main">
                                     <div class="card-box-image">
                                     <div class="card-img">
-                                        <img src="images/javascript.jpg" alt="logo javascript" class="card-img">
+                                        <img src="<?= $formation['picture'] ?>" alt="logo javascript" class="card-img">
                                     </div>
-                                    <p class="card-description">Cette formation a pour but de vous faire acquérir des bonnes pratiques dans la réalisation d'un site web afin de réduire son impact environnemental. En passant par les phases d'analyses, de maquettage et enfin de réalisation, vous avancerez pas à pas dans la conception de votre site.</p>
+                                        <p class="card-description"><?= $formation['description'] ?></p>
                                     </div>
                                 </div>
 
                                 <div class="card-box-footer">
-                                    <p class="text-center"><span>Formateur :</span> Florian Fleur</p>
-                                    <p class="text-center"><span>Ma progression :</span> 40%</p>
+                                    <p class="text-center"><span>Formateur : </span><?= $formation['firstname'].' '.$formation['lastname'] ?></p>
+                                    <p class="text-center"><span>Ma progression : </span><?= $formation['progression'].'%' ?></p>
                                 </div>
+
                                 <a href="Suivre-formation.view.php" class="m-3 btn button-general button-type-2">Accéder</a>
                             </div>
                         </div>
+                     <?php endforeach ; 
+                     } else {?>
+                     <div class="box-welcome-text">
+                        <p class="welcome-text">Vous n'avez pas de formations en cours</p>
+                     </div>
+                     <?php } ?>
                     </div>
                 </div>
             </div>
@@ -105,72 +120,52 @@ print_r($_SESSION);
                 <h3>Mes formations terminées</h3>
                 <div class="container-cards" class="d-flex justify-content-center">
                     <div id="container-card">
-                        <div id="card-container" class="d-flex flex-column align-items-center">
+                    <?php if(!empty($finishedFormationsTable)){    
+                        foreach($finishedFormationsTable as $formation) : ?>
+                        <div class="d-flex flex-column align-items-center">
+                        
                             <div class="card-box d-flex flex-column align-items-center">
                                 <div class="card-box-intro">
-                                    <h4>L'impact environnemental de la conception de site web sous php et javascript</h4>
+                                    <h4><?= $formation['title'] ?></h4>
                                 </div>
 
                                 <div class="card-box-main">
                                     <div class="card-box-image">
                                     <div class="card-img">
-                                        <img src="images/javascript.jpg" alt="logo javascript" class="card-img">
+                                        <img src="<?= $formation['picture'] ?>" alt="logo javascript" class="card-img">
                                     </div>
-                                    <p class="card-description">Cette formation a pour but de vous faire acquérir des bonnes pratiques dans la réalisation d'un site web afin de réduire son impact environnemental. En passant par les phases d'analyses, de maquettage et enfin de réalisation, vous avancerez pas à pas dans la conception de votre site.</p>
-                                    </div>
-                                </div>
-
-                                <div class="card-box-footer">
-                                    <p class="text-center"><span>Formateur :</span> Florian Fleur</p>
-                                    <p class="text-center"><span>Ma progression :</span> 100%</p>
-                                </div>
-                        
-                                <a href="Suivre-formation.view.php" class="btn button-general button-type-2 m-3">Accéder</a>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="container-cards" class="d-flex justify-content-center">
-                    <div id="container-card">
-                        <div id="card-container" class="d-flex flex-column align-items-center">
-                            <div class="card-box d-flex flex-column align-items-center">
-                                <div class="card-box-intro">
-                                    <h4>L'impact environnemental de la conception de site web sous php et javascript</h4>
-                                </div>
-
-                                <div class="card-box-main">
-                                    <div class="card-box-image">
-                                    <div class="card-img">
-                                        <img src="images/javascript.jpg" alt="logo javascript" class="card-img">
-                                    </div>
-                                    <p class="card-description">Cette formation a pour but de vous faire acquérir des bonnes pratiques dans la réalisation d'un site web afin de réduire son impact environnemental. En passant par les phases d'analyses, de maquettage et enfin de réalisation, vous avancerez pas à pas dans la conception de votre site.</p>
+                                    <p class="card-description"><?= $formation['description'] ?></p>
                                     </div>
                                 </div>
 
                                 <div class="card-box-footer">
-                                    <p class="text-center"><span>Formateur :</span> Florian Fleur</p>
-                                    <p class="text-center"><span>Ma progression :</span> 100%</p>
+                                    <p class="text-center"><span>Formateur : </span><?= $formation['firstname'].' '. $formation['lastname'] ?></p>
+                                    <p class="text-center"><span>Ma progression : </span> 100%</p>
                                 </div>
                         
                                 <a href="Suivre-formation.view.php" class="btn button-general button-type-2 m-3">Accéder</a>
-
                             </div>
                         </div>
+                        <?php endforeach ;
+                        } else {?>
+                        <div class="box-welcome-text">
+                            <p class="welcome-text">Vous n'avez pas de formations terminées.</p>
+                        </div>
+                        <?php } ?>
                     </div>
                 </div>
-
-
             </div>
 
         </div>
     </div>
 
-    </main>
+</main>
 
 
     <?php
 $content = ob_get_clean();
+
+//$src = '';
+$src = URL.'script/ajax/script.ajax.js';
 
 require "views/common/template.view.php";

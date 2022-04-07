@@ -1,7 +1,7 @@
 <?php
 
-require_once "models/Bdd.class.php";
-require_once "models/entities/Resource.class.php";
+require_once(ROOT.'/models/Bdd.class.php');
+require_once(ROOT.'/models/entities/Resource.class.php');
 
 class ResourceManager extends Bdd
 {
@@ -15,6 +15,8 @@ class ResourceManager extends Bdd
         return $this-> resources;
     }
 
+    // fonctions requêtes bdd
+    // charge toutes les ressources
     public function loadResources(){
         $req = "
         SELECT * FROM resource

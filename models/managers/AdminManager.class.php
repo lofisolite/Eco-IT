@@ -1,7 +1,7 @@
 <?php
 
-require_once "models/Bdd.class.php";
-require_once "models/entities/Admin.class.php";
+require_once(ROOT.'/models/Bdd.class.php');
+require_once(ROOT.'/models/entities/Admin.class.php');
 
 class AdminManager extends Bdd
 {
@@ -22,6 +22,8 @@ class AdminManager extends Bdd
         return $adminsMails;
     }
 
+    // fonctions requêtes bdd
+    // charge tous les admins
     public function loadAdmins(){
         $req = "SELECT * FROM admin";
         $stmt = $this -> getBdd()->prepare($req);
@@ -35,6 +37,7 @@ class AdminManager extends Bdd
         }
     }
 
+    // récupére l'admin avec son mail - 
     public function getAdminByMail($mail){
         foreach($this->admins as $admin){
                 if($admin->getMail() === $mail){
@@ -44,6 +47,7 @@ class AdminManager extends Bdd
         throw new Exception("Problème pour récupérer l'admin avec mail.");
     }
 
+    // vérifie que l'admin fournit les bons identifiants pour se connecter.
     public function isAdminConnexionValid($mail, $password){
         $admin = $this->getAdminByMail($mail);
         $bddPassword = $admin->getPassword();
