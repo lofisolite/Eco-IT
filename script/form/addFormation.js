@@ -11,9 +11,9 @@ compteur('formationDescription', 'compteur1');
   
 
 // ajout et suppression input section
-let buttonAddInputSection = document.getElementById('buttonAddInputSection');
-let buttonDeleteInputSection = document.getElementById('buttonDeleteInputSection');
-let containerSectionInput = document.getElementById('containerSectionInput');
+let buttonAddInputSection = document.getElementById('addSection');
+let buttonDeleteInputSection = document.getElementById('deleteSection');
+let containerSectionInput = document.getElementById('containerSection');
 let inputOrderSectionTag = document.getElementsByClassName('inputOrderSection');
 
 // disabled button supprimer section
@@ -78,7 +78,7 @@ function deleteInputSection(){
   let compteurSection2 = inputOrderSection2.length;
   let newCompteurSection2 = compteurSection2 - 1;
 
-  // disabled button delete si min 2 input
+  // disabled button delete si minimum 2 input
   if(newCompteurSection2 <= 2){
     buttonDeleteInputSection.style.display = 'none';
    } 
@@ -91,17 +91,41 @@ function deleteInputSection(){
   previousPreviousSibling.remove();
 }
 
+if(document.getElementById('divResource') !== null){
+
+
 // ajout et suppression ressource
 let buttonAddResource = document.getElementById('buttonAddResource');
 let buttonDeleteResource = document.getElementById('buttonDeleteResource');
 let divResource = document.getElementById('divResource');
-let resourceTitleh3 = document.getElementById('resourceTitleh3');
+let resourceTitle = document.getElementById('resourceTitle');
 
 // disabled button supprimer resource
 //if(inputOrderSectionTag.length <= 2){
 // }
 buttonDeleteResource.style.display = 'none';
 
+
+function deleteResource(){
+  // compteur nombre input order
+  let inputOrderResource = document.getElementsByClassName('inputOrderResource');
+  let compteurResource = inputOrderResource.length;
+  let newCompteurResource = inputOrderResource - 1;
+
+  // disabled button delete si minimum 2 input
+  if(newCompteurResource <= 1){
+    buttonDeleteResource.style.display = 'none';
+   } 
+  
+  /*
+  let lastChildren = containerSectionInput.lastElementChild;
+  let previousSibling = lastChildren.previousElementSibling;
+  let previousPreviousSibling = previousSibling.previousElementSibling;
+  lastChildren.remove();
+  previousSibling.remove();
+  previousPreviousSibling.remove();
+  */
+}
 
 buttonAddResource.addEventListener('click', () => {
   divResource.style.display="block";
@@ -128,8 +152,6 @@ function addResource(){
 
     buttonDeleteResource.style.display = 'block';
     
-  
-
     // creation div contenant une ressource
     let containerRes = document.createElement('div');
     containerRes.setAttribute('class', 'containerResource');
@@ -138,6 +160,12 @@ function addResource(){
     let titleRessource = document.createElement('p');
     titleRessource.setAttribute('class', 'fw-bold');
 
+    // creation input order
+    let inputResourceOrder = document.createElement('input');
+    inputResourceOrder.setAttribute('type', 'hidden');
+    inputResourceOrder.setAttribute('value', newCompteurResource);
+    inputResourceOrder.setAttribute('name', 'resourceOrder[]');
+    inputResourceOrder.setAttribute('class', 'inputOrderResource');
 
     //Creation div contenant titre et lien
     let div1 = document.createElement('div');
@@ -186,6 +214,7 @@ function addResource(){
      let content2 = document.createTextNode('Lien de la ressource');  
      labelURL.appendChild(content2);
 
+
     //creation p explicatif
     let pExplicationURL = document.createElement('p');
     pExplicationURL.setAttribute('class', 'explication-msg mb-2');
@@ -193,6 +222,11 @@ function addResource(){
     // creation noeud texte élément label et ajout au label
     let content3 = document.createTextNode('Formats acceptés : JPG/JPEG, PNG, PDF.');  
     pExplicationURL.appendChild(content3);
+
+
+
+    // creation noeud text élément label et ajout au label
+
 
     //creation input title
     let inputURL = document.createElement('input');
@@ -203,13 +237,17 @@ function addResource(){
     inputURL.setAttribute('accept', 'image/png, image/jpeg, application/pdf');
     inputURL.setAttribute('required', '');
 
-    //document.body.appendChild(p);
+
+
+
+    //ajout des éléments
     divResource.insertAdjacentElement('beforeend', containerRes);
     divResource.insertAdjacentElement('beforeend', titleRessource )
 
     containerRes.insertAdjacentElement('beforeend', div1);
     containerRes.insertAdjacentElement('beforeend', div1);
 
+    div1.insertAdjacentElement('beforeend', inputResourceOrder);
     div1.insertAdjacentElement('beforeend', pErrorTitle);
     div1.insertAdjacentElement('beforeend', labelTitle);
     div1.insertAdjacentElement('beforeend', inputTitle);
@@ -219,4 +257,6 @@ function addResource(){
     div1.insertAdjacentElement('beforeend', pExplicationURL);
     div1.insertAdjacentElement('beforeend', inputURL);
     
+}
+
 }

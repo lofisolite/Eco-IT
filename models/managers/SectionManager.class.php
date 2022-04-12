@@ -1,7 +1,7 @@
 <?php
 
-require_once "models/Bdd.class.php";
-require_once "models/entities/Section.class.php";
+require_once(ROOT.'/models/Bdd.class.php');
+require_once(ROOT.'/models/entities/Section.class.php');
 
 class SectionManager extends Bdd
 {
@@ -15,6 +15,29 @@ class SectionManager extends Bdd
         return $this-> sections;
     }
 
+    public function tri($a, $b){
+
+    }
+
+    public function getSectionsByFormation($formationId){
+
+        foreach($this->sections as $section){
+            if($section->getFormationId() === $formationId){
+                $sections[] = $section;
+                // ici tri après selection des sections et avant de retourner le tableau d'objet
+            }
+        }
+        return $sections;
+    }
+
+    public function getSectionById($SectionId){
+        foreach($this->sections as $section){
+            if($section->getId() === $SectionId){
+                return $section;
+            }
+        }
+    }
+    
     // fonctions requêtes bdd
     // charge toutes les sections
     public function loadSections(){

@@ -18,7 +18,7 @@ ob_start();
             <label for="password" class="form-label">Mot de passe</label>
             <div class="container-password">
                 <input type="password" class="form-control" id="password" name="password" value="<?= $_POST['password'] ?? '' ?>" min="2" max="80" required>
-                <img id="eye" src="images/general/notvisible.png">
+                <img id="eye" src="public/images/general/notvisible.png">
             </div>
         </div>
         <button type="submit" class="btn button-general button-type-2 align-self-center">Valider</Button>
@@ -31,6 +31,7 @@ ob_start();
 
 $content = ob_get_clean();
 
-$src = "script/form/formGeneral.js";
+$titleHead = 'connexion EcoIt';
+$src = "script/form/verifyFormGeneral.js";
 
 require_once "views/common/template.view.php";

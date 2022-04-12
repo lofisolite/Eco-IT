@@ -5,16 +5,25 @@ require_once(ROOT.'/models/entities/Formation.class.php');
 
 class FormationManager extends Bdd
 {
-    private $formations;
+    private $allFormations;
+    private $formationsOnline;
     private $lastFormations;
     private $formationsByWord;
 
     private function addFormation(Formation $formation){
-        $this-> formations[] = $formation;
+        $this-> allFormations[] = $formation;
     }
 
     public function getFormations(){
-        return $this-> formations;
+        return $this-> allFormations;
+    }
+
+    private function addFormationOnline(Formation $formation){
+        $this-> formationsOnline[] = $formation;
+    }
+
+    public function getFormationsOnline(){
+        return $this-> formationsOnline;
     }
 
     private function addLastFormation(Formation $formation){
@@ -34,31 +43,33 @@ class FormationManager extends Bdd
     }
 
     // reçoit un identifiant de formation, récupère la formation
-    public function getFormationById(int $formationId){
-        foreach($this->formations as $formation){
+    public function getFormationById($formationId){
+        foreach($this->allFormations as $formation){
             if($formation->getId() === $formationId){
                 return $formation;
             }
         }
     }
 
-    // reçoit un identifiant de formateur, donne toutes ses formations.
-    public function getFormationsByTeacherId(int $teacherId){
-        foreach($this->formations as $formation){
-            if($formation->getTeacherId() === $teacherId){
-                $formationsByTeacher[] = $formation;
+    // reçoit un identifiant de formateur, donne toutes ses formations en ligne.
+    public function getFormationsOnlineByTeacherId($teacherId){
+            foreach($this->formationsOnline as $formation){
+                if($formation->getTeacherId() === $teacherId){
+                    $formationsOnlineByTeacher[] = $formation;
+                }
             }
-        }
-        return $formationsByTeacher;
+            return $formationsOnlineByTeacher;
     }
-
-    // reçoit un tableau d'identifiant de formateurs, renvoie un tableau de tableau de formations.
-    public function getFormationsByTeachersId(array $teachersId){
-        foreach($teachersId as $teacherId){
-            $formationsByTeachers[] = $this->getFormationsByTeacherId($teacherId);
+    
+        // reçoit un identifiant de formateur, donne toutes ses formations hors ligne.
+        public function getformationsNotOnlineByTeacherId($teacherId){
+            foreach($this->allFormations as $formation){
+                if($formation->getTeacherId() === $teacherId && $formation->getOnlineStatus() === 'non'){
+                    $formationsNotOnlineByTeacher[] = $formation;
+                }
+            }
+            return $formationsNotOnlineByTeacher;
         }
-        return $formationsByTeachers;
-    }
 
     // fonctions requêtes bdd
     // charge toutes les formations
@@ -71,7 +82,13 @@ class FormationManager extends Bdd
 
         foreach($formations as $formation){
             $f = new Formation($formation['id'], $formation['title'], $formation['description'], $formation['url_picture'], $formation['creation_date'], $formation['id_teacher'], $formation['online']);
-            $this->addFormation($f);
+
+            if($f->getOnlineStatus() === 'oui'){
+                $this->addFormationOnline($f);
+                $this->addFormation($f);
+            } else if($f->getOnlineStatus() === 'non'){
+                $this->addFormation($f);
+            }
         }
     }
 
@@ -92,7 +109,6 @@ class FormationManager extends Bdd
             $f = new Formation($formation['id'], $formation['title'], $formation['description'], $formation['url_picture'], $formation['creation_date'], $formation['id_teacher'], $formation['online']);
             $this->addLastFormation($f);
         }
-        
         if($result === false){
             die();
         }
@@ -120,5 +136,22 @@ class FormationManager extends Bdd
             if($result === false){
                 die();
             }
+        }
+
+
+        public function UpdateFormationOnline($formationId, $creationDate){
+            $req = "
+            UPDATE formation
+            SET online = 'oui',
+            creation_date = :date
+            WHERE id = :id
+            ";
+            $stmt = $this -> getBdd()->prepare($req);
+            $stmt->bindValue(":id", $formationId, PDO::PARAM_INT);
+            $stmt->bindValue(":date", $creationDate, PDO::PARAM_STR);
+            $result = $stmt -> execute();
+            $stmt->closeCursor();
+        
+            return $result;
         }
 }

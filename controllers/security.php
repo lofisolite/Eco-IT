@@ -12,7 +12,7 @@ function secureData($string){
 function genereCookieSession(){
     $timerCookie = session_id().microtime().rand(0,55555);
     $timerCookie = hash("sha256", $timerCookie);
-    setCookie(COOKIE_PROTECT, $timerCookie, time() + (60 * 60));
+    setCookie(COOKIE_PROTECT, $timerCookie, time() + (120 * 60));
     $_SESSION[COOKIE_PROTECT] = $timerCookie;
 }
 
@@ -179,4 +179,5 @@ function verifyVideo($input){
         return "video : la vidéo n'est pas une vidéo youtube";
     }
 }
+
 

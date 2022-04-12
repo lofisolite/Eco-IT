@@ -1,7 +1,6 @@
 <?php
 ob_start();
 ?>
-
 <main>
     <div class="container-intro-espace" class="d-flex flex-column align-items-center">
         <p class="welcome-text"><?= 'Bonjour '.$_SESSION['ps'] ?></p>
@@ -35,11 +34,12 @@ ob_start();
                     <div id="container-card">
                         <div id="container-form-home" class="d-flex flex-column align-items-start">
                             <div id="box-search-form">
-                                <form action="" method="POST" id="form-search">
-                                <label for="input-search" class="form-label">Chercher une formation :</label>
-                                <br>
-                                <input type="text" id="input-search" name="search" placeholder="ex : javascript, front-end..." minlength="2" maxlength="30" required>
-                                <button class="btn button-form" type="submit">Envoi</button>
+                                <form action="" method="POST" id="form-search-student">
+                                    <label for="input-search" class="form-label">Chercher une formation :</label>
+                                    <br>
+                                    <input type="hidden" name="st" value="st">
+                                    <input type="text" id="input-search" name="search" placeholder="ex : javascript, front-end..." minlength="2" maxlength="30" required>
+                                    <button class="btn button-form-search" type="submit">Envoi</button>
                                 </form>
                             </div>
                         </div>
@@ -67,7 +67,7 @@ ob_start();
                                         <p class="text-center"><span>Formateur : </span><?= $formation['firstname'] .' '. $formation['lastname'] ?></p>
                                     </div>
 
-                                    <a href="Suivre-formation.view.php" class="btn button-general button-type-2 m-3">Accéder</a>
+                                    <a href="<?= URL ?>studentEspace/formation/<?= $formation['id'] ?>" class="btn button-general button-type-2 m-3">Accéder</a>
                                 </div>
                             </div>
                         <?php endforeach ; ?>
@@ -103,7 +103,7 @@ ob_start();
                                     <p class="text-center"><span>Ma progression : </span><?= $formation['progression'].'%' ?></p>
                                 </div>
 
-                                <a href="Suivre-formation.view.php" class="m-3 btn button-general button-type-2">Accéder</a>
+                                <a href="<?= URL ?>studentEspace/formation/<?= $formation['id'] ?>" class="m-3 btn button-general button-type-2">Accéder</a>
                             </div>
                         </div>
                      <?php endforeach ; 
@@ -143,7 +143,7 @@ ob_start();
                                     <p class="text-center"><span>Ma progression : </span> 100%</p>
                                 </div>
                         
-                                <a href="Suivre-formation.view.php" class="btn button-general button-type-2 m-3">Accéder</a>
+                                <a href="<?= URL ?>studentEspace/formation/<?= $formation['id']?>" class="btn button-general button-type-2 m-3">Accéder</a>
                             </div>
                         </div>
                         <?php endforeach ;
@@ -162,10 +162,11 @@ ob_start();
 </main>
 
 
-    <?php
+<?php
 $content = ob_get_clean();
 
+$titleHead = 'Espace étudiant';
 //$src = '';
-$src = URL.'script/ajax/script.ajax.js';
+$src = 'script/ajax/ajax.js';
 
 require "views/common/template.view.php";

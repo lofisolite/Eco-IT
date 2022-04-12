@@ -1,13 +1,14 @@
 <?php
 session_start();
 
-if(isset($_POST['deconnexion']) && !empty($_POST['deconnexion']) && $_POST['deconnexion'] === 'true'){
-  session_destroy();
-  header("location: accueil");
-}
-
 // appel fichiers constantes URL et ROOT
 require 'config.php';
+
+
+if(isset($_POST['deconnexion']) && $_POST['deconnexion'] === 'true'){
+  session_destroy();
+  header("Location: ". URL . "accueil");
+}
 
 require_once(ROOT.'/controllers/security.php');
 require_once(ROOT.'/controllers/Controller.php');
@@ -16,7 +17,6 @@ $controller = new Controller;
 
 try{
     if(empty($_GET['page'])){
-        //require_once(ROOT.'/views/common/accueil.view.php');
         $controller->setHomePage();
     } else {
         $getPage = explode("/", secureData($_GET['page']));
@@ -35,7 +35,7 @@ try{
             break;
 
             case "test" :
-                $controllerAjax->displayFormations();
+                $controller->test();
             break;
 
             case "Tinscription" :
@@ -48,13 +48,31 @@ try{
 
             case "adminEspace" :
                 if(verifyAccessAdmin()){
+                    if(isset($getPage[3])){
+                        $lessonId = intval($getPage[3]);
+                    }
+                    if(isset($getPage[2])){
+                    $formationId = intval($getPage[2]); 
+                    }
+
                     if(empty($getPage[1])){
                         $controller-> setAdminEspace(); 
-                    } else if($getPage[1] === "validate"){
+                    }
+                    
+                    if($getPage[1] === "validate"){
                         $controller->validateTeacher($getPage[2]);
                     } else if($getPage[1] === "reject"){
                         $controller->rejectTeacher($getPage[2]);
-                    } 
+
+                    }
+                    
+                    if($getPage[1] === 'formation'){
+                        if(!isset($lessonId)){
+                            $controller->adminFormationPage($formationId);
+                        } else if(isset($lessonId)){
+                            $controller->adminLessonFormationPage($formationId, $lessonId);
+                        }
+                    }
                 } else {
                     throw new Exception("Vous n'avez pas le droit d'accéder à cette page d'administration.");
                 }
@@ -62,10 +80,19 @@ try{
 
             case "studentEspace" :
                 if(verifyAccessStudent()){
-                    if(empty($getPage[1])){
+                    if(isset($getPage[3])){
+                        $lessonId = intval($getPage[3]);
+                    }
+                    if(isset($getPage[2])){
+                    $formationId = intval($getPage[2]); 
+                    }
+                    
+                    if(!isset($getPage[1])){
                         $controller->setStudentEspace($_SESSION['id']);
-                    } else if($getPage[1] === 'formation'){
-                        //$controller->studentFormationPage();
+                    } else if($getPage[1] === "formation" && !isset($lessonId)){
+                        $controller->studentFormationPage($_SESSION['id'], $formationId);
+                    } else if($getPage[1] === "formation" && isset($lessonId)){
+                        $controller->studentLessonFormationPage($_SESSION['id'], $formationId, $lessonId);
                     }
                 } else {
                     throw new Exception("Vous n'avez pas le droit d'accéder à cette page.");
@@ -73,13 +100,40 @@ try{
                 
             break;
 
+
             case "teacherEspace" :
                 if(verifyAccessTeacher()){
-                    if(empty($getPage[1])){
-                        $controller->setTeacherEspace($_SESSION['id']);
-                    } else if($getPage[1] === 'formation'){
-                        //$controller->teacherFormationPage();
+                    if(isset($getPage[3])){
+                        $lessonId = intval($getPage[3]);
                     }
+                    if(isset($getPage[2])){
+                    $formationId = intval($getPage[2]); 
+                    }
+
+                    if(!isset($getPage[1])){
+                        $controller->setTeacherEspace($_SESSION['id']);
+
+                    } else if($getPage[1] === 'formation'){
+                           
+                        if(!isset($lessonId)){
+                        $controller->teacherFormationPage($_SESSION['id'], $formationId);
+                        } else if(isset($lessonId)){
+                        $controller->teacherLessonFormationPage($_SESSION['id'], $formationId, $lessonId);
+                        }
+
+                    } else if($getPage[1] === 'online'){
+                        $controller->updateFormationOnline($formationId);
+
+                    } else if($getPage[1] === 'create'){
+                        if(!isset($getPage[2])){
+                            $controller->createFormation();
+                        } else if($getPage[2] ==='step'){
+                            $controller->createFormationStep($getPage[3]);
+                        }
+                    }/* else if($getPage[1] === 'modify'){
+                        $controller->modifyFormation($formationId);
+                    }
+                    */
                 } else {
                   throw new Exception("Vous n'avez pas le droit d'accéder à cette page.");
                 }
@@ -90,6 +144,7 @@ try{
 }
 
 catch(Exception $e){
-    $ErrorMsg = $e->getMessage();
+    $errorMsg = $e->getMessage();
+    $errorCode = $e->getCode();
     require "views/common/error.view.php";
 }

@@ -3,6 +3,7 @@ ob_start();
 ?>
 
 <main>
+
 <?php if(!empty($_SESSION['alert'])) : ?>
             <div class="alert alert-<?= $_SESSION['alert']['type'] ?>" role="alert">
             <p><?= $_SESSION['alert']['msg'] ?></p>
@@ -34,7 +35,7 @@ ob_start();
                         <label for="input-search" class="form-label">Chercher une formation :</label>
                         <br>
                         <input type="text" id="input-search" name="search" placeholder="ex : javascript, front-end..." minlength="2" maxlength="30" required>
-                        <button class="btn button-form" type="submit">Envoi</button>
+                        <button class="btn -search" type="submit">Envoi</button>
                       </form>
                     </div>
                 </div>
@@ -75,11 +76,13 @@ ob_start();
       </div>
     </main>
 
-    <?php
+<?php
 
-    $content = ob_get_clean();
+$content = ob_get_clean();
+    
+$titleHead = 'accueil EcoIt';
 
-    //$src = '';
-    $src = 'script/ajax/script.ajax.js';
+//$src = '';
+$src = 'script/ajax/ajax.js';
 
-    require "views/common/template.view.php";
+require "views/common/template.view.php";

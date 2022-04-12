@@ -15,6 +15,32 @@ class LessonManager extends Bdd
         return $this-> lessons;
     }
 
+    public function getLessonById($lessonId){
+        foreach($this->lessons as $lesson){
+            if($lesson->getId() === $lessonId){
+                return $lesson;
+            }
+        }
+    }
+
+    public function getLessonsBySection($sectionId){
+        foreach($this->lessons as $lesson){
+            if($lesson->getSectionId() === $sectionId){
+                $lessons[] = $lesson;
+            }
+        }
+        return $lessons;
+    }
+
+    public function getLessonsByFormation($formationId){
+        foreach($this->lessons as $lesson){
+            if($lesson->getFormationId() === $formationId){
+                $lessons[] = $lesson;
+            }
+        }
+        return $lessons;
+    }
+
     // fonctions requêtes bdd
     // charge toutes les lessons
     public function loadLessons(){

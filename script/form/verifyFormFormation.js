@@ -36,14 +36,19 @@ let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@%*+\-_!?])[a-zA-Z
 // ok - description
 let stringRegex = /^[a-z0-9éèàùâêîôûëçëïüÿ\s'\-\.\!\?\,\:\;]+$/i;
 
+// cette ligne fait tout beuger
+/*
+// ok - video youtube
+let youtubeRegex = /(https\:\/\/){0,}(www\.){0,}(youtube\.com){1} || (youtu\.be){1}(\/watch\?v\=[^\s]){1})/;
+*/
 
 function ShowPasswordInput(eye, password){
     imageSrc = eye.getAttribute('src');
-    if(imageSrc === 'images/general/notvisible.png'){
-      eye.setAttribute('src', 'images/general/visible.png');
+    if(imageSrc === 'public/images/general/notvisible.png'){
+      eye.setAttribute('src', 'public/images/general/visible.png');
       password.setAttribute('type', 'text');
-    } else if(imageSrc === 'images/general/visible.png'){
-      eye.setAttribute('src', 'images/general/notvisible.png');
+    } else if(imageSrc === 'public/images/general/visible.png'){
+      eye.setAttribute('src', 'public/images/general/notvisible.png');
       password.setAttribute('type', 'password');
     }
 }

@@ -3,7 +3,7 @@ ob_start();
 ?>
 
     <main>
-        <a href="<?= URL ?>teacherEspace" class="btn button-general button-type-1">Retour aux formations</a>
+        <a href="<?= URL ?>adminEspace" class="btn button-general button-type-1">Retour</a>
         <h2 id="formation-title" class="m-4"><?= $formation->getTitle(); ?></h2>
 
         <div id="container-main-formation">
@@ -19,14 +19,14 @@ ob_start();
                         <?php foreach($menuFormation as $menu){ ?>
                             <span class="menu-formation-section"><?=  $menu['sectionTitle'] ?></span>
                             <?php foreach($menu['lessons'] as $lesson){?>
-                                <a href="<?= URL ?>teacherEspace/formation/<?= $menu['formationId'].'/'.$lesson->getId() ?>" <?php if($lesson->getId() === $lessonContent['lessonId']){ ?> class="menu-formation-lesson lesson-active" <?php } else { ?> class="menu-formation-lesson" <?php } ?>class="menu-formation-lesson"><?= $lesson->getTitle() ?></a>
+                                <a href="<?= URL ?>adminEspace/formation/<?= $menu['formationId'].'/'.$lesson->getId() ?>" <?php if($lesson->getId() === $lessonContent['lessonId']){ ?> class="menu-formation-lesson lesson-active" <?php } else { ?> class="menu-formation-lesson" <?php } ?>class="menu-formation-lesson"><?= $lesson->getTitle() ?></a>
                             <?php } ?>
                         <?php } ?> 
 
                     </div>
                 </div>
         
-                <div id="box-formation"class="d-flex flex-column align-items-center">
+                <div id="box-formation"class="d-flex flex-column align-items-center pb-4">
                 
                     <div id="formation-box-section-title">
                         <h3><?= $lessonContent['sectionTitle'] ?></h3>
@@ -38,11 +38,11 @@ ob_start();
                         </div>
                         <div id="formation-button-arrow">
                             <?php if($lessonContent['lessonId'] !== $firstLessonId){ ?>
-                                <a href="<?= URL ?>teacherEspace/formation/<?= $menu['formationId'].'/'.$lessonContent['lessonId']-1 ?>" class="btn button-general button-type-1">précédent</a>
+                                <a href="<?= URL ?>adminEspace/formation/<?= $menu['formationId'].'/'.$lessonContent['lessonId']-1 ?>" class="btn button-general button-type-1">précédent</a>
                             <?php } ?>
                             
                             <?php if($lessonContent['lessonId'] !== $lastLessonId){ ?>
-                                <a href="<?= URL ?>teacherEspace/formation/<?= $menu['formationId'].'/'.$lessonContent['lessonId']+1 ?>" class="btn button-general button-type-1">Suivant</a>
+                                <a href="<?= URL ?>adminEspace/formation/<?= $menu['formationId'].'/'.$lessonContent['lessonId']+1 ?>" class="btn button-general button-type-1">Suivant</a>
                             <?php } ?>
                         </div>
                     </div>
@@ -74,8 +74,6 @@ ob_start();
                         } 
                     } ?>
                     </div>
-                    
-                    
                 </div>
             </div>
         </div>

@@ -9,6 +9,43 @@
     --secondpolice: 'Lato', sans-serif;
 }
 
+/* Menu 
+    header
+        header menu
+
+    main
+        main introduction
+
+    button
+
+    form   
+        form general
+        form search formation
+        form connexion et inscription
+        form creation formation
+
+    card
+
+    détail formation
+        formation menu
+        menu burger
+        formation contenu
+
+    espace admin
+        tableaux
+        card
+
+    espace apprenant
+
+    espace formateur
+
+    page d'erreur
+
+    credits
+
+    footer
+*/
+
 body{
     margin:0;
     padding:0;
@@ -42,26 +79,43 @@ h1 a:hover{
 .connexion-button{
     position:absolute;
     right:10px;
-    top:10px;    
+    top:10px; 
     border: var(--vertdark) solid 2px;
     background:#FFF;
     color:var(--vertdark);
+    text-decoration:none;
+    letter-spacing:1.5px;
     font-size:1.3rem;
+    margin: 5px; 
 }
 
 .connexion-button:hover{
-    background-color: var(--vertdark);
-    color:var(--beige);
+    background:var(--vertdark);
+    color:#FFF;
 }
 
-.btnEspace{
-    top:60px;
+.btn-espace{
+    position:absolute;
+    right:10px; 
+    top:60px;    
+    text-decoration:none;
+    color:#FFF;
+    letter-spacing:1.5px;
+    font-size:1.2rem;
+    margin: 5px;
+    border:var(--vertdark) solid 2px;
+    background-color: var(--vertdark);
+}
+
+.btn-espace:hover{
+    background-color: #FFF;
+    color:var(--vertdark);
 }
 
 @media screen and (max-width:650px){
-    .connexion-button{
+    .connexion-button, .btn-espace{
         right:5px;
-        font-size:1.1rem;
+        font-size:1rem;
         padding:3px;
     }
 }
@@ -101,10 +155,7 @@ h1 a:hover{
     }
 }
 
-/* main general */
-/*main general */
-
-/* main introduction */
+/* main */
 main{
     margin:15px 0px;
 }
@@ -160,7 +211,8 @@ p{
     letter-spacing: 1px;
 }
 
-a{
+
+a, button{
     cursor:pointer;
 }
 
@@ -204,6 +256,19 @@ a{
     color:var(--bleu);
 }
 
+.button-type-3{
+    border: var(--vertdark) solid 2px;
+    background:#FFF;
+    color:var(--vertdark);
+    font-size:1.3rem;
+}
+
+.button-type-3:hover{
+    background-color: var(--vertdark);
+    color:var(--beige);
+}
+
+
 .btn-choice-valid{
     border:#198754 solid 2px;background-color: #198754;
     
@@ -222,15 +287,40 @@ a{
     color:#DC3545;
 }
 
-.btn-form-input{
-    color:#FFF;
-    letter-spacing:1px;
+/* form button */
+.button-form-search{
+    border:var(--bleu) solid 2px;
+    background-color:var(--bleu);
+    color:#fff;
+    letter-spacing:1.5px;
     font-size:1.1rem;
-    margin: 5px;
+    padding:5px;
 }
 
-.btn-form-input:hover{
-    background-color: #FFF;
+.button-form-search:hover{
+    background-color: #fff;
+    color:var(--bleu);
+}
+
+.btn-status{
+    text-decoration:none;
+    letter-spacing:1.5px;
+    font-size:1.2rem;
+    font-weight:bold;
+    margin: 5px;
+    color:var(--bleu);
+    border:var(--bleu) solid 2px;
+    background-color:#FFF;
+}
+
+.btn-status:hover{
+    color:#FFF;
+    background-color:var(--bleu) ;
+}
+
+.btn-active{
+    color:#FFF;
+    background-color:var(--bleu) ;
 }
 
 @media screen and (max-width:500px){
@@ -240,7 +330,8 @@ a{
     }
 }
 
-/* form general */
+/* form
+   formulaire general */
 input{
     width:320px;
     border:solid 1px;
@@ -248,7 +339,7 @@ input{
     padding:5px;
 }
 
-/* form search and level */
+/* form search */
 #container-form-home label{
     font-size:1.1rem;
     font-weight: 600;
@@ -269,28 +360,14 @@ input{
     margin-bottom:20px;
 }
 
-/* form button */
-.button-form{
-    border:var(--bleu) solid 2px;
-    background-color:var(--bleu);
-    color:#fff;
-    letter-spacing:1.5px;
-    font-size:1.1rem;
-    padding:5px;
-}
-
-.button-form:hover{
-    background-color: #fff;
-    color:var(--bleu);
-}
-
 @media screen and (max-width:500px){
     #input-search{
         width:220px;
     }
 }
 
-/* formulaire connexion */
+/* formulaire connexion et inscription */
+
 #main-connexion{
     margin:120px 0px;
 }
@@ -362,8 +439,13 @@ input{
     font-size:1.2rem;
   }
 
+/* formulaire creation */
+#formation-creation span{
+    font-weight: bolder;
+}
 
-/* card général*/
+
+/* card general*/
 .container-main{
     background-color: var(--beige);
     margin:0px 15px 30px 15px;
@@ -494,11 +576,29 @@ input{
     }
 }
 
-/* Détails formation */
+/* Détail formation */
+/* menu-formation */
+#container-main-formation{
+    border: var(--vertdark) solid 3px;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    margin:30px 15px 20px 15px;
+}
+
+#container-formation{
+    display:grid;
+    width:100%;
+    grid-template-columns: 300px 1fr;
+}
+
 /* formation menu */
 #menu-formation{
     min-width:300px;
     border-right:var(--vertdark) solid 3px;
+}
+
+#menu-formation a:hover{
+    color:var(--vertdark);
+    font-weight:bolder;
 }
 
 #box-menu-formation{
@@ -540,6 +640,31 @@ input{
     color:var(--vertdark);
 }
 
+.lesson-active{
+    color:#FFF;
+    background-color:var(--vertdark);
+}
+
+.lesson-active:hover{
+    color:var(--vertdark);
+    background-color:#FFF;
+}
+
+
+@media screen and (max-width:1000px){
+    #container-formation{
+        display:block;
+    }
+
+    #menu-formation{
+        width:300px;
+        position:absolute;
+        left:-300px;
+        z-index:2;
+        border:var(--vertdark) solid 2px;
+    }
+}
+
 @media screen and (max-width:500px){
     .menu-formation-section, .menu-formation-lesson{
         padding:5px;
@@ -547,18 +672,46 @@ input{
     }
 }
 
-
-/* formation box */
-#container-main-formation{
-    border: var(--vertdark) solid 3px;
-    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
-    margin:30px 15px 20px 15px;
+/* menu burger */
+#menu-burger-show, #menu-burger-exit{
+    cursor:pointer;
+    visibility:hidden;
 }
 
-#container-formation{
-    margin:0 auto;
+#menu-burger-exit{
+    position:absolute;
+    top:0;
+    right:0;
+    padding:5px;
 }
 
+#menu-burger-show img, #menu-burger-exit img{
+    width:45px;
+    height:45px;
+  }
+
+@media screen and (max-width:1000px){
+    #menu-burger-show, #menu-burger-exit{
+        visibility:visible;
+    }
+    #menu-formation{
+        width:300px;
+        position:absolute;
+        left:-300px;
+        z-index:2;
+        border:var(--vertdark) solid 2px;
+    }
+    .show-menu{
+    transform: translateX(100%);
+    transition: all .5s ease-in-out;
+    }
+
+    .hide-menu{
+        transform: translateX(0%);
+    }
+}
+
+/* formation contenu */
 #formation-box-section-title{
     background-color: var(--gris);
     width:100%;
@@ -578,12 +731,20 @@ input{
     font-weight: bolder;
     letter-spacing: 1px;
     text-decoration: underline;
+    color:var(--bleu);
 }
 
 #formation-box-video iframe{
     width:600px;
     height:450px;
     padding:20px 5px;
+}
+
+#formation-box-resource p{
+    font-size:1.4rem;
+    color:var(--bleu);
+    letter-spacing:1px;
+    font-weight:bolder;
 }
 
 #formation-box-lesson-statut {
@@ -593,11 +754,19 @@ input{
     width:80%;
 }
 
-#formation-box-lesson-statut p{
+#p-titre-status{
     font-size:1.3rem;
     color:var(--bleu);
     font-weight:bolder;
+    text-decoration:underline;
     margin-top:10px;
+}
+
+#p-status-lesson{
+    font-size:1.2rem;
+    margin-top:5px;
+    letter-spacing:1px;
+    font-style:italic;
 }
 
 #formation-box-lesson-statut-button{
@@ -661,51 +830,6 @@ input{
     }
 }
 
-
-/* footer */
-footer{
-    height:150px;
-    background-color:var(--vertdark);
-}
-
-/* menu burger */
-#menu-burger-show, #menu-burger-exit{
-    cursor:pointer;
-    visibility:hidden;
-}
-
-#menu-burger-exit{
-    position:absolute;
-    top:0;
-    right:0;
-    padding:5px;
-}
-
-#menu-burger-show img, #menu-burger-exit img{
-    width:45px;
-    height:45px;
-  }
-
-@media screen and (max-width:1000px){
-    #menu-burger-show, #menu-burger-exit{
-        visibility:visible;
-    }
-    #menu-formation{
-        width:300px;
-        position:absolute;
-        left:-300px;
-        z-index:2;
-        border:var(--vertdark) solid 2px;
-    }
-    .show-menu{
-    transform: translateX(100%);
-    transition: all .5s ease-in-out;
-    }
-
-    .hide-menu{
-        transform: translateX(0%);
-    }
-}
 
 /* Espace admin */
 #main-admin h3{
@@ -909,3 +1033,16 @@ margin:0 auto;
       width:250px;
       height:auto;
   }
+
+  @media screen and (max-width:900px){
+    .credits{
+        flex-direction:column;
+        align-items:center;
+    }
+}
+
+/* footer */
+footer{
+    height:150px;
+    background-color:var(--vertdark);
+}

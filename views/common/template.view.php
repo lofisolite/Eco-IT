@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
-    <title>EcoIT</title>
     <meta charset="utf-8">
-    <meta name="description" content=".">
+    <title><?= $titleHead ?></title>
+    <meta name="description" content="EcoIT vous propose des formations gratuite de développement web basé sur l'éco-conception">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,11 +29,11 @@
           </form>
 
           <?php if($_SESSION["access"] === 'admin'){ ?>
-              <a type="button" class="connexion-button btnEspace btn" href="<?= URL ?>adminEspace">Mon espace</a>
+              <a type="button" class="btn-espace btn button-type-1" href="<?= URL ?>adminEspace">Mon espace</a>
           <?php } else if($_SESSION["access"] === 'student'){ ?>
-              <a type="button" class="connexion-button btnEspace btn" href="<?= URL ?>studentEspace">Mon espace</a>
+              <a type="button" class="btn-espace btn button-type-1" href="<?= URL ?>studentEspace">Mon espace</a>
           <?php } else if($_SESSION["access"] === 'teacher'){ ?>
-              <a type="button" class="connexion-button btnEspace btn" href="<?= URL ?>teacherEspace">Mon espace</a>
+              <a type="button" class="btn-espace btn button-type-1" href="<?= URL ?>teacherEspace">Mon espace</a>
           <?php } 
       } ?>
 
@@ -59,6 +59,8 @@
     <script type="text/javascript" src="<?= URL ?>script\general\bootstrap.min.js"></script>
     <script type="text/javascript" src="<?= URL ?>script\general\jquery-3.6.0.js"></script>
     <script type="text/javascript" src="<?= URL ?>script\general\script.js"></script>
-    <script type="text/javascript" src="<?= $src ?>"></script>
+    <?php if(isset($src)){ ?>
+    <script type="text/javascript" src="<?= URL.$src ?>"></script>
+    <?php } ?>
   </body>
 </html>

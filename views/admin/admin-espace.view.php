@@ -1,5 +1,6 @@
 <?php
 ob_start();
+
 ?>
 
 <main id="main-admin">
@@ -39,9 +40,11 @@ ob_start();
                     <td class="cell-border-right align-middle">
 
                         <div class="admin-choice">
-                            <a href="<?= URL ?>adminEspace/validate/<?= $teacher->getId();?>" type="submit" class="btn button-general btn-choice-valid">Valider</a>
-                        
-                            <form method="POST" action="<?= URL ?>adminEspace/reject/<?= $teacher->getId(); ?>" onSubmit="return confirm('voulez vous vraiment supprimer le formateur?');">
+                            <form method="POST" action="<?= URL ?>adminEspace/validate/<?= $teacher->getId(); ?>" onSubmit="return confirm('voulez vous vraiment valider le formateur?');">
+                                <button type="submit" class="btn button-general btn-choice-valid">Valider</button>
+                            </form>
+
+                            <form method="POST" action="<?= URL ?>adminEspace/reject/<?= $teacher->getId(); ?>" onSubmit="return confirm('voulez vous vraiment rejeter le formateur?');">
                                 <button type="submit" class="btn button-general btn-choice-reject">Rejeter</button>
                             </form>
                         </div>
@@ -55,7 +58,7 @@ ob_start();
             </table>
             <?php } else { ?>
                 <div class="box-welcome-text">
-                    <p class="welcome-text">Il n'y a pas de formateurs à valider.</p>
+                    <p class="welcome-text">Il n'y a pas de formateur à valider.</p>
                 </div>
             <?php } ?>
         </div>
@@ -63,24 +66,24 @@ ob_start();
         <h3>Validés</h3>
         <div class="container-admin">
 
-            <?php if(isset($teachersValidate)){ ?>
+            <?php if(isset($teachersValidateTable)){ ?>
             <table id="table2" class="table text-center">
                 <tr>
                     <th>Nom</th>
                     <th></th>
                 </tr>
-                <?php foreach($teachersValidate as $teacher):?>
+                <?php foreach($teachersValidateTable as $teacher):?>
                 <tr>
-                    <td class="cell-border-right align-middle"><?= $teacher->getFirstname().' '.$teacher->getLastname(); ?></td>
+                    <td class="cell-border-right align-middle"><?= $teacher['firstname'].' '.$teacher['lastname']; ?></td>
                     <td class="align-middle">
-                        <a class="btn button-general button-type-2" href="<?= '#card'.$teacher->getId(); ?>">Détails</a>
+                        <a class="btn button-general button-type-2" href="<?= '#card'.$teacher['id'] ?>">Détails</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </table>
             <?php } else { ?>
                 <div class="box-welcome-text">
-                    <p class="welcome-text">Il n'y a pas de formateurs validés.</p>
+                    <p class="welcome-text">Il n'y a pas de formateur validé.</p>
                 </div>
             <?php } ?>
 
@@ -124,7 +127,9 @@ ob_start();
 
                             <div class="card-box-footer">
                                 <div class="d-flex justify-content-center m-3">
-                                    <a href="<?= URL ?>adminEspace/validate/<?= $teacher->getId();?>" type="submit" class="btn button-general btn-choice-valid">Valider</a>
+                                    <form method="POST" action="<?= URL ?>adminEspace/validate/<?= $teacher->getId(); ?>" onSubmit="return confirm('voulez vous vraiment valider le formateur?');">
+                                        <button type="submit" class="btn button-general btn-choice-valid">Valider</button>
+                                    </form>
                                     
                                     <form method="POST" action="<?= URL ?>adminEspace/reject/<?= $teacher->getId(); ?>" onSubmit="return confirm('voulez vous vraiment supprimer le formateur?');">
                                         <button type="submit" class="btn button-general btn-choice-reject">Rejeter</button>
@@ -140,64 +145,53 @@ ob_start();
         </div>
         <?php } else { ?>
             <div class="box-welcome-text">
-                <p class="welcome-text">Il n'y a pas de formateurs non validés.</p>
+                <p class="welcome-text">Il n'y a pas de formateur non validé.</p>
             </div>
         <?php } ?>
 
         <h3>Validés</h3>
-        <?php if(isset($teachersValidate)){ ?>
+        <?php if(isset($teachersValidateTable)){ ?>
         <div class="container-admin">
             <div class="container-cards-teacher">
 
-                <?php foreach($teachersValidate as $teacher):?>
+                <?php foreach($teachersValidateTable as $teacher){?>
                     
                 <div id="box-container-card">
-                    <div id="<?= 'card'.$teacher->getId(); ?>" class="card-box">
+                    <div id="<?= 'card'.$teacher['id'] ?>" class="card-box">
                             
                         <div class="card-identity">
                             <div class="card-title">
-                                <h4><?= $teacher->getFirstname().' '.$teacher->getLastname(); ?></h4>
+                                <h4><?= $teacher['firstname'].' '.$teacher['lastname'] ?></h4>
                             </div>
-                            <img class="picture-profile" src="<?= $teacher->getPictureProfile(); ?>" alt="">
+                            <img class="picture-profile" src="<?= $teacher['picture'] ?>" alt="">
                         </div>
 
                         <div class="card-box-main">
                             <div class="card-box-description">
-                                <p class="fw-bold"><?= $teacher->getMail(); ?></p>
-                                <p class="card-description"><?= $teacher->getDescription(); ?></p>
+                                <p class="fw-bold"><?= $teacher['mail'] ?></p>
+                                <p class="card-description"><?= $teacher['description'] ?></p>
                             </div>
                         </div>
 
                         <div class="card-box-footer">
                             <p class="text-center"><span>Ses formations</span></p>
-                                
-                            <?php 
-                            $teacherId = $teacher->getId();
-
-                            foreach($formationsByTeachersId as $formations){
-                                foreach($formations as $formation){
-
-                                    $formationTitle = $formation->getTitle();
-
-                                    $formationTeacherId = $formation->getTeacherId(); 
-
-                                    if($teacherId === $formationTeacherId){ ?>
-                                        <p class="text-center"><?= $formationTitle ?></p>
-
-                                    <?php }
-                                }
-                            } ?>
+                            <?php if(isset($teacher['formations'])){ 
+                                foreach($teacher['formations'] as $formation){?>
+                                    <p class="text-center" ><a href="<?= URL ?>adminEspace/formation/<?= $formation->getId() ?>" ><?= $formation->getTitle() ?></a></p>
+                                <?php }
+                            } else { ?>
+                            <p class="text-center font-italic" >Ce formateur n'a pas encore de formation en ligne</p>
+                            <?php } ?>
                         </div>
-
                     </div>
-                    <?php endforeach; ?>
+                <?php } ?>
                 
                 </div>
             </div>
         </div>
         <?php } else { ?>
             <div class="box-welcome-text">
-                <p class="welcome-text">Il n'y a pas de formateurs validés.</p>
+                <p class="welcome-text">Il n'y a pas de formateur validé.</p>
             </div>
         <?php } ?>
 
@@ -209,6 +203,7 @@ ob_start();
 <?php
 $content = ob_get_clean();
 
+$titleHead = 'Espace administrateur';
 $src = "script/general/script.admin.js";
 
 require "views/common/template.view.php";

@@ -1,4 +1,5 @@
 
+
 jQuery(document).ready(() => {
     // menu - suivre une formation
     $('#menu-burger-show').click(function (){
@@ -11,3 +12,5 @@ jQuery(document).ready(() => {
     });
   });
     
+
+  

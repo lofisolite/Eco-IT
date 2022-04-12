@@ -5,8 +5,17 @@ require_once(ROOT.'/models/entities/FormationByStudent.class.php');
 
 class FormationByStudentManager extends Bdd
 {
+    private $formationsByStudentNotstarted;
     private $formationsByStudentStarted;
     private $formationsByStudentFinished;
+
+    private function addFormationByStudentNotStarted(FormationByStudent $formationByStudent){
+        $this-> formationsByStudentNotstarted[] = $formationByStudent;
+    }
+
+    public function getFormationsByStudentNotStarted(){
+        return $this-> formationsByStudentNotstarted;
+    }
 
     private function addFormationByStudentStarted(FormationByStudent $formationByStudent){
         $this-> formationsByStudentStarted[] = $formationByStudent;
@@ -39,11 +48,53 @@ class FormationByStudentManager extends Bdd
         foreach($formationsByStudent as $formation){
             $f = new FormationByStudent($formation['id_student'], $formation['id_formation'], $formation['status'], $formation['progression']);
 
-            if($f->getStatus() === 'suivi' && $f->getProgression() !== 100){
+            if($f->getStatus() === 'non suivi' && $f->getProgression() !== 100){
+                $this->addFormationByStudentNotStarted($f);
+            } else if($f->getStatus() === 'suivi' && $f->getProgression() !== 100){
                 $this->addFormationByStudentStarted($f);
-            } else if($f->getProgression() === 100){
+            } else if($f->getStatus() === 'suivi' && $f->getProgression() === 100){
                 $this-> addFormationByStudentFinished($f);
             }
         }
     }
+
+    // passe la formation non suivi en suivi
+    public function updateFormationByStudentStatus($studentId, $formationId){
+        $req ="
+        UPDATE student_formation
+        SET status = 'suivi'
+        WHERE id_student = :id_student
+        AND id_formation = :id_formation
+        ";
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindValue(":id_student", $studentId, PDO::PARAM_INT);
+        $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);
+        $result = $stmt->execute();
+        $stmt->closeCursor();
+        
+        if($result === false){
+            throw new Exception('La formation ne peux pas être ajoutée à vos formations en cours.');
+        }
+    }
+
+        // modifie la progression d'une formation
+        public function updateFormationByStudentProgression($studentId, $formationId, $progression){
+            $req ="
+            UPDATE student_formation
+            SET progression = :progression
+            WHERE id_student = :id_student
+            AND id_formation = :id_formation
+            ";
+            $stmt = $this->getBdd()->prepare($req);
+            $stmt->bindValue(":id_student", $studentId, PDO::PARAM_INT);
+            $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);
+            $stmt->bindValue(":progression", $progression, PDO::PARAM_INT);
+            $result = $stmt->execute();
+            $stmt->closeCursor();
+            
+            if($result === false){
+                
+                //throw new Exception('La formation ne peux pas être ajoutée à vos formations en cours.');
+            }
+        }
 }
