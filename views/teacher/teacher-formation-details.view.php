@@ -75,7 +75,6 @@ ob_start();
                     } ?>
                     </div>
                     
-                    
                 </div>
             </div>
         </div>
@@ -86,6 +85,6 @@ ob_start();
 $content = ob_get_clean();
 
 $titleHead = 'Formation EcoIt';
-// $src = '';
+$src = 'script\general\menuFormation.js';
 
 require "views/common/template.view.php";

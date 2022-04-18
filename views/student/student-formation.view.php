@@ -109,5 +109,6 @@ $content = ob_get_clean();
 
 $titleHead = 'Formation EcoIt';
 $src = 'script/ajax/ajax.js';
+$src2 = 'script\general\menuFormation.js';
 
 require "views/common/template.view.php";

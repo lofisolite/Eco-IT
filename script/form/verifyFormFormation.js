@@ -1,273 +1,136 @@
-//test
-
-let firstname = document.getElementById('firstname');
-let errorFirstname = document.getElementById('errorFirstname');
-let lastname = document.getElementById('lastname');
-let errorLastname = document.getElementById('errorLastname');
-let pictureProfil = document.getElementById('pictureProfil');
-let errorPictureProfil = document.getElementById('errorPictureProfil');
-let description = document.getElementById('description');
-let errorDescription = document.getElementById('errorDescription');
-let mail = document.getElementById('mail');
-let password = document.getElementById('password');
-let errorMail = document.getElementById('errorMail');
-let errorPassword = document.getElementById('errorPassword');
-let eye = document.getElementById('eye');
-
-// variables
-let formConnexion = document.getElementById('formConnexion');
-let formSinscription = document.getElementById('formSinscription');
-let formTinscription = document.getElementById('formTinscription');
-
 
 // REGEX
-// ok firstname, lastname
-let nameRegex = /^[a-zA-Zéèàùâêîôûëçëïüÿ]{2,}([-\s][a-zéèàùâêîôûëçëïüÿ]+)?$/i;
+// titre formation
+let titleRegex = /^[a-zéèàùâêîôûëçëïüÿ\s\'\-\.\!\?\,\:\;]+$/i;
 
-// ok - pseudo
-let pseudoRegex = /^(?=.+[a-z])[a-zA-Z0-9éèàùâêîôûëçëïüÿ]+$/i;
-
-//ok - mail
-let mailRegex = /^([0-9a-zA-Z].*?@([0-9a-zA-Z].*\.\w{2,4}))$/
-
-// ok - mdp
-let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@%*+\-_!?])[a-zA-Z\d$@%*+\-_!?]{10,}$/;
-
-// ok - description
-let stringRegex = /^[a-z0-9éèàùâêîôûëçëïüÿ\s'\-\.\!\?\,\:\;]+$/i;
-
-// cette ligne fait tout beuger
-/*
-// ok - video youtube
-let youtubeRegex = /(https\:\/\/){0,}(www\.){0,}(youtube\.com){1} || (youtu\.be){1}(\/watch\?v\=[^\s]){1})/;
-*/
-
-function ShowPasswordInput(eye, password){
-    imageSrc = eye.getAttribute('src');
-    if(imageSrc === 'public/images/general/notvisible.png'){
-      eye.setAttribute('src', 'public/images/general/visible.png');
-      password.setAttribute('type', 'text');
-    } else if(imageSrc === 'public/images/general/visible.png'){
-      eye.setAttribute('src', 'public/images/general/notvisible.png');
-      password.setAttribute('type', 'password');
-    }
-}
+// description Formation
+let descriptionRegex = /^[a-z0-9éèàùâêîôûëçëïüÿ\s'\-\.\!\?\,\:\;]+$/i;
 
 
-// function validation input
-function validMail(input, errorText){
-  if(input.value === ""){
-    errorText.textContent = "";
-    return false;
-  } else if(mailRegex.test(input.value) == false){
-    errorText.textContent = "Le format du mail n\'est pas valide."
-    return false;
-  } else if (input.value.length <= 7 || input.value.length >= 80){
-    errorText.textContent = "La taille du mail n\'est pas bonne."
-    return false;
-  } else {
-    errorText.textContent='';
-    return true;
-  }
-}
-
-function validPassword(input, errorText){
-  if(input.value === ""){
-    errorText.textContent = "";
-    return false;
-  } else if(passwordRegex.test(input.value) == false){
-    errorText.textContent = "Le format du mot de passe n\'est pas valide."
-    return false;
-  } else if (input.value.length <= 2 || input.value.length >= 80){
-    errorText.textContent = "La taille du mot de passe  n\'est pas bonne."
-    return false;
-  } else {
-    errorText.textContent= '';
-    return true;
-  }
-}
-
-function validPseudo(input, errorText){
-  if(input.value === ""){
-    errorText.textContent = "";
-    return false;
-  } else if(pseudoRegex.test(input.value) == false){
-    errorText.textContent = "Le format du pseudo n\'est pas valide."
-    return false;
-  } else if (input.value.length <= 2 || input.value.length >= 50){
-    errorText.textContent = "La taille du pseudo  n\'est pas bonne."
-    return false;
-  } else {
-    errorText.textContent= '';
-    return true;
-  }
-}
-
-function validName(input, errorText){
-  if(input.value === ""){
-    errorText.textContent = "";
-    return false;
-  } else if(nameRegex.test(input.value) == false){
-    errorText.textContent = "Format non valide."
-    return false;
-  } else if (input.value.length <= 2 || input.value.length >= 50){
-    errorText.textContent = "La taille du nom  n\'est pas bonne."
-    return false;
-  } else {
-    errorText.textContent= '';
-    return true;
-  }
-}
-
-function validImage(input, errorText){
-  let imageExtensions = ['jpeg','jpg', 'png'];
-  let inputExtension = input.value.split('.').pop().toLowerCase();
-  if(input.value === ""){
-    errorText.textContent = '';
-    return false;
-    } else if(input.files[0].size >= 1000000){
-    errorText.textContent = "L'image est trop volumineuse."
-    return false;
-    } else if(imageExtensions.includes(inputExtension) === false) {
-        errorText.textContent = "Le format d\'image n\'est pas valide.";
+// fonctions de vérification
+function validTitle(input, errorText){
+    if(input.value === ""){
+        errorText.textContent = "";
+        return false;
+    } else if(titleRegex.test(input.value) == false){
+        errorText.textContent = "Le format du titre n\'est pas valide. Il y a des caractères non autorisés";
+        return false;
+    } else if (input.value.length >= 70){
+        errorText.textContent = "La taille du titre n\'est pas bonne.";
         return false;
     } else {
-      errorText.textContent= '';
-      return true;
+        errorText.textContent= '';
+        return true;
     }
-
 }
 
 function validDescription(input, errorText){
-  if(input.value === ""){
-    errorText.textContent = "";
-    return false;
-  } else if(stringRegex.test(input.value) == false){
-    errorText.textContent = "Le format n\'est pas valide. Il y a des caractères non autorisés."
-    return false;
-  } else if (input.value.length <= 2 || input.value.length > 500){
-    errorText.textContent = "La description doit avoir entre 50 et 500 caractères."
-    return false;
-  } else {
-    errorText.textContent='';
-    return true;
-  }
+    if(input.value === ""){
+        errorText.textContent = "";
+        return false;
+    } else if(descriptionRegex.test(input.value) == false){
+        errorText.textContent = "Le format n\'est pas valide. Il y a des caractères non autorisés.";
+        return false;
+    } else if (input.value.length <= 10 || input.value.length > 500){
+        errorText.textContent = "La description doit avoir entre 10 et 500 caractères.";
+        return false;
+    } else {
+        errorText.textContent='';
+        return true;
+    }
 }
 
-// Validation formulaires
-// Formulaire connexion
-if(formConnexion !== null){
-  let mail = document.getElementById('mail');
-  let password = document.getElementById('password');
-  let errorMail = document.getElementById('errorMail');
-  let errorPassword = document.getElementById('errorPassword');
-  let eye = document.getElementById('eye');
+function validImage(input, errorText){
+    let imageExtensions = ['jpeg','jpg', 'png'];
+    let inputExtension = input.value.split('.').pop().toLowerCase();
 
-  eye.addEventListener('click', () =>{
-      ShowPasswordInput(eye, password)
-  });
-
-    mail.addEventListener('focusout', () => {
-      validMail(mail, errorMail);
-    });
-
-    password.addEventListener('focusout', () => {
-      validPassword(password, errorPassword);
-    });
-
-    formConnexion.addEventListener('submit', function(e) {
-      e.preventDefault();
-      if(validMail(mail, errorMail) && validPassword(password, errorPassword)){
-          formConnexion.submit();
-      };
-    });
-  }
-
-
-// Formulaire Inscription student 
-if(formSinscription !== null){
-    let pseudo = document.getElementById('pseudo');
-    let mail = document.getElementById('mail');
-    let password = document.getElementById('password');
-    
-    let errorPseudo = document.getElementById('errorPseudo');
-    let errorMail = document.getElementById('errorMail');
-    let errorPassword = document.getElementById('errorPassword');
-    
-    let eye = document.getElementById('eye');
-
-    eye.addEventListener('click', () =>{
-        ShowPasswordInput(eye, password)
-    });
-
-    pseudo.addEventListener('focusout', () => {
-      validPseudo(pseudo, errorPseudo);
-    });
-
-    mail.addEventListener('focusout', () => {
-      validMail(mail, errorMail);
-    });
-
-    password.addEventListener('focusout', () => {
-      validPassword(password, errorPassword);
-    });
-
-    formSinscription.addEventListener('submit', function(e) {
-      e.preventDefault();
-      if(validPseudo(pseudo, errorPseudo) && validMail(mail, errorMail) && validPassword(password, errorPassword)){
-        formSinscription.submit();
-      };
-    });
+    if(input.value === ""){
+        errorText.textContent = '';
+        return false;
+    } else if(input.files[0].size >= 2000000){
+        errorText.textContent = "L'image est trop volumineuse.";
+        return false;
+    } else if(imageExtensions.includes(inputExtension) === false) {
+        errorText.textContent = "Le fichier n\'est pas une image.";
+        return false;
+    } else {
+        errorText.textContent= '';
+        return true;
+    }
 }
 
-if(formTinscription !== null){
-  let firstname = document.getElementById('firstname');
-  let errorFirstname = document.getElementById('errorFirstname');
-  let lastname = document.getElementById('lastname');
-  let errorLastname = document.getElementById('errorLastname');
-  let pictureProfile = document.getElementById('pictureProfile');
-  let errorPictureProfile = document.getElementById('errorPictureProfile');
-  let description = document.getElementById('description');
-  let errorDescription = document.getElementById('errorDescription');
-  let mail = document.getElementById('mail');
-  let password = document.getElementById('password');
-  let errorMail = document.getElementById('errorMail');
-  let errorPassword = document.getElementById('errorPassword');
+// variables input et erreurs
+let formationTitle = document.getElementById('formationTitle');
+let errorFormationTitle = document.getElementById('errorFormationTitle');
 
-  let eye = document.getElementById('eye');
+let description = document.getElementById('formationDescription');
+let errorDescription = document.getElementById('errorFormationDescription');
 
-  eye.addEventListener('click', () =>{
-      ShowPasswordInput(eye, password)
-  });
+let picture = document.getElementById('formationPicture');
+let errorPicture = document.getElementById('errorFormationPicture');
 
-  firstname.addEventListener('focusout', () => {
-    validName(firstname, errorFirstname);
-  });
+// premier input section title
+let sectionFirstTitle = document.getElementById('sectionTitle1');
+let errorfirstSectionTitle = document.getElementById('errorSectionTitle1');
 
-  lastname.addEventListener('focusout', () => {
-    validName(lastname, errorLastname);
-  });
+// tous les inputs section title
+let inputsSectionTitle = document.querySelectorAll('input.sectionTitleClass');
 
-  pictureProfile.addEventListener('focusout', () => {
-    validImage(pictureProfile, errorPictureProfile);
-  });
-  
-  description.addEventListener('focusout', () => {
-    validDescription(description, errorDescription);
-  });
+let formAdd = document.getElementById('formAddFormation');
 
-  mail.addEventListener('focusout', () => {
-    validMail(mail, errorMail);
-  });
+// vérifications des inputs
+formationTitle.addEventListener('focusout', () => {
+  validTitle(formationTitle, errorFormationTitle);
+});
 
-  password.addEventListener('focusout', () => {
-    validPassword(password, errorPassword);
-  });
+description.addEventListener('focusout', () => {
+  validDescription(description, errorDescription);
+});
 
-  formTinscription.addEventListener('submit', function(e) {
+picture.addEventListener('focusout', () => {
+  validImage(picture, errorPicture);
+});
+
+let tableSection = '';
+sectionFirstTitle.addEventListener('input', () => {
+    let validation;
+    validation = validTitle(sectionFirstTitle, errorfirstSectionTitle);
+    if(validation === false){
+        tableSection = false;
+    } else if (validation === true) {
+        tableSection = true;
+    }
+})
+
+// observation inputs titre section ajouté dynamiquement
+let container = document.getElementById('containerSections');
+let config = { childList: true };
+
+function observeContainerSection(mutationsList){
+    let inputsSectionTitle = document.querySelectorAll('input.sectionTitleClass');
+    for(let i=0; i < inputsSectionTitle.length; i++){
+        inputsSectionTitle[i].addEventListener('input', () => {
+        let id = i+1;
+        let error = document.getElementById('errorSectionTitle'+id);
+        let validation;
+        validation = validTitle(inputsSectionTitle[i], error);
+            if(validation === false){
+                tableSection = false;
+            } else if(validation === true) {
+                tableSection = true;
+            }
+        });
+    } 
+}
+
+let observer = new MutationObserver(observeContainerSection);
+observer.observe(container, config);
+
+// soumission du formulaire
+formAdd.addEventListener('submit', function(e){
     e.preventDefault();
-    if(validName(firstname, errorFirstname) && validName(lastname, errorLastname) && validImage(pictureProfile, errorPictureProfile) && validDescription(description, errorDescription) && validMail(mail, errorMail) && validPassword(password, errorPassword)){
-      formTinscription.submit();
-    };
-  });
-}
+    if(validTitle(formationTitle, errorFormationTitle) && validDescription(description, errorDescription) && validImage(picture, errorPicture) && tableSection === true){
+      formAdd.submit();
+    } 
+});
+

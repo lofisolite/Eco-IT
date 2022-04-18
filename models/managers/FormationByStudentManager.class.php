@@ -77,24 +77,68 @@ class FormationByStudentManager extends Bdd
         }
     }
 
-        // modifie la progression d'une formation
-        public function updateFormationByStudentProgression($studentId, $formationId, $progression){
+    // modifie la progression d'une formation
+    public function updateFormationByStudentProgression($studentId, $formationId, $progression){
+        $req ="
+        UPDATE student_formation
+        SET progression = :progression
+        WHERE id_student = :id_student
+        AND id_formation = :id_formation
+        ";
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindValue(":id_student", $studentId, PDO::PARAM_INT);
+        $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);
+        $stmt->bindValue(":progression", $progression, PDO::PARAM_INT);
+        $result = $stmt->execute();
+        $stmt->closeCursor();
+            
+        if($result === false){
+                
+            //throw new Exception('La formation ne peux pas être ajoutée à vos formations en cours.');
+        }
+    }
+
+    // à l'inscription d'un étudiant, ajout à son compte des formations en ligne
+    public function addStudentByFormationOnline($formationsId, $studentId){
+        foreach($formationsId as $formationId){
             $req ="
-            UPDATE student_formation
-            SET progression = :progression
-            WHERE id_student = :id_student
-            AND id_formation = :id_formation
+            INSERT INTO student_formation(id_student, id_formation, status, progression) 
+            VALUES(:id_student, :id_formation, :status, :progression)
             ";
             $stmt = $this->getBdd()->prepare($req);
             $stmt->bindValue(":id_student", $studentId, PDO::PARAM_INT);
             $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);
-            $stmt->bindValue(":progression", $progression, PDO::PARAM_INT);
+            $stmt->bindValue(":status", 'non suivi', PDO::PARAM_STR);
+            $stmt->bindValue(":progression", '0', PDO::PARAM_INT);
             $result = $stmt->execute();
             $stmt->closeCursor();
-            
-            if($result === false){
-                
-                //throw new Exception('La formation ne peux pas être ajoutée à vos formations en cours.');
-            }
         }
+
+        if($result === false){
+            die();
+        }
+    }
+
+
+    // lorsqu'un formateur passe une formation en ligne, ajouter la formation à tous les élève
+    public function addFormationToStudent($formationId, $studentsId){
+        foreach($studentsId as $studentId){
+            $req ="
+            INSERT INTO student_formation(id_student, id_formation, status, progression) 
+            VALUES(:id_student, :id_formation, :status, :progression)
+            ";
+            $stmt = $this->getBdd()->prepare($req);
+            $stmt->bindValue(":id_student", $studentId, PDO::PARAM_INT);
+            $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);
+            $stmt->bindValue(":status", 'non suivi', PDO::PARAM_STR);
+            $stmt->bindValue(":progression", '0', PDO::PARAM_INT);
+            $result = $stmt->execute();
+            $stmt->closeCursor();
+        }
+
+        if($result === false){
+            die();
+        }
+    }
+
 }

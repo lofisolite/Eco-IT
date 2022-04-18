@@ -270,8 +270,8 @@ a, button{
 
 
 .btn-choice-valid{
-    border:#198754 solid 2px;background-color: #198754;
-    
+    border:#198754 solid 2px;
+    background-color: #198754; 
   }
 
   .btn-choice-reject{
@@ -285,6 +285,16 @@ a, button{
 
   .btn-choice-reject:hover{
     color:#DC3545;
+}
+
+
+.btn-modif{
+    border:#ff7f50 solid 2px;
+    background-color: #ff7f50; 
+}
+
+.btn-modif:hover{
+    color:#ff7f50; 
 }
 
 /* form button */
@@ -393,57 +403,72 @@ input{
     margin:20px 10px;
   }
 
-  .form-part{
-      font-size:1.5rem;
-      font-weight:bolder;
-      color:var(--bleu);
-  }
+.form-part{
+    font-size:1.5rem;
+    font-weight:bolder;
+    color:var(--bleu);
+}
 
-  label{
+label{
     font-size:1.2rem;
     padding-bottom: 8px;
     letter-spacing:1px;
-  }
+}
   
-  .form-spe{
+.form-spe{
     margin:10px;
-  }
+}
   
-  .container-password{
+.container-password{
     position:relative;
-  }
+}
   
-  #eye{
+#eye{
     width:25px;
     height:25px;
     position:absolute;
     right:12px;
     top:7px;
-  }
+}
   
-  .error-msg{
-    font-weight:bolder;
+.error-msg{
     font-size:1.1rem;
     font-style:italic;
     color:red;
-  }
+}
   
-  .explication-msg{
+.explication-msg{
     color:#30336b;
     font-style:italic;
     font-size:1.1rem;
     text-align:left;
-  }
+}
 
-  .infos-msg{
+.infos-msg{
     font-size:1.2rem;
-  }
+}
 
 /* formulaire creation */
 #formation-creation span{
     font-weight: bolder;
 }
 
+.nbrLesson{
+    width:75px;
+    padding:2px 5px;
+    margin-left : 10px;
+}
+
+hr{
+    width: 70%;
+    height: 2px;
+    background-color:var(--gris);
+    border:none; 
+}
+
+hr:last-of-type{
+    display:none;
+}
 
 /* card general*/
 .container-main{
@@ -497,6 +522,10 @@ input{
     float:left;
 }
 
+.card-img-modify{
+    width:400px;
+}
+
 .card-description{
     text-indent:20px;
     margin-top:15px;
@@ -518,6 +547,12 @@ input{
 .card-box-footer span{
     font-weight: bolder;
     color:var(--bleu);
+}
+
+/* formulaire modification */
+
+.card-img-form{
+    width:350px;
 }
 
 @media screen and (max-width:1200px){
@@ -988,6 +1023,9 @@ input{
 .formation-buttons-teacher{
 width:80%;
 margin:0 auto;
+display:flex;
+flex-direction:column;
+justify-content:center;
 }
 
 .text-explication{
@@ -998,9 +1036,20 @@ margin:0 auto;
     align-items:center;
 }
 
-#box-buttons-teacher{
+.box-buttons-teacher{
     display:flex;
     justify-content: center;
+    margin:0 auto;
+    width:90%;
+}
+
+.card-img-modify{
+    width:400px;
+}
+
+#container-modify-element{
+    max-width:600px;
+    margin:0 auto;
 }
 
 @media screen and (max-width:1000px){
@@ -1016,9 +1065,14 @@ margin:0 auto;
     .text-explication{
         width:95%;
     }
-    #box-buttons-teacher{
+    .card-img-modify{
+        width:300px;
+    }
+}
+
+@media screen and (max-width:375px){
+    .box-buttons-teacher{
         flex-direction:column;
-        align-items:center;
     }
 }
 

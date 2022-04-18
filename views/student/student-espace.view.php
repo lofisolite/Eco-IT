@@ -3,8 +3,8 @@ ob_start();
 ?>
 <main>
     <div class="container-intro-espace" class="d-flex flex-column align-items-center">
-        <p class="welcome-text"><?= 'Bonjour '.$_SESSION['ps'] ?></p>
         <h2>Les formations</h2>
+        <p class="welcome-text"><?= 'Bonjour '.$_SESSION['ps'] ?></p>
         <div class="text-explication">
             <p class="text-center">L'onglet "Les dernières" présente les dernières formations sorties, vous pouvez également chercher une formation par mot clef.</p>
             <p class="text-center">Lorsque vous cliquez sur "accéder", la formation sera placé dans l'onglet "En cours".</p>

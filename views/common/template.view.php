@@ -58,9 +58,11 @@
     </footer>
     <script type="text/javascript" src="<?= URL ?>script\general\bootstrap.min.js"></script>
     <script type="text/javascript" src="<?= URL ?>script\general\jquery-3.6.0.js"></script>
-    <script type="text/javascript" src="<?= URL ?>script\general\script.js"></script>
     <?php if(isset($src)){ ?>
     <script type="text/javascript" src="<?= URL.$src ?>"></script>
+    <?php } ?>
+    <?php if(isset($src2)){ ?>
+    <script type="text/javascript" src="<?= URL.$src2 ?>"></script>
     <?php } ?>
   </body>
 </html>

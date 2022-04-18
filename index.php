@@ -10,6 +10,13 @@ if(isset($_POST['deconnexion']) && $_POST['deconnexion'] === 'true'){
   header("Location: ". URL . "accueil");
 }
 
+/*
+echo 'la variable session : <br>';
+echo '<pre>';
+print_r($_SESSION);
+echo '</pre>';
+*/
+
 require_once(ROOT.'/controllers/security.php');
 require_once(ROOT.'/controllers/Controller.php');
 
@@ -57,16 +64,11 @@ try{
 
                     if(empty($getPage[1])){
                         $controller-> setAdminEspace(); 
-                    }
-                    
-                    if($getPage[1] === "validate"){
+                    } else if($getPage[1] === "validate"){
                         $controller->validateTeacher($getPage[2]);
                     } else if($getPage[1] === "reject"){
                         $controller->rejectTeacher($getPage[2]);
-
-                    }
-                    
-                    if($getPage[1] === 'formation'){
+                    } else if($getPage[1] === 'formation'){
                         if(!isset($lessonId)){
                             $controller->adminFormationPage($formationId);
                         } else if(isset($lessonId)){
@@ -124,16 +126,32 @@ try{
                     } else if($getPage[1] === 'online'){
                         $controller->updateFormationOnline($formationId);
 
-                    } else if($getPage[1] === 'create'){
+                    } else if($getPage[1] === 'delete'){
+                        $controller->deleteFormation($formationId);
+                    } else if($getPage[1] === 'createFormation'){
                         if(!isset($getPage[2])){
                             $controller->createFormation();
-                        } else if($getPage[2] ==='step'){
+                        } else if($getPage[2] === 'step' and !isset($getPage[3])){
+                            throw new Exception('Vous ne pouvez pas être sur cette page');
+                        } else if($getPage[2] ==='step' && isset($getPage[3]) && !isset($_SESSION['sections'])){
+                            throw new Exception('Vous ne pouvez pas être sur cette page');
+                        } else if($getPage[2] ==='step' && isset($getPage[3])){
                             $controller->createFormationStep($getPage[3]);
+                        } else {
+                            throw new Exception("Cette page n'existe pas.");
                         }
-                    }/* else if($getPage[1] === 'modify'){
-                        $controller->modifyFormation($formationId);
+                    } else if($getPage[1] === 'modify'){
+                        if(!isset($getPage[2])){
+                            throw new Exception('Cette page n\'existe pas');
+                        } else if(isset($getPage[2]) && !isset($getPage[3])){
+                            $controller->modifyFormation($formationId);
+                        } else if(isset($getPage[2]) && isset($getPage[3])){
+                            $controller->modifyFormationGeneral($formationId);
+                        }
+                    } else {
+                        throw new Exception("Vous n'avez pas le droit d'accéder à cette page.");
                     }
-                    */
+                    
                 } else {
                   throw new Exception("Vous n'avez pas le droit d'accéder à cette page.");
                 }

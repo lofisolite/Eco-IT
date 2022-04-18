@@ -15,10 +15,6 @@ class SectionManager extends Bdd
         return $this-> sections;
     }
 
-    public function tri($a, $b){
-
-    }
-
     public function getSectionsByFormation($formationId){
 
         foreach($this->sections as $section){
@@ -28,6 +24,17 @@ class SectionManager extends Bdd
             }
         }
         return $sections;
+    }
+
+    public function getSectionsIdByFormation($formationId){
+
+        foreach($this->sections as $section){
+            if($section->getFormationId() === $formationId){
+                $sectionsId[] = $section->getId();
+                // ici tri après selection des sections et avant de retourner le tableau d'objet
+            }
+        }
+        return $sectionsId;
     }
 
     public function getSectionById($SectionId){
@@ -51,5 +58,34 @@ class SectionManager extends Bdd
             $s = new Section($section['id'], $section['title'], $section['position'], $section['id_formation']);
             $this->addSection($s);
         }
+    }
+
+    public function addSectionInBdd($titles, $formationId){
+        $compteur = 0;
+        foreach($titles as $title){
+            $compteur++;
+            $req ="
+            INSERT INTO section(title, position, id_formation) 
+            VALUES(:title, :position, :id_formation)
+            "; 
+            $stmt = $this->getBdd()->prepare($req);
+            $stmt->bindValue(":title", $title, PDO::PARAM_STR);
+            $stmt->bindValue(":position", $compteur, PDO::PARAM_INT);
+            $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);
+            $result = $stmt->execute();
+            $stmt->closeCursor();
+        }
+    }
+
+    public function deletesectionsInBdd($formationId){
+        $req ="
+        DELETE FROM section WHERE id_formation = :id_formation
+        "; 
+      $stmt = $this->getBdd()->prepare($req);
+      $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);
+      $result = $stmt->execute();
+      $stmt->closeCursor();
+
+      return $result;
     }
 }

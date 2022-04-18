@@ -12,7 +12,7 @@ function secureData($string){
 function genereCookieSession(){
     $timerCookie = session_id().microtime().rand(0,55555);
     $timerCookie = hash("sha256", $timerCookie);
-    setCookie(COOKIE_PROTECT, $timerCookie, time() + (120 * 60));
+    setCookie(COOKIE_PROTECT, $timerCookie, time() + (300 * 60));
     $_SESSION[COOKIE_PROTECT] = $timerCookie;
 }
 
@@ -112,7 +112,7 @@ function verifyPicture($input){
     if($input['error'] === 0){
         if(is_array(getimagesize($input['tmp_name']))){
             if(in_array($extensionImage, $imageTypes)){
-                if($input['size'] < 1000000){
+                if($input['size'] < 2000000){
                     return true;
                 } else {
                     return 'Photo : l\'image est trop volumineuse';
@@ -128,56 +128,100 @@ function verifyPicture($input){
     }  
 }
 
+// fonction d'ajout d'image
+function ajoutImageFile($image, $text, $dir){
+    $random = rand(0,9999);
+    $extension = pathinfo($image['name'], PATHINFO_EXTENSION);
+    $imageFile = $dir."_".$random.$text.".".$extension;
+    if(!move_uploaded_file($image['tmp_name'], $imageFile)){
+        return false;
+    } else {
+        return $imageFile;
+    }
+}
+
 function verifyDescription($input){
-    if(strlen($input) >= 2 && strlen($input) <= 500){
+    if(strlen($input) >= 10 && strlen($input) <= 500){
         if(preg_match('/^[a-z0-9éèàùâêîôûëçëïüÿ\s\'\-\.\!\?\,\:\;]+$/i', $input)){
             return true;
         } else {
             return "Description : Caractères non autorisés.";
         }
     } else {
-        return "Description : Entre 2 et 500 caractères.";
+        return "Description : Entre 10 et 500 caractères.";
     }
 }
 
 function verifyFormationTitle($input){
-    if(strlen($input) >= 2 && strlen($input) <= 80){
-        if(preg_match('/^[a-z0-9éèàùâêîôûëçëïüÿ\s\'\-\.\!\?\,\:\;]+$/i', $input)){
+    if(strlen($input) >= 2 && strlen($input) <= 70){
+        if(preg_match('/^[a-zéèàùâêîôûëçëïüÿ\s\'\-\.\!\?\,\:\;]+$/i', $input)){
             return true;
         } else {
-            return "Titre : Caractères non autorisés.";
+            return "Titre de la formation : Caractères non autorisés.";
         }
     } else {
-        return "Titre : Entre 2 et 80 caractères.";
+        return "Titre de la formation : Entre 2 et 70 caractères.";
     }
 }
 
-function verifyTitle($input){
-    if(strlen($input) >= 2 && strlen($input) <= 60){
-        if(preg_match('/^[a-z0-9éèàùâêîôûëçëïüÿ\s\'\-\.\!\?\,\:\;]+$/i', $input)){
+function verifyTitleSection($input){
+    if(strlen($input) >= 2 && strlen($input) <= 70){
+        if(preg_match('/^[a-zéèàùâêîôûëçëïüÿ\s\'\-\.\!\?\,\:\;]+$/i', $input)){
             return true;
         } else {
-            return "Titre : Caractères non autorisés.";
+            return false;
         }
     } else {
-        return "Titre : Entre 2 et 60 caractères.";
+        return false;
     }
 }
 
-function verifyContent($input){
+function verifyTitleLesson($input){
+    if(strlen($input) >= 2 && strlen($input) <= 70){
+        if(preg_match('/^[a-zéèàùâêîôûëçëïüÿ\s\'\-\.\!\?\,\:\;]+$/i', $input)){
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
+function verifyLessonContent($input){
     if(preg_match('/^[a-z0-9éèàùâêîôûëçëïüÿ\s\'\-\.\!\?\,\:\;]+$/i', $input)){
         return true;
     } else {
-        return "contenu lesson : Caractères non autorisés.";
+        return false;
     }
 }
 
-function verifyVideo($input){
-    if(preg_match('/(https\:\/\/){0,}(www\.){0,}(youtube\.com){1}(\/watch\?v\=[^\s]){1})/', $input)){
+function verifyLessonVideo($input){
+    if(preg_match('/^(https?\:\/\/)?(www\.youtube\.com|youtu\.be)\/.+$/', $input)){
         return true;
     } else {
-        return "video : la vidéo n'est pas une vidéo youtube";
+        return false;
     }
 }
 
-
+function verifyResourceURL($input){
+    $filesTypes = ['jpeg', 'jpg', 'png', 'pdf'];
+    $extension = strtolower(pathinfo($input['name'],PATHINFO_EXTENSION));
+    if($input['error'] === 0){
+        if(is_array(getimagesize($input['tmp_name']))){
+            if(in_array($extension, $filesTypes)){
+                if($input['size'] < 1000000){
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else{
+            return false;
+        }  
+    } else {
+        return false;
+    }  
+}

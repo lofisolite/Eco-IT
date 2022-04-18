@@ -31,7 +31,7 @@ ob_start();
                 <p id="errorPictureProfile" class="mb-3 error-msg"></p>
                 <label for="pictureProfile" class="form-label">Photo de profil</label>
                 <p class="explication-msg mb-3">Formats acceptés : JPG/JPEG, PNG. Max 1MO.</p>
-                <input type="file" class="form-control" id="pictureProfile" value="<?= $_FILES['pictureProfile'] ?? '' ?>" name="pictureProfile" accept="image/png, image/jpeg" required >
+                <input type="file" class="form-control" id="pictureProfile" value="<?= $_FILES['pictureProfile'] ?? '' ?>" name="pictureProfile" accept="image/png, image/jpeg" required>
             </div>
 
             <div class="mb-3">

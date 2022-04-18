@@ -7,7 +7,7 @@ $controller = new Controller();
 
 // student et visiteur : recherche formation par mot clef
 if(isset($_POST['search'])){
-    $recherche = $_POST['search'];
+    $recherche = secureData($_POST['search']);
     $formations = $controller-> ajaxSearchFormation($recherche);
 
     if(empty($formations)){ ?>
@@ -118,5 +118,21 @@ if(isset($_POST['lessonFinished'])){
     echo json_encode($statusString);
 
 } ?>
+
+
+<?php // essai ajout input section
+/*
+if(isset($_POST['addSection'])){
+    $sectionAdd = $_POST['addSection'];
+?>
+
+<div id="containerSection<?= $sectionAdd ?>">
+    <p id="errorSectionTitle<?= $sectionAdd ?>" class="mb-3 error-msg"></p>
+    <label for="sectionTitle<?= $sectionAdd ?>" class="form-label labelSection">Section <?= $sectionAdd ?> - titre :</label>
+    <input type="hidden" value="<?= $sectionAdd ?>" name="sectionOrder[]" class="inputOrderSection">
+    <input type="text" id="sectionTitle<?= $sectionAdd ?>" class="form-control sectionTitleClass" name="sectionTitle[]" value="" minlength="2" maxlength="70" required>
+</div>
+} ?>
+*/
 
 

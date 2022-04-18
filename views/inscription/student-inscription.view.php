@@ -1,6 +1,5 @@
 <?php
 ob_start();
-
 ?>
 
 <main id="main-inscription">  

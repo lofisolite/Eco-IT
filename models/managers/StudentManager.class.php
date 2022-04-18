@@ -41,6 +41,14 @@ class StudentManager extends Bdd
         throw new Exception("Problème pour récupérer l'étudiant avec son mail.");
     }
 
+    // récupère tous les étudiant par leur identifiant
+    public function getStudentsId(){
+        foreach($this->students as $student){
+            $studentsId[] = $student->getId(); 
+            }   
+        return $studentsId; 
+    }
+
     // vérifie que l'éudiant fournit les bons identifiants.
     public function isStudentConnexionValid(string $mail, string $password){
         $student= $this->getStudentByMail($mail);
@@ -80,7 +88,6 @@ class StudentManager extends Bdd
             $student = new Student($this->getBdd()->lastInsertId(), $pseudo, $mail, $password);
             $this->addStudent($student);
         } else {
-            throw new Exception("Votre inscription n'a pas fonctionné, veuillez réessayer.");
             die();
         }
     }

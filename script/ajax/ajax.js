@@ -143,5 +143,18 @@ jQuery(document).ready(() => {
             searchFormation(document.getElementById('enfant'));
         
     });
+    /*
+    $('#addSection').click(function() {
+        $.ajax({
+          type: "POST",
+          url: url + 'controllers/ControllerAjax.php',
+          data: { addSection: "2" }
+        }).done(function( msg ) {
+          console.log(msg);
+          $('#containerSections').append(msg);
+        });
+      });
+    */
+
 });
 

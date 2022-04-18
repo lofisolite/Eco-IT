@@ -27,8 +27,24 @@ class ResourceManager extends Bdd
         $stmt->closeCursor();
 
         foreach($resources as $resource){
-            $r = new Resource($resource['id'], $resource['title'], $resource['type_mime'], $resource['url'], $resource['id_lesson']);
+            $r = new Resource($resource['id'], $resource['title'], $resource['type_mime'], $resource['url'], $resource['id_lesson'], $resource['id_formation']);
             $this->addResource($r);
         }
+    }
+
+    public function addResourceInBdd($resource){
+
+    }
+
+    public function deleteResourcesInBdd($formationId){
+        $req ="
+        DELETE FROM resource WHERE id_formation = :id_formation
+        "; 
+      $stmt = $this->getBdd()->prepare($req);
+      $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);
+      $result = $stmt->execute();
+      $stmt->closeCursor();
+
+      return $result;
     }
 }

@@ -1,56 +1,70 @@
 <?php
 ob_start();
+
+/*
+echo 'la variable POST : <br>';
+echo '<pre>';
+print_r($_POST);
+echo '</pre>';
+*/
+
+
 ?>
 
     <main class="mt-4" id="formation-creation">
-        <h2>Création de la section 1</h2>
-
-        <div class="text-explication">  
+        <h2>Section<?=' '.$step ?></h2>
+        <h3><?= $sectionTitle ?></h3>
+        <div class="text-explication">
+            <p>Une leçon contient un <span>titre</span>, une <span>vidéo youtube</span>, un <span>contenu textuel</span> et éventuellement des <span>ressources</span></p> 
         </div>
-     
-        <h2>titre section 1</h2>
-        <p>Chaque section doit contenir au moins deux leçons.</p>
-        <p>Une leçon contient un titre, un vidéo youtube, un contenu textuel et éventuellement des ressources</p>
+
         <div class="d-flex justify-content-center">
-          <form action="?step=1" id="" enctype="multipart/form-data" method="POST" class="form d-flex flex-column" id="formAddFormation">
-                <h3>Leçon 1</h3>
-                <p id="errorMsg" class="mb-3 error-msg"></p>
+          <form action="" id="formAddFormationStep" enctype="multipart/form-data" method="POST" class="form d-flex flex-column">
+          <?php if(isset($error)) : ?>
+                <p id="errorMsg" class="mb-3 error-msg"><?= $error ?></p>
+            <?php endif; ?>
+
+            <?php for($i= 1; $i <= $numberLesson; $i++){ ?>
+                <h3>Leçon <?= $i ?></h3>
 
                 <div class="mb-3">
-                    <p id="errorLessonTitle1" class="mb-3 error-msg"></p>
-                    <label for="lessonTitle1" class="form-label">Titre</label>
-                    <input type="text" class="form-control" id="lessonTitle1" name="lessontitle1" value="" minlength="2" maxlength="60" required>
+                    <p id="errorLessonTitle<?= $i ?>" class="mb-3 error-msg errorLessonTitle"><?php if(isset($errorTitleLesson[$i-1])){ echo $errorTitleLesson[$i-1]; }?></p>
+                    <label for="lessonTitle<?= $i ?>" class="form-label">Titre</label>
+                    <input type="hidden" value="<?= $i ?>" name="lessonOrder[]" class="inputOrderLesson">
+                    <input type="text" class="form-control lessonTitleClass" id="lessonTitle<?= $i ?>" name="lessonTitle[]" value="<?= $_POST['lessonTitle'][$i-1] ?? '' ?>" minlength="2" maxlength="70" required>
                 </div>
 
                 <div class="mb-3">
-                    <p id="errorLessonVideo1" class="mb-3 error-msg"></p>
-                    <label for="lessonVideo1" class="form-label">Vidéo youtube</label>
+                    <p id="errorLessonVideo<?= $i ?>" class="mb-3 error-msg errorLessonVideo"><?php if(isset($errorVideoLesson[$i-1])){ echo $errorVideoLesson[$i-1]; }?></p>
+                    <label for="lessonVideo<?= $i ?>" class="form-label errorLessonVideo">Vidéo youtube</label>
                     <p class="explication-msg mb-2"></p>
-                    <input type="text" class="form-control" id="lessonVideo1" name="lessonVideo1" value="" minlength="10" maxlength="200" required>
+                    <input type="text" class="form-control lessonVideoClass" id="lessonVideo<?= $i ?>" name="lessonVideo[]" value="<?= $_POST['lessonVideo'][$i-1] ?? '' ?>" minlength="10" maxlength="200" required>
                 </div>
 
                 <div class="mb-3">
-                    <p id="errorLessonContent1" class="mb-3 error-msg"></p>
-                    <label for="lessonContent1" class="form-label">Contenu</label>
-                    <textarea class="form-control" id="lessonContent1" name="lessonContent1" value="" cols="30" rows="10" min="2" max="" required></textarea>
+                    <p id="errorLessonContent<?= $i ?>" class="mb-3 error-msg errorLessonContent"><?php if(isset($errorContentLesson[$i-1])){ echo $errorContentLesson[$i-1]; }?></p>
+                    <label for="lessonContent<?= $i ?>" class="form-label">Contenu</label>
+                    <textarea class="form-control lessonContentClass" id="lessonContent<?= $i ?>" name="lessonContent[]" value="" cols="30" rows="10" min="50" max="20000" required><?= $_POST['lessonContent'][$i-1] ?? '' ?></textarea>
                 </div>
-
-                <h3 style='display:none' id="resourceTitle">Ressources</h3>
+                <p id="errorRessource<?= $i ?>" class="mb-3 error-msg"><?php if(isset($errorResource[$i-1])){ echo $errorResource[$i-1]; }?></p>
+                <h3 class="resourceTitleh3" id="lesson<?= $i ?>resourceTitleh3" style="display:none">Ressources</h3>
                 
-                <div class="mb-3" id="divResource"  style='display:none'>
-
-                  
-                  
+                <div class="mb-3 containerResources" id="lesson<?= $i ?>containerResources" style="display:none">
                 </div>
+                <?php if(isset($contentContainerRessource)){
+                        echo $contentContainerRessource;
+                    } ?>
 
-                
                 <div class="d-flex justify-content-center">
-                  <a class="btn button-general btn-choice-valid" id="buttonAddResource">Ajouter ressource</a>
-                  <a class="btn button-general btn-choice-reject" id="buttonDeleteResource">Supprimer ressource</a>
+                  <a class="btn button-general btn-choice-valid buttonAddResource" id="buttonAddResource<?= $i ?>">+ ressource</a>
+                  <a class="btn button-general btn-choice-reject buttonDeleteResource" id="buttonDeleteResource<?= $i ?>" style="display:none">- ressource</a>
                 </div>
 
+                <hr class="my-5">
 
-                <button type="submit" class="btn button-general button-type-2 align-self-center">Valider</Button>
+            <?php } ?>
+
+                <button type="submit" class="my-3 btn button-general button-type-2 align-self-center">Valider</Button>
           </form>
         </div>
     </main>
@@ -59,7 +73,8 @@ ob_start();
 
 $content = ob_get_clean();
 
-$titleHead = 'Ajout Formation';
-$src = "script/form/formAddFormation.js";
+$titleHead = 'Ajout Formation - étape '.$step;
+$src = "script/form/addFormationStep.js";
+$src2 = "script/form/verifyFormFormationStep.js";
 
 require "views/common/template.view.php";

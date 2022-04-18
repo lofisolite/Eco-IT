@@ -40,7 +40,6 @@ class LessonByStudentManager extends Bdd
                 $finishedLesson++;
             }
         }
-
         $lessonByStudentStatustable['totalLessonNbr'] = $totalLesson;
         $lessonByStudentStatustable['finishedLessonNbr'] = $finishedLesson;
 
@@ -48,8 +47,6 @@ class LessonByStudentManager extends Bdd
         } else {
             return false;
         }
-
-
         
     }
 
@@ -87,34 +84,71 @@ class LessonByStudentManager extends Bdd
         if($lessonByStudent){
             return $lessonByStudent;
         }
-        
     }
 
-        // passe la lesson non suivi en suivi
-        public function updateLessonByStudentStatus($studentId, $lessonId, $status){
-            if($status === 'en cours'){
-                $req ="
-                UPDATE student_lesson
-                SET status = 'en cours'
-                WHERE id_student = :id_student
-                AND id_lesson = :id_lesson
-                ";
-            } else if($status === 'terminé'){
-                $req ="
-                UPDATE student_lesson
-                SET status = 'terminé'
-                WHERE id_student = :id_student
-                AND id_lesson = :id_lesson
-                ";
-            }
-
-            $stmt = $this->getBdd()->prepare($req);
-            $stmt->bindValue(":id_student", $studentId, PDO::PARAM_INT);
-            $stmt->bindValue(":id_lesson", $lessonId, PDO::PARAM_INT);
-            $result = $stmt->execute();
-            $count = $stmt->rowCount();
-            $stmt->closeCursor();
-            
+     // passe la lesson non suivi en suivi
+    public function updateLessonByStudentStatus($studentId, $lessonId, $status){
+        if($status === 'en cours'){
+            $req ="
+            UPDATE student_lesson
+            SET status = 'en cours'
+            WHERE id_student = :id_student
+            AND id_lesson = :id_lesson
+            ";
+        } else if($status === 'terminé'){
+            $req ="
+            UPDATE student_lesson
+            SET status = 'terminé'
+            WHERE id_student = :id_student
+            AND id_lesson = :id_lesson
+            ";
         }
 
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindValue(":id_student", $studentId, PDO::PARAM_INT);
+        $stmt->bindValue(":id_lesson", $lessonId, PDO::PARAM_INT);
+        $result = $stmt->execute();
+        $count = $stmt->rowCount();
+        $stmt->closeCursor();   
+    }
+
+    // a l'inscription d'un étudiant, lui ajoute toutes les lessons de toutes les formations
+    public function addStudentToLessons($tableFormationLesson, $studentId){
+        foreach($tableFormationLesson as $table){
+            $formationId = $table['formationId'];
+            foreach($table['lessonId'] as $lessonId){
+                $req ="
+                INSERT INTO student_lesson(id_student, id_lesson, id_formation, status) 
+                VALUES(:id_student, :id_lesson, :id_formation, :status)
+                ";
+                $stmt = $this->getBdd()->prepare($req);
+                $stmt->bindValue(":id_student", $studentId, PDO::PARAM_INT);
+                $stmt->bindValue(":id_lesson", $lessonId, PDO::PARAM_INT);
+                $stmt->bindValue(':id_formation', $formationId, PDO::PARAM_INT);
+                $stmt->bindValue(":status", 'en cours', PDO::PARAM_STR);
+                $result = $stmt->execute();
+                $stmt->closeCursor();
+            }
+        }
+    }
+
+        // A la mise en ligne d'une formation, ajoute les leçons de cette formations aux étudiants
+        public function addLessonsToStudent($lessonsId, $formationId, $studentsId){
+            foreach($studentsId as $studentId){
+                foreach($lessonsId as $lessonId){
+                    $req ="
+                    INSERT INTO student_lesson(id_student, id_lesson, id_formation, status) 
+                    VALUES(:id_student, :id_lesson, :id_formation, :status)
+                    ";
+                    $stmt = $this->getBdd()->prepare($req);
+                    $stmt->bindValue(":id_student", $studentId, PDO::PARAM_INT);
+                    $stmt->bindValue(":id_lesson", $lessonId, PDO::PARAM_INT);
+                    $stmt->bindValue(':id_formation', $formationId, PDO::PARAM_INT);
+                    $stmt->bindValue(":status", 'en cours', PDO::PARAM_STR);
+                    $result = $stmt->execute();
+                    $stmt->closeCursor();
+                }
+            }
+            
+        }
 }

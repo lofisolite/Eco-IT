@@ -35,7 +35,7 @@ ob_start();
                         <label for="input-search" class="form-label">Chercher une formation :</label>
                         <br>
                         <input type="text" id="input-search" name="search" placeholder="ex : javascript, front-end..." minlength="2" maxlength="30" required>
-                        <button class="btn -search" type="submit">Envoi</button>
+                        <button class="btn button-form-search" type="submit">Envoi</button>
                       </form>
                     </div>
                 </div>

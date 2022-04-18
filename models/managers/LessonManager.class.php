@@ -32,6 +32,7 @@ class LessonManager extends Bdd
         return $lessons;
     }
 
+    // donne un identifiant de formation, récupére toutes les lessons de cette formation.
     public function getLessonsByFormation($formationId){
         foreach($this->lessons as $lesson){
             if($lesson->getFormationId() === $formationId){
@@ -40,6 +41,16 @@ class LessonManager extends Bdd
         }
         return $lessons;
     }
+
+        // donne un identifiant de formation, récupére toutes les lessons de cette formation.
+        public function getLessonsIdByFormation($formationId){
+            foreach($this->lessons as $lesson){
+                if($lesson->getFormationId() === $formationId){
+                    $lessons[] = $lesson->getId();
+                }
+            }
+            return $lessons;
+        }
 
     // fonctions requêtes bdd
     // charge toutes les lessons
@@ -54,5 +65,37 @@ class LessonManager extends Bdd
             $l = new Lesson($lesson['id'], $lesson['title'], $lesson['content'], $lesson['url_video'], $lesson['position'], $lesson['id_formation'], $lesson['id_section']);
             $this->addLesson($l);
         }
+    }
+
+    public function addLessonInBdd($lesson){
+        $req ="
+        INSERT INTO lesson(title, content, url_video, position, id_formation, id_section) 
+        VALUES(:title, :content, :url_video, :position, :id_formation, :id_section)
+        "; 
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindValue(":title", $lesson['title'], PDO::PARAM_STR);
+        $stmt->bindValue(":content", $lesson['content'], PDO::PARAM_STR);
+        $stmt->bindValue(":url_video", $lesson['video'], PDO::PARAM_STR);
+        $stmt->bindValue(":position", $lesson['position'], PDO::PARAM_INT);
+        $stmt->bindValue(":id_formation", $lesson['formationId'], PDO::PARAM_INT);
+        $stmt->bindValue(":id_section", $lesson['sectionId'], PDO::PARAM_INT);
+        $result = $stmt->execute();
+        $stmt->closeCursor();
+
+        if($result === false){
+            throw new Exception('l\insertion des lessons en base de donnés n\'a pas fonctionné');
+        }
+    }
+
+    public function deletelessonsInBdd($formationId){
+        $req ="
+        DELETE FROM lesson WHERE id_formation = :id_formation
+        "; 
+      $stmt = $this->getBdd()->prepare($req);
+      $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);
+      $result = $stmt->execute();
+      $stmt->closeCursor();
+
+      return $result;
     }
 }
