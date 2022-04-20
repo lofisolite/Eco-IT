@@ -1,4 +1,4 @@
-let url = document.location.origin + '/test/';
+let url = document.location.origin + '/EcoIt/';
 
 // Récupére les formations par mot clef et les dernières formations
 function searchFormation(formElement){

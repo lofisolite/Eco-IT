@@ -118,7 +118,6 @@ ob_start();
 $content = ob_get_clean();
 $titleHead = 'Espace formateur';
 
-//$src = '';
 $src = 'script/ajax/ajax.js';
 
 require "views/common/template.view.php";

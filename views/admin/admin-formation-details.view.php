@@ -58,22 +58,6 @@ ob_start();
                     <div id="formation-box-content" class="px-3">
                         <p><?=$lessonContent['lessonContent'] ?></p>
                     </div>
-
-                    <div id="formation-box-resource">
-                    <?php if(isset($resources)){ ?>
-                        <p class="py-3">Les Ressources </p>
-                        <?php foreach($resources as $resource){ ?>
-                            <h4><?= $resource->getTitle();?></h4>
-                            <?php if($resource->getTypeMime() === 'PDF'){ ?>
-                                    <a href="<?= URL.$resource->getUrl()?>" target='_blank'>Lien du PDF</a>
-                                <?php } else if($resource->getType() === 'Image'){ ?>
-                                    <a href="<?= URL.$resource->getUrl()?>" target='_blank'>lien de l'image</a>
-                                <?php } else if($resource->getType() === 'video'){ ?>
-                                    <a href="<?= URL.$resource->getUrl()?>" target="_blank">lien youtube</a>
-                            <?php } 
-                        } 
-                    } ?>
-                    </div>
                 </div>
             </div>
         </div>

@@ -79,29 +79,28 @@ function validURL(input, errorText){
 // variables input et erreurs
 // titres de leçon
 let lessonTitles = document.getElementsByClassName('lessonTitleClass');
-let errorLessonTitles = document.getElementsByClassName('errorLessonTitle');
 
 // contenu de la video
 let lessonVideos = document.getElementsByClassName('lessonVideoClass');
-let errorLessonVideos = document.getElementsByClassName('errorLessonVideo');
 
 // contenu de leçon
 let lessonContents = document.getElementsByClassName('lessonContentClass');
-let errorLessonContents = document.getElementsByClassName('errorLessonContent');
 
-// container à ressources
-let containerRessources = document.getElementsByClassName('containerResources');
-
+let allLesson = document.getElementById('allLesson');
 
 // formulaire
 let form = document.getElementById('formAddFormationStep');
 
 
 // Vérification des titres des leçons
+
 let validation;
 let lessonTitleValidation;
+if(allLesson !== null){
+    lessonTitleValidation = true;
+}
 for(let i=0; i < lessonTitles.length; i++){
-    lessonTitles[i].addEventListener('focusout', () => {
+    lessonTitles[i].addEventListener('input', () => {
     let id = i+1;
     let error = document.getElementById('errorLessonTitle'+id);
     validation = validTitle(lessonTitles[i], error);
@@ -116,8 +115,11 @@ for(let i=0; i < lessonTitles.length; i++){
 
 // Vérification des videos des leçons
 let lessonVideoValidation;
+if(allLesson !== null){
+    lessonVideoValidation = true;
+}
 for(let i=0; i < lessonVideos.length; i++){
-    lessonVideos[i].addEventListener('focusout', () => {
+    lessonVideos[i].addEventListener('input', () => {
     let id = i+1;
     let error = document.getElementById('errorLessonVideo'+id);
     validation = validVideo(lessonVideos[i], error);
@@ -131,8 +133,11 @@ for(let i=0; i < lessonVideos.length; i++){
 
 // Vérification des contenu des leçons
 let lessonContentValidation;
+if(allLesson !== null){
+    lessonContentValidation = true;
+}
 for(let i=0; i < lessonContents.length; i++){
-    lessonContents[i].addEventListener('focusout', () => {
+    lessonContents[i].addEventListener('input', () => {
     let id = i+1;
     let error = document.getElementById('errorLessonContent'+id);
     validation = validContent(lessonContents[i], error);
@@ -144,78 +149,11 @@ for(let i=0; i < lessonContents.length; i++){
     });
 }
 
-// vérification ressources
-// je dois observer l'ensemble des container à resource, lorsqu'il détecte un ajout d'input, je leur ajoute un event
-let config = { childList: true, subtree:true };
-
-// pour tout les container (un par leçon)
-for(let i=0; i < containerRessources.length; i++){
-    let id = i+1;
-    // observe chaque container et exécute cette fonction
-    let observer = new MutationObserver(observeContainerRessources);
-    observer.observe(document.getElementById('lesson'+id+'containerResources'), config);
-}
-
-let ressourceTitleValidationtable = [];
-let ressourceURLValidationtable = [];
-function observeContainerRessources(mutationsList){
-    let containerResource = mutationsList[0].target;
-    let inputsResourceTitleError = containerResource.getElementsByClassName('resourceTitleError');
-    let inputsResourceTitle = containerResource.getElementsByClassName('ressourceTitleInputs');
-    
-    for(let i=0; i < inputsResourceTitle.length; i++){
-        inputsResourceTitle[i].addEventListener('input', () =>{
-            let error = inputsResourceTitleError[i];
-            validation = validTitle(inputsResourceTitle[i], error);
-            if(validation === false){
-                ressourceTitleValidationtable[i] = false;
-            } else if(validation === true) {
-                ressourceTitleValidationtable[i] = true;
-            }
-        });
-        
-    }
-
-    let inputsResourceURLError = containerResource.getElementsByClassName('resourceURLError');
-    let inputsResourceURL = containerResource.getElementsByClassName('ressourceURLInputs');
-    
-    for(let i=0; i < inputsResourceURL.length; i++){
-        inputsResourceURL[i].addEventListener('input', () => {
-            let error = inputsResourceURLError[i];
-            validation = validURL(inputsResourceURL[i], error);
-            if(validation === false){
-                ressourceURLValidationtable[i] = false;
-            } else if(validation === true) {
-                ressourceURLValidationtable[i] = true;
-            }
-        });
-        
-    }
-}
-
-function notFalse(table){
-    if(table.includes(false)){
-        return false;
-    } else {
-        return true;
-    }
-}
-
-let essai = notFalse(ressourceTitleValidationtable);
-let essai2 = notFalse(ressourceURLValidationtable);
-
 // soumission du formulaire
 form.addEventListener('submit', function(e){
-    console.log('nope...');
     e.preventDefault();
-    if(
-        lessonTitleValidation === true 
-        && lessonVideoValidation === true 
-        && lessonContentValidation === true 
-        && essai === true 
-        && essai2 === true){
-        console.log('yep');
-            form.submit(); 
+    if(lessonTitleValidation === true && lessonVideoValidation === true && lessonContentValidation === true){
+        form.submit(); 
     } 
 });
 

@@ -1,21 +1,15 @@
 <?php
 ob_start();
-/*
-echo '<pre>';
+
 print_r($essai);
-echo '</pre>';
-*/
-//$test = end($formations);
-echo '<pre>';
-print_r($formationsIdPossible);
-echo '</pre>';
+
 ?>
 
 <?php
 
 $content = ob_get_clean();
 
-$titleHead = 'Ajout formation';
+$titleHead = 'test';
 //$src = "script/form/verifyFormFormation.js";
 $src2 = "script/form/addFormation.js";
 

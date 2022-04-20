@@ -203,25 +203,3 @@ function verifyLessonVideo($input){
         return false;
     }
 }
-
-function verifyResourceURL($input){
-    $filesTypes = ['jpeg', 'jpg', 'png', 'pdf'];
-    $extension = strtolower(pathinfo($input['name'],PATHINFO_EXTENSION));
-    if($input['error'] === 0){
-        if(is_array(getimagesize($input['tmp_name']))){
-            if(in_array($extension, $filesTypes)){
-                if($input['size'] < 1000000){
-                    return true;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        } else{
-            return false;
-        }  
-    } else {
-        return false;
-    }  
-}

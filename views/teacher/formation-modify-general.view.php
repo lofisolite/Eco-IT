@@ -1,5 +1,8 @@
 <?php
 ob_start();
+echo '<pre>';
+print_r($_POST);
+echo '</pre>';
 ?>
 
     <main class="mt-4" id="formation-creation">
@@ -20,6 +23,7 @@ ob_start();
                     <p id="errorFormationTitle" class="mb-3 error-msg"><?= $errorTitle ?></p>
                 <?php endif; ?>
                     <label for="formationTitle" class="form-label">Titre</label>
+                    <input type="hidden" name="envoi" value="envoi">
                     <input type="text" class="form-control" id="formationTitle" name="formationTitle" value="<?= $_POST['formationTitle'] ?? $formation->getTitle(); ?>" minlength="2" maxlength="70" required>
                 </div>
 
@@ -57,7 +61,6 @@ ob_start();
 $content = ob_get_clean();
 
 $titleHead = 'Ajout formation';
-$src = "script/form/verifyFormFormation.js";
-$src2 = "script/form/addFormation.js";
+$src = "script/form/modifyFormation/verifyGeneralFormFormation.js";
 
 require "views/common/template.view.php";

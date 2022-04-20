@@ -1,6 +1,7 @@
 <?php
 // appel fichiers constantes URL et ROOT
 require_once '../config.php';
+require_once(ROOT.'/controllers/security.php');
 
 require_once(ROOT.'/controllers/Controller.php');
 $controller = new Controller();

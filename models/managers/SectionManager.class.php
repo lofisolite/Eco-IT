@@ -31,7 +31,6 @@ class SectionManager extends Bdd
         foreach($this->sections as $section){
             if($section->getFormationId() === $formationId){
                 $sectionsId[] = $section->getId();
-                // ici tri après selection des sections et avant de retourner le tableau d'objet
             }
         }
         return $sectionsId;
@@ -55,37 +54,79 @@ class SectionManager extends Bdd
         $stmt->closeCursor();
 
         foreach($sections as $section){
-            $s = new Section($section['id'], $section['title'], $section['position'], $section['id_formation']);
+            $s = new Section($section['id'], $section['title'], $section['position'], $section['lesson_number'], $section['id_formation']);
             $this->addSection($s);
         }
     }
 
-    public function addSectionInBdd($titles, $formationId){
-        $compteur = 0;
-        foreach($titles as $title){
-            $compteur++;
+    public function addSectionInBdd($sections){
+        
+        foreach($sections as $section){
             $req ="
-            INSERT INTO section(title, position, id_formation) 
-            VALUES(:title, :position, :id_formation)
+            INSERT INTO section(title, position, lesson_number, id_formation) 
+            VALUES(:title, :position, :lesson_number, :id_formation)
             "; 
             $stmt = $this->getBdd()->prepare($req);
-            $stmt->bindValue(":title", $title, PDO::PARAM_STR);
-            $stmt->bindValue(":position", $compteur, PDO::PARAM_INT);
-            $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);
+            $stmt->bindValue(":title", $section['title'], PDO::PARAM_STR);
+            $stmt->bindValue(":position", $section['position'], PDO::PARAM_INT);
+            $stmt->bindValue(":lesson_number", $section['nbrLesson'], PDO::PARAM_INT);
+            $stmt->bindValue(":id_formation", $section['formationId'], PDO::PARAM_INT);
             $result = $stmt->execute();
             $stmt->closeCursor();
         }
     }
 
-    public function deletesectionsInBdd($formationId){
-        $req ="
-        DELETE FROM section WHERE id_formation = :id_formation
-        "; 
-      $stmt = $this->getBdd()->prepare($req);
-      $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);
-      $result = $stmt->execute();
-      $stmt->closeCursor();
+    public function updateSectionPosition($formationId, $sectionsId){
+        // tableau d'identifiant de section
+        $compteur = 0;
+        foreach($sectionsId as $sectionId){
+            $compteur++;
+            $req = "
+            UPDATE section
+            SET position = :position
+            WHERE id_formation = :id_formation
+            AND id = :id_section
+            ";
+            $stmt = $this -> getBdd()->prepare($req);
+            $stmt->bindValue(":position", $compteur, PDO::PARAM_INT);
+            $stmt->bindValue(":id_section", $sectionId, PDO::PARAM_INT);
+            $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);
+            $result = $stmt -> execute();
+            $stmt->closeCursor();
+        }
+    }
 
-      return $result;
+    public function deleteOneSectionInBdd($sectionId){
+        $req ="
+        DELETE FROM section 
+        WHERE id = :id_section
+        "; 
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindValue(":id_section", $sectionId, PDO::PARAM_INT);
+        $result = $stmt->execute();
+        $stmt->closeCursor();
+
+        if($result === true){
+            return true;
+        } else {
+            die();
+        }
+    }
+
+    public function deleteSectionsOfFormationInBdd($formationId){
+        $req ="
+        DELETE FROM section 
+        WHERE id_formation = :id_formation
+        "; 
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);
+        $result = $stmt->execute();
+        $stmt->closeCursor();
+
+        if($result === true){
+            return true;
+        } else {
+            die();
+        }
     }
 }

@@ -3,6 +3,9 @@ ob_start();
 echo '<pre>';
 print_r($_POST);
 echo '</pre>';
+echo '<pre>';
+print_r($sectionsTable);
+echo '</pre>';
 ?>
 
     <main class="mt-4" id="formation-creation">
@@ -93,7 +96,7 @@ echo '</pre>';
 $content = ob_get_clean();
 
 $titleHead = 'Ajout formation';
-$src = "script/form/verifyFormFormation.js";
-$src2 = "script/form/addFormation.js";
+$src = "script/form/addFormation/verifyAddFormFormation.js";
+$src2 = "script/form/addFormation/addFormation.js";
 
 require "views/common/template.view.php";

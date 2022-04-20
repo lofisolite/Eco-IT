@@ -54,7 +54,43 @@
 
 
     <footer>
+      <div class="footer-left">
+          <p class="footer-links">
+            <a href="#" class="link-1">Accueil</a>
+            <a href="<?=URL ?>Sinscription"">Apprendre</a>
+            <a href="<?=URL ?>Tinscription"">Former</a>
+            <a href="<?=URL ?>credits"">Crédits</a>
+          </p>
 
+        <p class="footer-company-name">EcoIt © <?= date('Y', time()); ?></p>
+      </div>
+
+      <div class="footer-center">
+          <div>
+            <img src="<?= URL ?>images/general/gps.png" alt="">
+            <p>18 rue de l'écologie <br> Paris</p>
+          </div>
+          <div>
+            <img src="<?= URL ?>images/general/phone.png" alt="">
+            <p>00.55.55.55</p>
+          </div>
+          <div>
+            <img src="<?= URL ?>images/general/arobas.png">
+            <p><a href="mailto:formation-EcoIt@company.com">formation-EcoIt@company.com</a></p>
+          </div>
+      </div>
+
+      <div class="footer-right">
+          <div class="box-footer-right">
+            <p class="footer-social">Nos Réseaux</p>
+
+            <div class="footer-icons">
+              <a href="#"><img src="<?= URL ?>images/general/facebook.png" alt=""></a>
+              <a href="#"><img src="<?= URL ?>images/general/instagram.png" alt=""></a>
+              <a href="#"><img src="<?= URL ?>images/general/twitter.png" alt=""></a>
+            </div>
+          </div>
+      </div>
     </footer>
     <script type="text/javascript" src="<?= URL ?>script\general\bootstrap.min.js"></script>
     <script type="text/javascript" src="<?= URL ?>script\general\jquery-3.6.0.js"></script>
@@ -63,6 +99,9 @@
     <?php } ?>
     <?php if(isset($src2)){ ?>
     <script type="text/javascript" src="<?= URL.$src2 ?>"></script>
+    <?php } ?>
+    <?php if(isset($src3)){ ?>
+    <script type="text/javascript" src="<?= URL.$src3 ?>"></script>
     <?php } ?>
   </body>
 </html>

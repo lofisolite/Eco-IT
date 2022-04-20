@@ -1,25 +1,22 @@
 <?php
 ob_start();
-
 /*
 echo 'la variable POST : <br>';
 echo '<pre>';
 print_r($_POST);
 echo '</pre>';
 */
-
-
 ?>
 
     <main class="mt-4" id="formation-creation">
         <h2>Section<?=' '.$step ?></h2>
         <h3><?= $sectionTitle ?></h3>
         <div class="text-explication">
-            <p>Une leçon contient un <span>titre</span>, une <span>vidéo youtube</span>, un <span>contenu textuel</span> et éventuellement des <span>ressources</span></p> 
+            <p>Une leçon contient un <span>titre</span>, une <span>vidéo youtube</span> et un <span>contenu textuel.</span></p> 
         </div>
 
         <div class="d-flex justify-content-center">
-          <form action="" id="formAddFormationStep" enctype="multipart/form-data" method="POST" class="form d-flex flex-column">
+          <form action="" id="formAddFormationStep" method="POST" class="form d-flex flex-column">
           <?php if(isset($error)) : ?>
                 <p id="errorMsg" class="mb-3 error-msg"><?= $error ?></p>
             <?php endif; ?>
@@ -46,20 +43,6 @@ echo '</pre>';
                     <label for="lessonContent<?= $i ?>" class="form-label">Contenu</label>
                     <textarea class="form-control lessonContentClass" id="lessonContent<?= $i ?>" name="lessonContent[]" value="" cols="30" rows="10" min="50" max="20000" required><?= $_POST['lessonContent'][$i-1] ?? '' ?></textarea>
                 </div>
-                <p id="errorRessource<?= $i ?>" class="mb-3 error-msg"><?php if(isset($errorResource[$i-1])){ echo $errorResource[$i-1]; }?></p>
-                <h3 class="resourceTitleh3" id="lesson<?= $i ?>resourceTitleh3" style="display:none">Ressources</h3>
-                
-                <div class="mb-3 containerResources" id="lesson<?= $i ?>containerResources" style="display:none">
-                </div>
-                <?php if(isset($contentContainerRessource)){
-                        echo $contentContainerRessource;
-                    } ?>
-
-                <div class="d-flex justify-content-center">
-                  <a class="btn button-general btn-choice-valid buttonAddResource" id="buttonAddResource<?= $i ?>">+ ressource</a>
-                  <a class="btn button-general btn-choice-reject buttonDeleteResource" id="buttonDeleteResource<?= $i ?>" style="display:none">- ressource</a>
-                </div>
-
                 <hr class="my-5">
 
             <?php } ?>
@@ -74,7 +57,7 @@ echo '</pre>';
 $content = ob_get_clean();
 
 $titleHead = 'Ajout Formation - étape '.$step;
-$src = "script/form/addFormationStep.js";
-$src2 = "script/form/verifyFormFormationStep.js";
+$src = "script/form/addFormation/addFormationStep.js";
+$src2 = "script/form/verifyAddFormFormationStep.js";
 
 require "views/common/template.view.php";

@@ -6,7 +6,6 @@ require_once(ROOT.'/models/managers/TeacherManager.class.php');
 require_once(ROOT.'/models/managers/FormationManager.class.php');
 require_once(ROOT.'/models/managers/SectionManager.class.php');
 require_once(ROOT.'/models/managers/LessonManager.class.php');
-require_once(ROOT.'/models/managers/ResourceManager.class.php');
 require_once(ROOT.'/models/managers/FormationByStudentManager.class.php');
 require_once(ROOT.'/models/managers/LessonByStudentManager.class.php');
 
@@ -17,7 +16,6 @@ class Controller{
     private $formationManager;
     private $sectionManager;
     private $lessonManager;
-    private $resourceManager;
     private $formationByStudentManager;
     private $lessonByStudentManager;
 
@@ -28,14 +26,13 @@ class Controller{
         $this->formationManager = new FormationManager();
         $this->sectionManager = new SectionManager();
         $this->lessonManager = new LessonManager();
-        $this->resourceManager = new ResourceManager();
         $this->formationByStudentManager = new FormationByStudentManager;
         $this->lessonByStudentManager = new LessonByStudentManager;
     }
 
     public function test(){
-        $this->formationManager->loadFormations();
-        $formationsIdPossible = $this->formationManager->getformationsNotOnlineIdByTeacherId(1);
+            
+        
         require_once(ROOT.'\views\common\test.view.php');
     }
 
@@ -296,9 +293,10 @@ class Controller{
         {
             $videoYT = str_replace('youtu.be/', 'www.youtube.com/embed/', $videoYT);
             $videoYT = str_replace('www.youtube.com/watch?v=', 'www.youtube.com/embed/', $videoYT);
+
+            $array = explode("&", $videoYT);
         }
-        // -----------------
-        return $videoYT;
+        return $array[0];
     }
 
     
@@ -372,7 +370,6 @@ class Controller{
         $this->formationManager->loadFormations();
         $this->sectionManager->loadSections();
         $this->lessonManager->loadLessons();
-        $this->resourceManager->loadResources();
 
         //Si une formation n'existe pas, page d'erreur
         $allFormations = $this->formationManager->getFormationsOnline();
@@ -436,7 +433,6 @@ class Controller{
         $this->formationManager->loadFormations();
         $this->sectionManager->loadSections();
         $this->lessonManager->loadLessons();
-        $this->resourceManager->loadResources();
 
         //Si une formation n'existe pas, page d'erreur
         $allFormations = $this->formationManager->getFormationsOnline();
@@ -577,7 +573,6 @@ class Controller{
         $this->formationManager->loadFormations();
         $this->sectionManager->loadSections();
         $this->lessonManager->loadLessons();
-        $this->resourceManager->loadResources();
         $this->formationByStudentManager->loadformationsByStudent($studentId);
 
         //Si une formation n'existe pas, page d'erreur
@@ -660,7 +655,6 @@ class Controller{
         $this->formationManager->loadFormations();
         $this->sectionManager->loadSections();
         $this->lessonManager->loadLessons();
-        $this->resourceManager->loadResources();
         $this->formationByStudentManager->loadformationsByStudent($studentId);
 
         //Si une formation n'existe pas, page d'erreur
@@ -743,17 +737,26 @@ class Controller{
     public function updateFormationOnline($formationId){
         $teacherId = $_SESSION['id'];
         $this->formationManager->loadFormations();
-        $formationsIdPossible = $this->formationManager->getformationsNotOnlineIdByTeacherId($teacherId);
-
+        $this->sectionManager->loadSections();
         $this->lessonManager->loadLessons();
-        $lessons = $this->lessonManager->getLessonsByFormation($formationId);
+
+        $formationsIdPossible = $this->formationManager->getformationsNotOnlineIdByTeacherId($teacherId);
+        
+        // vérifie que toutes les sections de la formations ont des leçons
+        $allSections = $this->sectionManager->getSectionsByFormation($formationId);
+        $sectionsLessons = true;
+        foreach($allSections as $section){
+            if($this->lessonManager->getLessonsBySection($section->getId()) === null){
+                $sectionsLessons = false;
+            }
+        }
 
         // si la formation n'appartient pas au formateur ou qu'elle est en ligne
         if(!in_array($formationId, $formationsIdPossible)){
             throw new Exception('vous ne pouvez pas mettre en ligne cette formation');
             // si la formation n'a pas de sections
-         } else if(!isset($lessons)) {
-            throw new Exception('Vous ne pouvez pas mettre en ligne une formation qui n\'a pas de leçon.');
+        } else if($sectionsLessons === false){
+            throw new Exception('Vous ne pouvez pas mettre en ligne une formation où il manque des leçons.');
         } else {
         $creationDate =  date("Y-m-d"); 
 
@@ -789,7 +792,6 @@ class Controller{
         $this->formationManager->loadFormations();
         $this->sectionManager->loadSections();
         $this->lessonManager->loadLessons();
-        $this->resourceManager->loadResources();
 
         //Si une formation n'existe pas, page d'erreur
         $allFormations = $this->formationManager->getFormations();
@@ -812,6 +814,12 @@ class Controller{
 
         $allSections = $this->sectionManager->getSectionsByFormation($formationId);
 
+        foreach($allSections as $section){
+            if($this->lessonManager->getLessonsBySection($section->getId()) === null){
+                throw new Exception('cette formation manque de leçon');
+            }
+        }
+
         $allLessons = $this->lessonManager->getLessonsByFormation($formationId);
         // les identifiants des leçons pour les boutons "leçon précédente" et leçon "suivante".
         if(isset($allLessons)){
@@ -819,7 +827,7 @@ class Controller{
             $lessonsId[] = $lesson->getId();
             }
         } else {
-            throw new Exception('cette formation n\'a pas de leçon');
+            throw new Exception('cette formation manque de leçon');
         }
         
         $firstLessonId = $lessonsId[0];
@@ -867,28 +875,34 @@ class Controller{
         $this->formationManager->loadFormations();
         $this->sectionManager->loadSections();
         $this->lessonManager->loadLessons();
-        $this->resourceManager->loadResources();
 
         //Si une formation n'existe pas, page d'erreur
         $allFormations = $this->formationManager->getFormations();
         foreach($allFormations as $formation){
             $allFormationsId[] = $formation->getId();
         }
-
         if(!in_array($formationId, $allFormationsId)){
             throw new Exception('Cette formation n\'existe pas.');
             }
 
         // la formation
         $formation = $this->formationManager->getFormationById($formationId);
-        // les sections de la formation
+       
 
         // si le professeur essaie d'accéder à une formation qui ne lui appartient pas.
         if($teacherId !== $formation->getTeacherId()){
             throw new EXception('Vous ne pouvez pas accéder à cette page');
         }
 
+        // les sections de la formation
         $allSections = $this->sectionManager->getSectionsByFormation($formationId);
+        
+        foreach($allSections as $section){
+            if($this->lessonManager->getLessonsBySection($section->getId()) === null){
+                throw new Exception('cette formation manque de leçon');
+            }
+        }
+        
         // Les lessons de la formation
         $allLessons = $this->lessonManager->getLessonsByFormation($formationId);
         // les identifiants des leçons de la formation
@@ -1047,6 +1061,9 @@ class Controller{
                     $nbrLesson = $_POST['nbrLesson'];
                     if(count($sectionsTitle) === count($_POST['nbrLesson'])){
                         $nbrLessonStatus = true;
+                        foreach($_POST['sectionOrder'] as $order){
+                            $sectionOrder[] = $order;
+                        }
 
                     } else {
                         $nbrLessonStatus = false;
@@ -1069,8 +1086,21 @@ class Controller{
                     $this->formationManager->loadFormations();
 
                     // ajout sections en bdd
+                    //1. je récupére l'identifiant de la formation qui vient d'être ajouté
+
                     $lastFormationId = $this->formationManager->getLastFormationIdByTeacher($_SESSION['id']);
-                    $this->sectionManager->addSectionInBdd($sectionsTitle, $lastFormationId);
+
+                    $table = [];
+                    $sectionsTable = [];
+                    for($i=0; $i<count($sectionOrder); $i++){
+                        $table['title'] = $sectionsTitle[$i];
+                        $table['position'] = $sectionOrder[$i];
+                        $table['nbrLesson'] = $nbrLesson[$i];
+                        $table['formationId'] = $lastFormationId;
+                        array_push($sectionsTable, $table);
+                    }
+
+                    $this->sectionManager->addSectionInBdd($sectionsTable);
 
                     // récupére les identifiants des sections
                     $this->sectionManager->loadSections();
@@ -1100,6 +1130,7 @@ class Controller{
         require_once(ROOT.'/views/teacher/formation-add.view.php');
     }
 
+    // je crée les leçons des sections
     public function createFormationStep(int $step){
         $countSection = count($_SESSION['sections']);
         $nextStep = $step + 1;
@@ -1175,46 +1206,6 @@ class Controller{
                 }
             }
         }
-/*
-        //vérification ressources
-        if(isset($dataStatus['lessonContent'])){
-            if(!in_array(false, $dataStatus['lessonContent'])){
-                if(isset($_POST['resourceTitle']) && !empty($_POST['resourceTitle'])){
-                    
-                    foreach($_POST['resourceTitle'] as $containerRessource){
-                        foreach($containerRessource as $resourceTitle){
-                            $resourceTitles[] = secureData($resourceTitle);
-                        }
-                    }
-                    $dataStatus['resourceTitle'] = [];
-                    
-                    foreach($_POST['resourceTitle'] as $containerRessource){
-                        for($i = 0; $i < count($containerRessource); $i++){
-                            if(verifyTitleLesson($containerRessource[$i]) === true){
-                                array_push($dataStatus['resourceTitle'], true);
-                            } else {
-                                $error = 'Ressource : Erreur avec le titre d\'une ressource, veuillez réessayer de les envoyer,';
-                                array_push($dataStatus['resourceTitle'], false);
-                            }
-                        }
-                    }
-
-
-                        for($i = 0; $i < count($containerResource); $i++){
-
-                        }
-                            
-                            //if(verifyResourceURL($containerRessource[$i]) === true){
-                                array_push($dataStatus['resourceURL'], true);
-                            } else {
-                                $error = 'Ressource : Erreur avec le fichier d\'une ressource, veuillez réessayer de les envoyer,';
-                                array_push($dataStatus['resourceURL'], false);
-                            }
-            
-                }
-            }
-        }
-*/
 
         if(isset($dataStatus['lessonContent'])){
             if(!in_array(false, $dataStatus['lessonContent'])){
@@ -1231,8 +1222,6 @@ class Controller{
                     $table['sectionId'] = $sectionId;
                 array_push($lessons, $table);
                 }
-
-// si existe resourceTitles - si on est passé dans la condition où il existe des ressources alors on les insére en bdd, sinon on ne fait rien, pas de ressource, pas d'insertion en bdd
 
                 //2. je boucle sur le tableau et insére les leçons
                 foreach($lessons as $lesson){
@@ -1260,6 +1249,8 @@ class Controller{
         require_once(ROOT.'/views/teacher/formation-add-step.view.php');
     }
     
+
+    // panneau de modification, possibilité d'ajouter des sections
     public function modifyFormation($formationId){
         // si cette formation n'appartient pas au formateur ou est en ligne, erreur
         $teacherId = $_SESSION['id'];
@@ -1272,17 +1263,129 @@ class Controller{
             // je dois récupérer tous les éléments de la formation
             $this->formationManager->loadFormations();
             $this->sectionManager->loadSections();
+            $this->lessonManager->loadLessons();
+
     
             // la formation
             $formation = $this->formationManager->getFormationById($formationId);
             
             // les sections de la formation
             $sections = $this->sectionManager->getSectionsByFormation($formationId);
+
+            $existingSectionElements = [];
+            $tableElementSection = [];
+                for($i = 0; $i < count($sections); $i++){
+                    $tableElementSection['id'] = $sections[$i]->getId();
+                    $tableElementSection['title'] = $sections[$i]->getTitle();
+                    $tableElementSection['position'] = $sections[$i]->getPosition();
+                    if($this->lessonManager->getLessonsBySection($sections[$i]->getId()) !== null){
+                        $nbrLesson = count($this->lessonManager->getLessonsBySection($sections[$i]->getId()));
+                        $tableElementSection['nbrLesson'] = $nbrLesson;
+                        $tableElementSection['nbrLessonCreated'] = $nbrLesson;
+                    } else {
+                        $tableElementSection['nbrLesson'] = $sections[$i]->getLessonNumber();
+                        $tableElementSection['nbrLessonCreated'] = 0;
+                    }
+                    array_push($existingSectionElements, $tableElementSection);
+                }
+
+            $errorSection = '';
+            $dataStatus = [];
+            // vérification titre des sections
+            if(isset($_POST['sectionTitle']) && !empty($_POST['sectionTitle'])){
+                foreach($_POST['sectionTitle'] as $sectionTitle){
+                    $sectionsTitle[] = secureData($sectionTitle);
+                }
+                $dataStatus['sectionTitle'] = [];
+                
+                foreach($sectionsTitle as $title){
+
+                    if(verifyTitleSection($title) === true){
+                        array_push($dataStatus['sectionTitle'], true);
+
+                    } else if(verifyTitleSection($title) !== true) {
+                        $error = 'Erreur : titre section';
+                        $errorSection = 'Erreur avec un titre, lettres autorisées seulement';
+                        array_push($dataStatus['sectionTitle'], false);
+
+                        //sections existante + nouvelles créés
+                        $nbrSections = count($sections) + count($sectionsTitle);
+
+                        ob_start();
+                        for($i= 1; $i< $nbrSections; $i++){ ?>
+
+                        <div id="containerSection<?= $i + 1 ?>">
+                            <p id="errorSectionTitle<?= $i + 1 ?>" class="mb-3 error-msg"></p>
+                            <label for="sectionTitle<?= $i + 1 ?>" class="form-label labelSection">Section <?= $i + 1 ?> - titre :</label>
+                            <input type="hidden" value="<?= $i + 1 ?>" name="sectionOrder[]" class="inputOrderSection">
+                            <input type="text" id="sectionTitle<?= $i + 1 ?>" class="form-control sectionTitleClass" name="sectionTitle[]" value="<?= $_POST['sectionTitle'][$i] ?? '' ?>" minlength="2" maxlength="70" required>
+                            <label for="nbrLesson<?= $i + 1 ?>" class="my-2">Nombre de lesson :</label>
+                            <label for="nbrLesson1" class="my-2">Nombre de lesson :</label>
+                        <select name="nbrLesson[]" id="nbrLesson<?= $i + 1 ?>" class="nbrLesson" required>
+                            <option value="" ></option>
+                            <?php for($j = 1; $j<=10; $j++){ ?>
+                            <option value="<?= $j ?>"
+                            <?php if(isset($_POST['nbrLesson'][0])){
+                                    if($_POST['nbrLesson'][0] === $j){
+                                        echo "selected";
+                                    }
+                                } ?>><?= $i ?>
+                                </option>
+                            <?php } ?>
+                            </select>
+                        </div>
+                        <?php }   
+                        $contentSectionTitle = ob_get_clean(); 
+                    }     
+                }
+            }
+        }
+
+        // vérifie que tous les nombres de leçons sont renseignés
+        if(isset($dataStatus['sectionTitle'])){
+            if(!in_array(false, $dataStatus['sectionTitle'])){
+                if(isset($_POST['nbrLesson'])){
+                    $nbrLesson = $_POST['nbrLesson'];
+                    if(count($sectionsTitle) === count($_POST['nbrLesson'])){
+                        $nbrLessonStatus = true;
+
+                        foreach($_POST['sectionOrder'] as $order){
+                            $sectionOrder[] = $order;
+                        }
+
+                    } else {
+                        $nbrLessonStatus = false;
+                        $error = 'Erreur : Section - nombre de leçon';
+                        $errorSection = 'Vous n\'avez pas renseigné  tous les nombres de leçons';
+                    }
+                }
+            }
+        }
+
+
+        if(isset($nbrLessonStatus) && $nbrLessonStatus === true){
+            //1. je crée le tableau final des sections
+
+            $table = [];
+            $sectionsTable = [];
+            for($i=0; $i<count($sectionOrder); $i++){
+                $table['title'] = $sectionsTitle[$i];
+                $table['position'] = $sectionOrder[$i];
+                $table['nbrLesson'] = $nbrLesson[$i];
+                $table['formationId'] = $formationId;
+                array_push($sectionsTable, $table);
+            }
+
+            // 2. J'ajoute les section en bdd
+            $this->sectionManager->addSectionInBdd($sectionsTable);
+
+            header("location: ". URL . "teacherEspace/modify/".$formationId);
         }
 
         require_once(ROOT.'/views/teacher/formation-modify.view.php');
     }
 
+    // modifie les éléments généraux d'une formation
     public function modifyFormationGeneral($formationId){
         // si cette formation n'appartient pas au formateur ou est en ligne, erreur
         $teacherId = $_SESSION['id'];
@@ -1293,13 +1396,37 @@ class Controller{
         } else {
             // je dois récupérer tous les éléments de la formation
             $this->formationManager->loadFormations();
+            //$this->sectionManager->loadSections();
+            //$this->lessonManager->loadLessons();
     
             // la formation
             $formation = $this->formationManager->getFormationById($formationId);
+
+            // les sections
+           // $sections = $this->sectionManager->getSectionsByFormation($formationId);
+
+        /*    
+            // on récupére les données à placer en variable $_SESSION
+            $tableSection = [];
+            $table = [];
+                for($i = 0; $i < count($sections); $i++){
+                    $table['id'] = $sections[$i]->getId();
+                    $table['title'] = $sections[$i]->getTitle();
+                    $table['position'] = $sections[$i]->getPosition();
+                    $table['nbrLesson'] = count($this->lessonManager->getLessonsBySection($sections[$i]->getId()));
+                    array_push($tableSection, $table);
+                }
+
+            // en variable session ce dont j'ai besoin pour la suite
+            $_SESSION['sections'] = $tableSection;
+            $_SESSION['nbrSections'] =  count($_SESSION['sections']);
+
+        */
             
             $errorTitle = '';
             $errorDescription = '';
             $errorPicture = '';
+        //    $errorSection = '';
             $dataStatus = [];
 
             // vérification titre formation
@@ -1333,7 +1460,6 @@ class Controller{
                     $description = $formation->getDescription();
                 }
             }
-            
 
             // vérification image formation
             if(isset($dataStatus['description']) && $dataStatus['description'] === true){
@@ -1358,14 +1484,175 @@ class Controller{
         }
 
         if(isset($dataStatus['picture']) && $dataStatus['picture'] === true){
-            $this->formationManager->updateFormationInBdd($formationId, $title, $description, $picture);
+            if(isset($_POST['envoi']) && $_POST['envoi'] === 'envoi'){
+
+                $this->formationManager->updateFormationInBdd($formationId, $title, $description, $picture);
+
+            header("location: ". URL . "teacherEspace/modify/".$formationId);
+            }
         }
 
         require_once(ROOT.'/views/teacher/formation-modify-general.view.php');
     }
 
-    public function modifyFormationStep($formationId){
 
+    // modifier une section
+    public function modifyFormationStep($formationId, $step){
+        $this->formationManager->loadFormations();
+        $this->sectionManager->loadSections();
+        $this->lessonManager->loadLessons();
+
+        // toutes les sections
+        $allSections = $this->sectionManager->getSectionsByFormation($formationId);
+
+        // nombre de section
+        $countSection = count($allSections);
+        
+        // Liste des étapes possibles
+        foreach($allSections as $section){
+            $stepsPossible[] = $section->getPosition();
+        }
+        
+        // Tableau des identifiants des formations que le formateur peut modifier
+        $formationsIdPossible = $this->formationManager->getformationsNotOnlineIdByTeacherId($_SESSION['id']);
+        
+        // Si la formation n'appartient pas au formateur ou est déjà en ligne
+        if(!in_array($formationId, $formationsIdPossible)){
+            throw new Exception('vous ne pouvez pas modifier cette formation');
+        } else if(!in_array($step, $stepsPossible)){
+            throw new Exception('Cette étape n\'existe pas');
+        } else {
+            // la section actuelle
+            foreach($allSections as $section){
+                if($section->getPosition() === $step){
+                    $theSection = $section;
+                } 
+            }
+            // nombre de leçon de la section
+            $numberLesson = $theSection->getLessonNumber();
+
+            // identifiant de la section
+            $sectionId = $theSection->getId();
+
+            // les leçons de la section
+            $allLessons = $this->lessonManager->getLessonsBySection($sectionId);
+
+            $error = '';
+            $errorTitleLesson = [];
+            $errorVideoLesson = [];
+            $errorContentLesson = [];
+            $dataStatus = [];
+    
+            // vérification titres leçons
+            if(isset($_POST['lessonTitle']) && !empty($_POST['lessonTitle'])){
+                foreach($_POST['lessonTitle'] as $title){
+                    $lessonsTitle[] = secureData($title);
+                }
+                $dataStatus['lessonTitle'] = [];
+                for($i = 0; $i < count($lessonsTitle); $i++){
+                    if(verifyTitleLesson($lessonsTitle[$i]) === true){
+                        array_push($dataStatus['lessonTitle'], true);
+                    } else {
+                        $error = 'Erreur : titre de section';
+                        $errorTitleLesson[$i] = 'Erreur dans le titre';
+                        array_push($dataStatus['lessonTitle'], false);
+                    }
+                }
+            }
+    
+            // vérification Video youtube
+            if(isset($dataStatus['lessonTitle'])){
+                if(!in_array(false, $dataStatus['lessonTitle'])){
+                    if(isset($_POST['lessonVideo']) && !empty($_POST['lessonVideo'])){
+                        foreach($_POST['lessonVideo'] as $video){
+                            $lessonsVideo[] = secureData($video);
+                        }
+                        $dataStatus['lessonVideo'] = [];
+                        for($i = 0; $i < count($lessonsVideo); $i++){
+                            if(verifyLessonVideo($lessonsVideo[$i]) === true){
+                                array_push($dataStatus['lessonVideo'], true);
+                            } else {
+                                $error = 'Erreur : vidéo youtube';
+                                $errorVideoLesson[$i] = 'Erreur avec la video';
+                                array_push($dataStatus['lessonVideo'], false);
+                            }
+                        }
+                    }
+                }
+            }
+    
+            // vérification contenu leçon
+            if(isset($dataStatus['lessonVideo'])){
+                if(!in_array(false, $dataStatus['lessonVideo'])){
+                    if(isset($_POST['lessonContent']) && !empty($_POST['lessonContent'])){
+                        foreach($_POST['lessonContent'] as $content){
+                            $lessonsContent[] = secureData($content);
+                        }
+                        $dataStatus['lessonContent'] = [];
+                        for($i = 0; $i < count($lessonsContent); $i++){
+                            if(verifyLessonContent($lessonsContent[$i]) === true){
+                                array_push($dataStatus['lessonContent'], true);
+                            } else {
+                                $error = 'Erreur : contenu de la leçon';
+                                $errorContentLesson[$i] = 'Erreur avec le contenu de la leçon';
+                                array_push($dataStatus['lessonContent'], false);
+                            }
+                        }
+                    }
+                }
+            }
+    
+            if(isset($dataStatus['lessonContent'])){
+                if(!in_array(false, $dataStatus['lessonContent'])){
+                    if(isset($_POST['envoi']) && $_POST['envoi'] === 'envoi'){
+    
+                        //1. je crée le tableau final
+                        $table = [];
+                        $lessons = [];
+                        for($i=0; $i<$numberLesson; $i++){
+                            $table['title'] = $lessonsTitle[$i];
+                            $table['content'] = $lessonsContent[$i];
+                            $table['video'] = $lessonsVideo[$i];
+                            $table['position'] = $_POST['lessonOrder'][$i];
+                            $table['formationId'] = $formationId;
+                            $table['sectionId'] = $sectionId;
+                        array_push($lessons, $table);
+                        }
+    
+                        //2. je boucle sur le tableau et insére les leçons
+                        // Si les leçons existent déjà, je les met à jour
+                        // Si les leçons n'existe pas, qu'il faut les créer, je les insère.
+                        if(isset($allLessons)){
+                            foreach($lessons as $lesson){
+                                $this->lessonManager->updateLessonInBdd($lesson);
+                            }
+                        } else {
+                            foreach($lessons as $lesson){
+                                $this->lessonManager->addLessonInBdd($lesson);
+                            }
+                        }
+    
+                        //3. redirection vers le panneau de modification
+                        header("location: ". URL . "teacherEspace/modify/".$formationId);
+                    }
+                }
+            }
+        }
+        require_once(ROOT.'/views/teacher/formation-modify-step.view.php');
+    }
+
+    public function deleteSection($formationId, $sectionId){
+        // supprime section et lesson rattaché 
+        if($this->lessonManager->deleteLessonOfSectionInBdd($sectionId) === true){
+            if($this->sectionManager->deleteOneSectionInBdd($sectionId) === true){
+                // modifie la position de toutes les sections, réinitialise à 1;
+                $this->sectionManager->loadSections();
+                $sectionsId = $this->sectionManager->getSectionsIdByFormation($formationId);
+                $this->sectionManager->updateSectionPosition($formationId, $sectionsId);
+                    
+                header("location: ". URL . "teacherEspace/modify/".$formationId);
+            }   
+        }   
     }
 
     public function deleteFormation($formationId){
@@ -1376,10 +1663,8 @@ class Controller{
         if(!in_array($formationId, $formationsIdPossible)){
             throw new Exception('vous ne pouvez pas supprimer cette formation');
         } else {
-            // supprime ressource si existe
-            //$this->resourceManager->deleteResourcesInBdd($formationId);
-            if($this->lessonManager->deleteLessonsInBdd($formationId) === true){
-                if($this->sectionManager->deletesectionsInBdd($formationId) === true){
+            if($this->lessonManager->deleteLessonsOfFormationInBdd($formationId) === true){
+                if($this->sectionManager->deleteSectionsOfFormationInBdd($formationId) === true){
                     $this->formationManager->loadFormations();
                     $picture = $this->formationManager->getFormationById($formationId)->getPicture();
                     if($this->formationManager->deleteFormationInBdd($formationId) === true){

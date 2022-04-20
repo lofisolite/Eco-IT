@@ -207,6 +207,9 @@ class FormationManager extends Bdd
         $stmt->closeCursor();
 
         return $result;
+        if($result === false){
+            throw new Exception('l\'insertion de la formation en base de donnés n\'a pas fonctionné');
+        }
     }
 
     public function updateFormationInBdd($formationId, $title, $description, $picture){
@@ -226,7 +229,6 @@ class FormationManager extends Bdd
         $stmt->closeCursor();
 
         return $result;
-
     }
 
         

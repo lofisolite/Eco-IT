@@ -83,13 +83,58 @@ class LessonManager extends Bdd
         $stmt->closeCursor();
 
         if($result === false){
-            throw new Exception('l\insertion des lessons en base de donnés n\'a pas fonctionné');
+            throw new Exception('l\'insertion des lessons en base de donnés n\'a pas fonctionné');
         }
     }
 
-    public function deletelessonsInBdd($formationId){
+    public function updateLessonInBdd($lesson){
         $req ="
-        DELETE FROM lesson WHERE id_formation = :id_formation
+        UPDATE lesson
+        SET title = :title, 
+        content = :content, 
+        url_video = :url_video
+        WHERE id_formation = :id_formation
+        AND id_section = :id_section
+        AND position = :position
+        "; 
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindValue(":title", $lesson['title'], PDO::PARAM_STR);
+        $stmt->bindValue(":content", $lesson['content'], PDO::PARAM_STR);
+        $stmt->bindValue(":url_video", $lesson['video'], PDO::PARAM_STR);
+        $stmt->bindValue(":position", $lesson['position'], PDO::PARAM_INT);
+        $stmt->bindValue(":id_formation", $lesson['formationId'], PDO::PARAM_INT);
+        $stmt->bindValue(":id_section", $lesson['sectionId'], PDO::PARAM_INT);
+        $result = $stmt->execute();
+        $stmt->closeCursor();
+
+        if($result === true){
+            return true;
+        } else {
+            die();
+        }
+    }
+
+    public function deleteLessonOfSectionInBdd($sectionId){
+        $req ="
+        DELETE FROM lesson 
+        WHERE id_section = :id_section
+        "; 
+        $stmt = $this->getBdd()->prepare($req);
+        $stmt->bindValue(":id_section", $sectionId, PDO::PARAM_INT);
+        $result = $stmt->execute();
+        $stmt->closeCursor();
+
+        if($result === true){
+            return true;
+        } else {
+            die();
+        }
+    }
+
+    public function deletelessonsOfFormationInBdd($formationId){
+        $req ="
+        DELETE FROM lesson 
+        WHERE id_formation = :id_formation
         "; 
       $stmt = $this->getBdd()->prepare($req);
       $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);

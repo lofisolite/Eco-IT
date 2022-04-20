@@ -43,6 +43,6 @@ $content = ob_get_clean();
 
 $titleHead = 'inscription apprenant';
 // $src = '';
-$src = "script/form/verifyFormGeneral.js";
+$src = "script/form/general/verifyFormGeneral.js";
 
 require_once "views/common/template.view.php";

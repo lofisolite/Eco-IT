@@ -31,6 +31,33 @@ ob_start();
         </div>
     </div>
 
+    <div class="mt-5 d-flex justify-content-center icons">
+        <div class="m-4 d-flex flex-column">
+            <h4 class="text-center"><a target="_blank" href="https://www.flaticon.com/authors/hqrloveq">hqrloveq</a></h4>
+            <img src="<?= URL ?>images/general/gps.png" alt="">
+        </div>
+        <div class="m-4 d-flex flex-column">
+            <h4 class="text-center"><a target="_blank" href="https://www.flaticon.com/authors/creaticca-creative-agency">Creatica</a></h4>
+            <img src="<?= URL ?>images/general/phone.png" alt="">
+        </div>
+        <div class="m-4 d-flex flex-column">
+            <h4 class="text-center"><a target="_blank" href="https://www.flaticon.com/authors/freepik">freepik</a></h4>
+            <img src="<?= URL ?>images/general/arobas.png">
+        </div>
+        <div class="m-4 d-flex flex-column">
+            <h4 class="text-center"><a target="_blank" href="https://www.flaticon.com/authors/freepik">freepik</a></h4>
+            <img src="<?= URL ?>images/general/facebook.png" alt="">
+        </div>
+        <div class="m-4 d-flex flex-column">
+            <h4 class="text-center"><a target="_blank" href="https://www.flaticon.com/authors/freepik">freepik</a></h4>
+            <img src="<?= URL ?>images/general/instagram.png" alt="">
+        </div>
+        <div class="m-4 d-flex flex-column">
+            <h4 class="text-center"><a target="_blank" href="https://www.flaticon.com/fr/auteurs/riajulislam">riajulislam</a></h4>
+            <img src="<?= URL ?>images/general/twitter.png" alt="">
+        </div>
+    </div>
+
 </main>
 
 <?php
