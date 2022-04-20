@@ -73,6 +73,6 @@ $content = ob_get_clean();
 
 $titleHead = 'inscription formateur';
 //$src = '';
-$src = "script/form/general/verifyFormGeneral.js";
+$src = "script/form/general/formGeneral.js";
 
 require_once "views/common/template.view.php";

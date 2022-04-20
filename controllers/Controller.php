@@ -30,12 +30,6 @@ class Controller{
         $this->lessonByStudentManager = new LessonByStudentManager;
     }
 
-    public function test(){
-            
-        
-        require_once(ROOT.'\views\common\test.view.php');
-    }
-
     // Page d'accueil
     Public function setHomePage(){
         $this->teacherManager->loadTeachers();
@@ -126,10 +120,10 @@ class Controller{
                     genereCookieSession();
                     header("Location: ". URL . "teacherEspace");
                 } else {
-                    $alert = "mot de passe non valide - teacher";
+                    $alert = "mot de passe non valide";
                 }
             } else {
-                $alert = "mot de passe ou mail non valide - teacher.";
+                $alert = "mot de passe ou mail non valide";
             }
         }
         require_once(ROOT.'/views/common/connexion.view.php');
@@ -907,13 +901,10 @@ class Controller{
         $allLessons = $this->lessonManager->getLessonsByFormation($formationId);
         // les identifiants des leçons de la formation
 
-        // si il existe des leçons, sinon erreur
-        if(isset($allSessons)){
+        if(isset($allLessons)){
             foreach($allLessons as $lesson){
                 $lessonsId[] = $lesson->getId();
             }
-        } else {
-            throw new Exception('cette formation n\'a pas de leçon');
         }
         $firstLessonId = $lessonsId[0];
         $lastLessonId = end($lessonsId);
@@ -948,7 +939,7 @@ class Controller{
         $lessonContent['lessonTitle'] = $mainLesson->getTitle();
         $lessonContent['lessonvideo'] = $this->videoYoutubeEmbed($mainLesson->getvideo());
         $lessonContent['lessonContent'] = $mainLesson->getContent();
-        
+
         require_once(ROOT.'/views/teacher/teacher-formation-details.view.php');
     }
 
@@ -1735,7 +1726,7 @@ class Controller{
         return $formationsTable;
     }
     
-    public function ajaxUpdateLessonAndFormationStatus($studentId, $lessonId, $formationId, $status, ){
+    public function ajaxUpdateLessonAndFormationStatus($studentId, $lessonId, $formationId, $status){
         // met à jour le statut de la leçon
         $this->lessonByStudentManager->updateLessonByStudentStatus($studentId, $lessonId, $status);
 

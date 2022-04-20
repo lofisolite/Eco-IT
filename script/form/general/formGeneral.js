@@ -1,19 +1,5 @@
 //test
 
-let firstname = document.getElementById('firstname');
-let errorFirstname = document.getElementById('errorFirstname');
-let lastname = document.getElementById('lastname');
-let errorLastname = document.getElementById('errorLastname');
-let pictureProfil = document.getElementById('pictureProfil');
-let errorPictureProfil = document.getElementById('errorPictureProfil');
-let description = document.getElementById('description');
-let errorDescription = document.getElementById('errorDescription');
-let mail = document.getElementById('mail');
-let password = document.getElementById('password');
-let errorMail = document.getElementById('errorMail');
-let errorPassword = document.getElementById('errorPassword');
-let eye = document.getElementById('eye');
-
 // variables
 let formConnexion = document.getElementById('formConnexion');
 let formSinscription = document.getElementById('formSinscription');
@@ -36,19 +22,14 @@ let passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@%*+\-_!?])[a-zA-Z
 // ok - description
 let stringRegex = /^[a-z0-9éèàùâêîôûëçëïüÿ\s'\-\.\!\?\,\:\;]+$/i;
 
-// cette ligne fait tout beuger
-/*
-// ok - video youtube
-let youtubeRegex = /(https\:\/\/){0,}(www\.){0,}(youtube\.com){1} || (youtu\.be){1}(\/watch\?v\=[^\s]){1})/;
-*/
 
 function ShowPasswordInput(eye, password){
     imageSrc = eye.getAttribute('src');
-    if(imageSrc === 'images/general/notvisible.png'){
-      eye.setAttribute('src', 'images/general/visible.png');
+    if(imageSrc === 'public/images/general/notvisible.png'){
+      eye.setAttribute('src', 'public/images/general/visible.png');
       password.setAttribute('type', 'text');
-    } else if(imageSrc === 'images/general/visible.png'){
-      eye.setAttribute('src', 'images/general/notvisible.png');
+    } else if(imageSrc === 'public/images/general/visible.png'){
+      eye.setAttribute('src', 'public/images/general/notvisible.png');
       password.setAttribute('type', 'password');
     }
 }

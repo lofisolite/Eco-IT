@@ -4,18 +4,10 @@ session_start();
 // appel fichiers constantes URL et ROOT
 require 'config.php';
 
-
 if(isset($_POST['deconnexion']) && $_POST['deconnexion'] === 'true'){
   session_destroy();
   header("Location: ". URL . "accueil");
 }
-
-/*
-echo 'la variable session : <br>';
-echo '<pre>';
-print_r($_SESSION);
-echo '</pre>';
-*/
 
 require_once(ROOT.'/controllers/security.php');
 require_once(ROOT.'/controllers/Controller.php');
@@ -39,10 +31,6 @@ try{
         
             case "Sinscription" :
                 $controller->signUpStudent();
-            break;
-
-            case "test" :
-                $controller->test();
             break;
 
             case "Tinscription" :

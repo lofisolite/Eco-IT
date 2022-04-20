@@ -51,7 +51,6 @@ class AdminManager extends Bdd
     public function isAdminConnexionValid($mail, $password){
         $admin = $this->getAdminByMail($mail);
         $bddPassword = $admin->getPassword();
-        $pass = password_hash($bddPassword, PASSWORD_DEFAULT);
-        return password_verify($password, $pass);
+        return password_verify($password, $bddPassword);
     }
 }

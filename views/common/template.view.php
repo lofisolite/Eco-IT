@@ -67,15 +67,15 @@
 
       <div class="footer-center">
           <div>
-            <img src="<?= URL ?>images/general/gps.png" alt="">
+            <img src="<?= URL ?>public/images/general/gps.png" alt="">
             <p>18 rue de l'écologie <br> Paris</p>
           </div>
           <div>
-            <img src="<?= URL ?>images/general/phone.png" alt="">
+            <img src="<?= URL ?>public/images/general/phone.png" alt="">
             <p>00.55.55.55</p>
           </div>
           <div>
-            <img src="<?= URL ?>images/general/arobas.png">
+            <img src="<?= URL ?>public/images/general/arobas.png">
             <p><a href="mailto:formation-EcoIt@company.com">formation-EcoIt@company.com</a></p>
           </div>
       </div>
@@ -85,9 +85,9 @@
             <p class="footer-social">Nos Réseaux</p>
 
             <div class="footer-icons">
-              <a href="#"><img src="<?= URL ?>images/general/facebook.png" alt=""></a>
-              <a href="#"><img src="<?= URL ?>images/general/instagram.png" alt=""></a>
-              <a href="#"><img src="<?= URL ?>images/general/twitter.png" alt=""></a>
+              <a href="#"><img src="<?= URL ?>public/images/general/facebook.png" alt=""></a>
+              <a href="#"><img src="<?= URL ?>public/images/general/instagram.png" alt=""></a>
+              <a href="#"><img src="<?= URL ?>public/images/general/twitter.png" alt=""></a>
             </div>
           </div>
       </div>

@@ -1,0 +1,11 @@
+user-agent : *
+allow:/accueil
+allow:/Sinscription
+allow:/Tinscription
+allow:credits
+
+disallow:/studentEspace
+disallow:/adminEspace
+disallow:/teacherEspace
+
+sitemap : https://www.formation-ecoit.fr/sitemap.xml

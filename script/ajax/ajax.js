@@ -8,7 +8,6 @@ function searchFormation(formElement){
     
     request.onreadystatechange = function(){
         if(this.readyState == 4 && this.status == 200){
-            console.log(this.responseText);
             divResultat.innerHTML = '';
             divResultat.innerHTML = this.responseText;
         } else if(this.readyState == 4){
@@ -61,7 +60,6 @@ function updateFormationOnline(formElement){
     
     request.onreadystatechange = function(){
         if(this.readyState == 4 && this.status == 200){
-            console.log(this.responseText);
 
         } else if(this.readyState == 4){
             alert('une erreur est survenue, veuillez réessayer');
@@ -143,18 +141,6 @@ jQuery(document).ready(() => {
             searchFormation(document.getElementById('enfant'));
         
     });
-    /*
-    $('#addSection').click(function() {
-        $.ajax({
-          type: "POST",
-          url: url + 'controllers/ControllerAjax.php',
-          data: { addSection: "2" }
-        }).done(function( msg ) {
-          console.log(msg);
-          $('#containerSections').append(msg);
-        });
-      });
-    */
-
+ 
 });
 

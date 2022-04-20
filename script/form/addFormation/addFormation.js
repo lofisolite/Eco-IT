@@ -1,4 +1,4 @@
-
+alert('hello');
 // compteur caractères textarea
 function compteur(zoneTexte, compteur){
     document.getElementById(zoneTexte).addEventListener('keyup', 

@@ -57,7 +57,5 @@ echo '</pre>';
 $content = ob_get_clean();
 
 $titleHead = 'Ajout Formation - étape '.$step;
-$src = "script/form/addFormation/addFormationStep.js";
-$src2 = "script/form/verifyAddFormFormationStep.js";
-
+$src = "script/form/addFormation/verifyAddFormFormationStep.js";
 require "views/common/template.view.php";

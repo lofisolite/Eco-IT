@@ -1,11 +1,6 @@
 <?php
 ob_start();
-echo '<pre>';
-print_r($_POST);
-echo '</pre>';
-echo '<pre>';
-print_r($sectionsTable);
-echo '</pre>';
+
 ?>
 
     <main class="mt-4" id="formation-creation">

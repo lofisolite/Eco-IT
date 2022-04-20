@@ -42,7 +42,7 @@ if(isset($_POST['search'])){
           <div class="card-box-main">
               <div class="card-box-image">
                   <div class="card-img">
-                      <img src="<?= $formation['picture']?>" alt="logo javascript" class="card-img">
+                      <img src="<?= $formation['picture']?>" alt="" class="card-img">
                   </div>
                   <p class="card-description"><?= $formation['description']?></p>
               </div>
@@ -75,7 +75,7 @@ if(isset($_POST['back'])){
               <div class="card-box-main">
                   <div class="card-box-image">
                       <div class="card-img">
-                          <img src="<?= $formation['picture']?>" alt="logo javascript" class="card-img">
+                          <img src="<?= $formation['picture']?>" alt="" class="card-img">
                       </div>
                       <p class="card-description"><?= $formation['description']?></p>
                   </div>

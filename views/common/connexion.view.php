@@ -32,6 +32,6 @@ ob_start();
 $content = ob_get_clean();
 
 $titleHead = 'connexion EcoIt';
-$src = "script/form/verifyFormGeneral.js";
+$src = "script/form/general/formGeneral.js";
 
 require_once "views/common/template.view.php";

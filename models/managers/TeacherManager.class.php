@@ -106,12 +106,7 @@ class TeacherManager extends Bdd
         $result = $stmt->execute();
         $stmt->closeCursor();
 
-        if($result === true){
-            $teacher = new Teacher($this->getBdd()->lastInsertId(), $firstname, $lastname, $pictureProfile, $description, $mail, $password, 'non');
-        } else {
-            throw new Exception("Votre inscription n'a pas fonctionné, veuillez réessayer.");
-            die();
-        }
+        return $result;
     }
 
     // passe la propriété "validation" de non à oui par l'action de l'admin.
