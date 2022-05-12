@@ -73,8 +73,8 @@ class Controller{
         
         $alert = "";
         if(isset($_POST['mail']) && !empty($_POST['mail']) && isset($_POST['password']) && !empty($_POST['password'])){  
-            $mail = SecureData($_POST['mail']);
-            $password = secureData($_POST['password']);
+            $mail = $_POST['mail'];
+            $password = $_POST['password'];
 
             if(in_array($mail, $adminMails)){
                 if($this->adminManager->isAdminConnexionValid($mail, $password)){

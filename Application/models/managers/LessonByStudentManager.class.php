@@ -5,18 +5,8 @@ require_once(ROOT.'/models/entities/LessonByStudent.class.php');
 
 class LessonByStudentManager extends Bdd
 {
-    private $lessonsByStudent;
 
-    // nécessaire?
-    private function addLessonByStudent(LessonByStudent $lessonByStudent){
-        $this-> lessonsByStudent[] = $lessonByStudent;
-    }
-
-    // nécessaire?
-    public function getLessonsByStudent(){
-        return $this-> lessonsByStudent;
-    }
-
+    // fonctions requête bdd
     public function getNbrStatusLessonByStudent($studentId, $formationId){
         $req = "
         SELECT status FROM student_lesson
@@ -48,24 +38,6 @@ class LessonByStudentManager extends Bdd
             return false;
         }
         
-    }
-
-    // fonctions requêtes bdd
-    // charge toutes les lignes des lessons par étudiant
-    // nécessaire?
-    public function loadlessonsByStudent(){
-        $req = "
-        SELECT * FROM student_lesson
-        ";
-        $stmt = $this -> getBdd()->prepare($req);
-        $stmt -> execute();
-        $lessonsByStudent = $stmt-> fetchAll(PDO::FETCH_ASSOC);
-        $stmt->closeCursor();
-
-        foreach($lessonsByStudent as $lessonByStudent){
-            $l = new LessonByStudent($lessonByStudent['id_student'], $lessonByStudent['id_lesson'], $lessonByStudent['id_formation'], $lessonByStudent['status']);
-            $this->addLessonByStudent($l);
-        }
     }
 
     public function getLessonByStudentStatus($studentId, $lessonId){
