@@ -60,13 +60,12 @@ class SectionManager extends Bdd
     }
 
     public function addSectionInBdd($sections){
-        
+        $req ="
+        INSERT INTO section(title, position, lesson_number, id_formation) 
+        VALUES(:title, :position, :lesson_number, :id_formation)
+        ";     
+        $stmt = $this->getBdd()->prepare($req);
         foreach($sections as $section){
-            $req ="
-            INSERT INTO section(title, position, lesson_number, id_formation) 
-            VALUES(:title, :position, :lesson_number, :id_formation)
-            "; 
-            $stmt = $this->getBdd()->prepare($req);
             $stmt->bindValue(":title", $section['title'], PDO::PARAM_STR);
             $stmt->bindValue(":position", $section['position'], PDO::PARAM_INT);
             $stmt->bindValue(":lesson_number", $section['nbrLesson'], PDO::PARAM_INT);
@@ -79,15 +78,15 @@ class SectionManager extends Bdd
     public function updateSectionPosition($formationId, $sectionsId){
         // tableau d'identifiant de section
         $compteur = 0;
+        $req = "
+        UPDATE section
+        SET position = :position
+        WHERE id_formation = :id_formation
+        AND id = :id_section
+        ";
+        $stmt = $this -> getBdd()->prepare($req);
         foreach($sectionsId as $sectionId){
             $compteur++;
-            $req = "
-            UPDATE section
-            SET position = :position
-            WHERE id_formation = :id_formation
-            AND id = :id_section
-            ";
-            $stmt = $this -> getBdd()->prepare($req);
             $stmt->bindValue(":position", $compteur, PDO::PARAM_INT);
             $stmt->bindValue(":id_section", $sectionId, PDO::PARAM_INT);
             $stmt->bindValue(":id_formation", $formationId, PDO::PARAM_INT);

@@ -58,6 +58,12 @@ ob_start();
         </div>
     </div>
 
+    <div class="m-5 d-flex flex-column align-items-center background-credits">
+        <h4 class="text-center"><a target="_blank" href="https://unsplash.com/photos/hv0NXDd_Jww">Rodion Kutsaev</a></h4>
+        <img src="<?= URL ?>/style/green2.jpg" alt="">
+    </div>
+
+    
 </main>
 
 <?php

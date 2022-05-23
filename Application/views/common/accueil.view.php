@@ -11,7 +11,7 @@ ob_start();
         <?php unset($_SESSION['alert']);
         endif; ?>
 
-
+    <div id="background-green">
       <section id="container-intro-home" class="d-flex flex-column align-items-center">
           <h2>Formations en eco-conception web</h2>
           <p class="m-2">La crise écologique est aujourd'hui une réalité, en matière d'émissions de CO2, des études montrent qu'internet pollue 1.5 fois plus que le transport aérien. Des solutions existent pour limiter notre impact sur le réchauffement climatique. EcoIT est un organisme de formation fondé en 2017 et dont l'objectif est de former à l'éco-conception web.</p>
@@ -22,6 +22,7 @@ ob_start();
           </p>
             <a href="<?= URL ?>Tinscription" type="button" class="btn button-general button-type-1">Postuler</a>
       </section>
+    </div>
 
       <div class="container-main">
         <h3>Nos dernières formations</h3>

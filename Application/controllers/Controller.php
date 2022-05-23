@@ -70,7 +70,7 @@ class Controller{
         $adminMails = $this->adminManager->getAdminsMails();
         $studentMails = $this->studentManager->getStudentsMails();
         $teacherMails = $this->teacherManager->getTeachersValidateMails();
-        
+
         $alert = "";
         if(isset($_POST['mail']) && !empty($_POST['mail']) && isset($_POST['password']) && !empty($_POST['password'])){  
             $mail = $_POST['mail'];
@@ -140,9 +140,9 @@ class Controller{
         if(isset($_POST['pseudo']) && !empty($_POST['pseudo']) 
         && isset($_POST['mail']) && !empty($_POST['mail']) 
         && isset($_POST['password']) && !empty($_POST['password'])){
-            $pseudo = secureData($_POST['pseudo']);
-            $mail = secureData($_POST['mail']);
-            $passwordtmp = secureData($_POST['password']);
+            $pseudo = $_POST['pseudo'];
+            $mail = $_POST['mail'];
+            $passwordtmp = $_POST['password'];
 
             if(verifyPseudo($pseudo, $pseudoList) === true){
                 if(verifyMail($mail, $mailList) === true){
@@ -222,12 +222,12 @@ class Controller{
         && isset($_POST['password']) && !empty($_POST['password'])
         && isset($_FILES['pictureProfile']) && !empty($_FILES['pictureProfile'])
         && isset($_POST['description']) && !empty($_POST['description'])){
-            $firstname = secureData($_POST['firstname']);
-            $lastname = secureData($_POST['lastname']);
-            $mail = secureData($_POST['mail']);
-            $passwordtmp = secureData($_POST['password']);
+            $firstname = $_POST['firstname'];
+            $lastname = $_POST['lastname'];
+            $mail = $_POST['mail'];
+            $passwordtmp = $_POST['password'];
             $pictureProfile = $_FILES['pictureProfile'];
-            $description = secureData($_POST['description']);
+            $description = $_POST['description'];
             
             if(verifyName($firstname) === true){
                 if(verifyName($lastname) === true){
@@ -639,7 +639,6 @@ class Controller{
         // Le statut de la leçon pour l'étudiant
         $lessonStatus = $this->lessonByStudentManager->getLessonByStudentStatus($studentId, $lessonContent['lessonId']);
 
-
         require_once(ROOT.'/views/student/student-formation.view.php');
     }
 
@@ -749,7 +748,7 @@ class Controller{
         // si la formation n'appartient pas au formateur ou qu'elle est en ligne
         if(!in_array($formationId, $formationsIdPossible)){
             throw new Exception('vous ne pouvez pas mettre en ligne cette formation');
-            // si la formation n'a pas de sections
+            // si la formation n'a pas de section
         } else if($sectionsLessons === false){
             throw new Exception('Vous ne pouvez pas mettre en ligne une formation où il manque des leçons.');
         } else {
@@ -944,6 +943,33 @@ class Controller{
         require_once(ROOT.'/views/teacher/teacher-formation-details.view.php');
     }
 
+    public function createSectionInput($nbrSections){
+        if(isset($nbrSections)){
+            ob_start();
+            for($i= 1; $i< count($nbrSections); $i++){ ?>
+                <div id="containerSection<?= $i + 1 ?>">
+                    <p id="errorSectionTitle<?= $i + 1 ?>" class="mb-3 error-msg"></p>
+                    <label for="sectionTitle<?= $i + 1 ?>" class="form-label labelSection">Section <?= $i + 1 ?> - titre :</label>
+                    <input type="hidden" value="<?= $i + 1 ?>" name="sectionOrder[]" class="inputOrderSection">
+                    <input type="text" id="sectionTitle<?= $i + 1 ?>" class="form-control sectionTitleClass" name="sectionTitle[]" value="<?= $_POST['sectionTitle'][$i] ?? '' ?>" minlength="2" maxlength="70" required>
+                    <label for="nbrLesson<?= $i + 1 ?>" class="my-2">Nombre de lesson :</label>
+                    <select name="nbrLesson[]" id="nbrLesson<?= $i + 1 ?>" class="nbrLesson" required>
+                    <?php for($j = 1; $j<=10; $j++){ ?>
+                    <option value="<?= $j ?>"
+                    <?php if(isset($_POST['nbrLesson'][$i]) && intval($_POST['nbrLesson'][$i]) === $j){
+                            echo "selected";
+                        } ?>><?= $j ?>
+                        </option>
+                    <?php } ?>
+                    </select>
+                </div>
+            <?php }   
+            $contentSectionTitle = ob_get_clean();
+            return $contentSectionTitle;
+        } else {
+            return null;
+        }
+    }
 
 
     // teacher - créer une formation
@@ -954,31 +980,34 @@ class Controller{
         $errorSection = '';
         $dataStatus = [];
 
+        $nbrSections = $_POST['sectionTitle'];
+
         // vérification titre formation
         if(isset($_POST['formationTitle']) && !empty($_POST['formationTitle'])){
-            $formationTitle = secureData($_POST['formationTitle']);
+            $formationTitle = $_POST['formationTitle'];
             if(verifyFormationTitle($formationTitle) === true){
                 $dataStatus['formationTitle'] = true;
             } else {
                 $error = 'Erreur : titre formation';
                 $errorTitle = verifyFormationTitle($formationTitle);
                 $dataStatus['formationTitle'] = false;
+                $contentSectionTitle = $this->createSectionInput($nbrSections);
             }
         }
 
         // vérification description formation
         if(isset($dataStatus['formationTitle']) && $dataStatus['formationTitle'] === true){
             if(isset($_POST['formationDescription']) && !empty($_POST['formationDescription'])){
-                $description = secureData($_POST['formationDescription']);
+                $description = $_POST['formationDescription'];
                 if(verifyDescription($description) === true){
                     $dataStatus['description'] = true;
                 } else {
                     $error = 'Erreur : description';
                     $errorDescription = verifyDescription($description);
                     $dataStatus['description'] = false;
+                    $contentSectionTitle = $this->createSectionInput($nbrSections);
                 }
             }
-
         }
        
 
@@ -992,6 +1021,7 @@ class Controller{
                     $error = 'Erreur : image';
                     $errorPicture = verifyPIcture($formationPicture);
                     $dataStatus['formationPicture'] = false;
+                    $contentSectionTitle = $this->createSectionInput($nbrSections);
                 }
             } 
         }
@@ -1001,45 +1031,17 @@ class Controller{
         if(isset($dataStatus['formationPicture']) && $dataStatus['formationPicture'] === true){
             if(isset($_POST['sectionTitle']) && !empty($_POST['sectionTitle'])){
                 foreach($_POST['sectionTitle'] as $sectionTitle){
-                    $sectionsTitle[] = secureData($sectionTitle);
+                    $sectionsTitle[] = $sectionTitle;
                 }
                 $dataStatus['sectionTitle'] = [];
-                
                 foreach($sectionsTitle as $title){
-
                     if(verifyTitleSection($title) === true){
                         array_push($dataStatus['sectionTitle'], true);
-
                     } else if(verifyTitleSection($title) !== true) {
                         $error = 'Erreur : titre section';
                         $errorSection = "Erreur avec un titre : Est autorisé : lettre ou ('-!?,.:;)";
                         array_push($dataStatus['sectionTitle'], false);
-
-                        ob_start();
-                        for($i= 1; $i< count($sectionsTitle); $i++){ ?>
-
-                        <div id="containerSection<?= $i + 1 ?>">
-                            <p id="errorSectionTitle<?= $i + 1 ?>" class="mb-3 error-msg"></p>
-                            <label for="sectionTitle<?= $i + 1 ?>" class="form-label labelSection">Section <?= $i + 1 ?> - titre :</label>
-                            <input type="hidden" value="<?= $i + 1 ?>" name="sectionOrder[]" class="inputOrderSection">
-                            <input type="text" id="sectionTitle<?= $i + 1 ?>" class="form-control sectionTitleClass" name="sectionTitle[]" value="<?= $_POST['sectionTitle'][$i] ?? '' ?>" minlength="2" maxlength="70" required>
-                            <label for="nbrLesson<?= $i + 1 ?>" class="my-2">Nombre de lesson :</label>
-                            <label for="nbrLesson1" class="my-2">Nombre de lesson :</label>
-                        <select name="nbrLesson[]" id="nbrLesson<?= $i + 1 ?>" class="nbrLesson" required>
-                            <option value="" ></option>
-                            <?php for($j = 1; $j<=10; $j++){ ?>
-                            <option value="<?= $j ?>"
-                            <?php if(isset($_POST['nbrLesson'][0])){
-                                    if($_POST['nbrLesson'][0] === $j){
-                                        echo "selected";
-                                    }
-                                } ?>><?= $i ?>
-                                </option>
-                            <?php } ?>
-                            </select>
-                        </div>
-                        <?php }   
-                        $contentSectionTitle = ob_get_clean(); 
+                        $contentSectionTitle = $this->createSectionInput($nbrSections);
                     }     
                 }
             }
@@ -1056,16 +1058,15 @@ class Controller{
                         foreach($_POST['sectionOrder'] as $order){
                             $sectionOrder[] = $order;
                         }
-
                     } else {
                         $nbrLessonStatus = false;
                         $error = 'Erreur : Section - nombre de leçon';
                         $errorSection = 'Vous n\'avez pas renseigné  tous les nombres de leçons';
+                        $contentSectionTitle = $this->createSectionInput($nbrSections);
                     }
                 }
             }
         }
-
 
         if(isset($nbrLessonStatus) && $nbrLessonStatus === true){
                 // ajout image en dossier
@@ -1109,12 +1110,15 @@ class Controller{
                         }
 
                     // en variable session ce dont j'ai besoin pour la suite
+
                     $_SESSION['sections'] = $tableSection;
                     $_SESSION['formationId'] = $lastFormationId;
                     $_SESSION['nbrSections'] =  count($_SESSION['sections']);
                     $_SESSION['step'] = 1;
 
                     header("Location: ". URL . "teacherEspace/createFormation/step/1");
+
+                    
                 } else {
                     throw new Exception('Il y a une erreur, veuillez réessayer.');
                 }
@@ -1130,7 +1134,7 @@ class Controller{
         $sectionTitle = $_SESSION['sections'][$step-1]['title'];
         $numberLesson = $_SESSION['sections'][$step-1]['nbrLesson'];
 
-        if($countSection < $step){
+        if($countSection < $step || $step < 0){
             header("Location: ". URL . "teacherEspace/createFormation/step/1");
         }
 
@@ -1143,7 +1147,7 @@ class Controller{
         // vérification titres leçons
         if(isset($_POST['lessonTitle']) && !empty($_POST['lessonTitle'])){
             foreach($_POST['lessonTitle'] as $title){
-                $lessonsTitle[] = secureData($title);
+                $lessonsTitle[] = $title;
             }
             $dataStatus['lessonTitle'] = [];
             for($i = 0; $i < count($lessonsTitle); $i++){
@@ -1162,7 +1166,7 @@ class Controller{
             if(!in_array(false, $dataStatus['lessonTitle'])){
                 if(isset($_POST['lessonContent']) && !empty($_POST['lessonVideo'])){
                     foreach($_POST['lessonVideo'] as $video){
-                        $lessonsVideo[] = secureData($video);
+                        $lessonsVideo[] = $video;
                     }
                     $dataStatus['lessonVideo'] = [];
                     for($i = 0; $i < count($lessonsVideo); $i++){
@@ -1183,7 +1187,7 @@ class Controller{
             if(!in_array(false, $dataStatus['lessonVideo'])){
                 if(isset($_POST['lessonContent']) && !empty($_POST['lessonContent'])){
                     foreach($_POST['lessonContent'] as $content){
-                        $lessonsContent[] = secureData($content);
+                        $lessonsContent[] = $content;
                     }
                     $dataStatus['lessonContent'] = [];
                     for($i = 0; $i < count($lessonsContent); $i++){
@@ -1249,7 +1253,8 @@ class Controller{
         $this->formationManager->loadFormations();
         $formationsIdPossible = $this->formationManager->getformationsNotOnlineIdByTeacherId($teacherId);
         if(!in_array($formationId, $formationsIdPossible)){
-            throw new Exception('Vous ne pouvez pas modifier cette formation, elle ne vous appartient pas où elle est déjà en ligne.');
+            throw new Exception('Vous ne pouvez pas modifier cette formation, elle ne vous appartient pas
+             où elle est déjà en ligne.');
         } else {
 
             // je dois récupérer tous les éléments de la formation
@@ -1286,7 +1291,7 @@ class Controller{
             // vérification titre des sections
             if(isset($_POST['sectionTitle']) && !empty($_POST['sectionTitle'])){
                 foreach($_POST['sectionTitle'] as $sectionTitle){
-                    $sectionsTitle[] = secureData($sectionTitle);
+                    $sectionsTitle[] = $sectionTitle;
                 }
                 $dataStatus['sectionTitle'] = [];
                 
@@ -1388,42 +1393,19 @@ class Controller{
         } else {
             // je dois récupérer tous les éléments de la formation
             $this->formationManager->loadFormations();
-            //$this->sectionManager->loadSections();
-            //$this->lessonManager->loadLessons();
-    
+
             // la formation
             $formation = $this->formationManager->getFormationById($formationId);
 
-            // les sections
-           // $sections = $this->sectionManager->getSectionsByFormation($formationId);
-
-        /*    
-            // on récupére les données à placer en variable $_SESSION
-            $tableSection = [];
-            $table = [];
-                for($i = 0; $i < count($sections); $i++){
-                    $table['id'] = $sections[$i]->getId();
-                    $table['title'] = $sections[$i]->getTitle();
-                    $table['position'] = $sections[$i]->getPosition();
-                    $table['nbrLesson'] = count($this->lessonManager->getLessonsBySection($sections[$i]->getId()));
-                    array_push($tableSection, $table);
-                }
-
-            // en variable session ce dont j'ai besoin pour la suite
-            $_SESSION['sections'] = $tableSection;
-            $_SESSION['nbrSections'] =  count($_SESSION['sections']);
-
-        */
             
             $errorTitle = '';
             $errorDescription = '';
             $errorPicture = '';
-        //    $errorSection = '';
             $dataStatus = [];
 
             // vérification titre formation
             if(isset($_POST['formationTitle']) && !empty($_POST['formationTitle']) && $_POST['formationTitle'] !== $formation->getTitle()){
-                $title = secureData($_POST['formationTitle']);
+                $title = $_POST['formationTitle'];
                 if(verifyFormationTitle($title) === true){
                     $dataStatus['title'] = true;
                 } else {
@@ -1439,7 +1421,7 @@ class Controller{
             // vérification description formation
             if(isset($dataStatus['title']) && $dataStatus['title'] === true){
                 if(isset($_POST['formationDescription']) && !empty($_POST['formationDescription']) && $_POST['formationDescription'] !== $formation->getDescription()){
-                    $description = secureData($_POST['formationDescription']);
+                    $description = $_POST['formationDescription'];
                     if(verifyDescription($description) === true){
                         $dataStatus['description'] = true;
                     } else {
@@ -1538,7 +1520,7 @@ class Controller{
             // vérification titres leçons
             if(isset($_POST['lessonTitle']) && !empty($_POST['lessonTitle'])){
                 foreach($_POST['lessonTitle'] as $title){
-                    $lessonsTitle[] = secureData($title);
+                    $lessonsTitle[] = $title;
                 }
                 $dataStatus['lessonTitle'] = [];
                 for($i = 0; $i < count($lessonsTitle); $i++){
@@ -1557,7 +1539,7 @@ class Controller{
                 if(!in_array(false, $dataStatus['lessonTitle'])){
                     if(isset($_POST['lessonVideo']) && !empty($_POST['lessonVideo'])){
                         foreach($_POST['lessonVideo'] as $video){
-                            $lessonsVideo[] = secureData($video);
+                            $lessonsVideo[] = $video;
                         }
                         $dataStatus['lessonVideo'] = [];
                         for($i = 0; $i < count($lessonsVideo); $i++){
@@ -1578,7 +1560,7 @@ class Controller{
                 if(!in_array(false, $dataStatus['lessonVideo'])){
                     if(isset($_POST['lessonContent']) && !empty($_POST['lessonContent'])){
                         foreach($_POST['lessonContent'] as $content){
-                            $lessonsContent[] = secureData($content);
+                            $lessonsContent[] = $content;
                         }
                         $dataStatus['lessonContent'] = [];
                         for($i = 0; $i < count($lessonsContent); $i++){

@@ -66,18 +66,22 @@
       </div>
 
       <div class="footer-center">
-          <div>
-            <img src="<?= URL ?>public/images/general/gps.png" alt="">
-            <p>18 rue de l'écologie <br> Paris</p>
+        <div class="container-footer-center">
+          <div class="box-footer-center">
+              <div>
+                <img src="<?= URL ?>public/images/general/gps.png" alt="">
+                <p>18 rue de l'écologie <br> Paris</p>
+              </div>
+              <div>
+                <img src="<?= URL ?>public/images/general/phone.png" alt="">
+                <p>00.55.55.55</p>
+              </div>
+              <div>
+                <img src="<?= URL ?>public/images/general/arobas.png">
+                <p><a href="mailto:formation-EcoIt@company.com">formation-EcoIt@company.com</a></p>
+              </div>
           </div>
-          <div>
-            <img src="<?= URL ?>public/images/general/phone.png" alt="">
-            <p>00.55.55.55</p>
-          </div>
-          <div>
-            <img src="<?= URL ?>public/images/general/arobas.png">
-            <p><a href="mailto:formation-EcoIt@company.com">formation-EcoIt@company.com</a></p>
-          </div>
+        </div>
       </div>
 
       <div class="footer-right">
