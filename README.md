@@ -19,7 +19,36 @@ https://www.formation-ecoit.fr
 - HTML
 - CSS & BootStrap
 - JavaScript & Jquery
-- Php
+- PHP
+
+**Logiciels :**
+- Adobe XD pour les maquettes
+- GitMind pour les diagrammes
+- Tableau Kanban pour l'organisation : https://trello.com/b/bjbxE9oX/projet-ecf
+
+## Contenu du dépot
+### Dossier Application
+Fichiers du projet en local
+
+### Dossier Documents
+#### Conception
+- Modèle de conception
+- Persona 
+- User Stories
+
+#### Diagrammes
+- Diagrammes de séquence
+- Diagramme de cas d'utilisation
+- Diagramme de classe
+
+#### Maquettage :
+Wireframes version mobile et desktop page d'accueil, page pour suivre une formation et page administrateur.
+
+#### PDF :
+- Charte graphique
+- Commandes SQL BDD
+- Documentation technique
+- Manuel d'utilisation
 
 
 ## Deploiement en local
