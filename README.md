@@ -3,7 +3,7 @@
 ## Description
 Réalisation de l'application Formation-EcoIt pour l'entreprise fictive EcoIt qui propose des formations basées sur l'eco conception web.
 
-Projet réalisé en modèle MVC.
+Projet réalisé en modèle MVC avec certaines requêtes au serveur en AJAX.
 
 
 ### Fonctionnalités : 
