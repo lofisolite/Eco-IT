@@ -1,27 +1,28 @@
 
 # Formation EcoIt
+## Description
+Réalisation de l'application Formation-EcoIt pour l'entreprise fictive EcoIt qui propose des formations basées sur l'eco conception web.
 
-Ce projet a été réalisé lors d'une évaluation dans le cadre de ma formation de développeur web full stack à Studi.
-
-Formation-EcoIt est l'application web de l'entreprise fictive EcoIt qui  propose des formations basées sur l'eco conception web. 
-
-
+Projet réalisé en modèle MVC.
 
 
-## Auteur
-
-- [@helene lacaze](https://github.com/lofisolite)
-
-
+### Fonctionnalités : 
+- **Visiteur** : Accès aux cartes des trois dernières formations, recherche par mot clef de formation.
+- **Apprenant** : Accès aux formations, possibilité de valider les leçons d'une formation et de passer des leçons dans un onglet "formation en cours" et un onglet "formation terminées".
+- **Formateur** : Création, modification, suppression et mise en ligne de formations.
+- **Administeur** : Valide ou rejette les candidatures des formateurs
 
 ## Lien du site
-
 https://www.formation-ecoit.fr
+
+## Technologies utilisés
+- HTML
+- CSS & BootStrap
+- JavaScript & Jquery
+- Php
 
 
 ## Deploiement en local
-
-
 Exemple avec le terminal de commande en ligne windows Powershell
 
 
